@@ -1,0 +1,90 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Import Factory Production Target Excel</h1>
+        </div><!-- /.col -->
+  
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row" style="margin-top:20px">
+  
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header d-flex p-0">
+              <ul class="nav nav-pills ml-auto p-2">
+                <li class="nav-item">
+                  <div id="export-area" style="padding-left: 10px;"></div>
+                </li>
+              </ul>
+            </div><!-- /.card-header -->
+  
+            <div class="card-body">
+              <div class="row" style="margin-bottom:20px">
+                <div class="col-sm-1">
+                  <select id="ddlYear" class="form-control select2" style="width: 100%;" required></select>
+                </div>
+  
+                <div class="col-sm-2">
+                  <select id="ddlMonth" class="form-control select2" style="width: 100%;" required></select>
+                </div>
+  
+
+                <div class="col-sm-2";">
+                  <button type="button" class="btn btn-default" onclick="importfactoryproductiontarget.ListPPFactoryProductionTarget()">
+                    <i class="fas fa-search" style="color: #fd7e14;"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row" style="margin-bottom:20px">
+  
+                <div class="col-sm-3">
+                  <label>1. Select Factory Production Target Excel file</label>
+                  <input type="file" id="FileUpload1" name="FileUpload1" />
+                </div>
+  
+                <div class="col-sm-3">
+                  <label>2. View Uploaded Excel Data</label>
+                  <button type="button" class="btn btn-default" onclick="importfactoryproductiontarget.UploadExcel_FactoryProductionTarget()">
+                    <i class="fas fa-upload" style="color: #fd7e14;"></i>
+                </div>
+                
+                <div class="col-sm-4">
+                  <label>3. Save Factory Production Target Data </label>
+                  <button type="button" class="btn btn-default" onclick="importfactoryproductiontarget.SaveExcel_FactoryProductionTarget()">
+                    <i class="fas fa-save" style="color: #fd7e14;"></i>
+                  </button>
+                </div>
+              </div>
+
+              <table id="dtListPPFactoryProductionTarget" class="table table-bordered table-hover">
+              </table>
+  
+            </div>
+  
+            <div id="df" class="card-footer clearfix">
+  
+            </div>
+  
+  
+  
+          </div>
+        </div>
+  
+  
+      </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+  
+  <script>
+    $(document).ready(function () {
+        importfactoryproductiontarget.Initialize();
+    })
+  </script>

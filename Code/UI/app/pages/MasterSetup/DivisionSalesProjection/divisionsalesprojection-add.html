@@ -1,0 +1,99 @@
+<div class="modal fade" role="dialog" id="modAddDivisionSalesProjection" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+          <h4 class="modal-title">Sales Team's Projection</h4>
+          <button type="button" class="close" onclick="DivisionSalesProjection.CloseAddModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" id="formAddDivisionSalesProjection">
+            <input type="hidden" id="hdnID" value="0" data-ParameterName="PK_ID" />
+            <div class="card-body">
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <select id="ddlEntry_Year" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="ForYear"  required></select>
+                </div>    
+                
+                <div class="form-group col-md-8">
+                  <select id="ddlEntry_Month" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="ForMonth"  required></select>
+                </div>                
+              </div>
+
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="ddlEntry_Division">Division Name</label>
+                  <select id="ddlEntry_Division" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="DivisionName" required></select>
+                </div>             
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="ddlEntry_Depot">Depot</label>
+                  <select id="ddlEntry_Depot" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="DepotName" required></select>
+                </div>             
+              </div>
+  
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="ddlEntry_ProductName">Product Name</label>
+                  <select id="ddlEntry_ProductName" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="ProductName" required></select>
+                </div>             
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="txtaProductCode">Product Code</label>
+                  <input type="text" class="form-control" id="txtaProductCode" placeholder="Enter Product Code"
+                    data-ParameterName="ProductCode" required />
+                </div>   
+
+                <div class="form-group col-md-8">
+                  <label for="ddlEntry_PackUnit">Pack Unit</label>
+                  <select id="ddlEntry_PackUnit" class="form-control form-control-sm select2" style="width: 100%;"
+                  data-ParameterName="PackUnit" required></select>
+                </div>             
+              </div>
+
+
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtPrimarySalesQTY">Primary Sales QTY</label>
+                  <input type="text" class="form-control" id="txtPrimarySalesQTY" placeholder="Enter Primary Sales QTY"
+                    data-ParameterName="txtPrimarySalesQTY" numeric />
+                </div>   
+                
+                <div class="form-group col-md-6">
+                  <label for="txtTotalClosingStockQTY">Closing Stock QTY</label>
+                  <input type="text" class="form-control" id="txtTotalClosingStockQTY" placeholder="Enter Closing Stock QTY"
+                    data-ParameterName="txtTotalClosingStockQTY" numeric />
+                </div>  
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="txtProjectedTotalSalesQTY">Projected QTY</label>
+                  <input type="text" class="form-control" id="txtProjectedTotalSalesQTY" placeholder="Enter Projected Sales QTY"
+                    data-ParameterName="ProjectedTotalSalesQTY" required numeric />
+                </div>             
+              </div>
+
+            </div>
+            <!-- /.card-body -->
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between bg-info">
+          <button type="button" class="btn btn-default" onclick="DivisionSalesProjection.CloseAddModal()">Close</button>
+          <button type="button" onclick="DivisionSalesProjection.AddUpdateDivisionSalesProjection()" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>

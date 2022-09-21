@@ -1,0 +1,98 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Transfer Primary Sales Data</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Transfer Primary Sales Data
+                        </h3>
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body">
+                        <div class="row" style="margin-bottom:30px">
+                            <div class="col-sm-4">
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input id="dtFromdate" type='text' class="form-control" onkeydown="return false" />
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar-alt"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input id="dtTodate" type='text' class="form-control" onkeydown="return false" />
+                                    <span class="input-group-addon">
+                                        <span class="fas fa-calendar-alt"></span>
+                                    </span>
+                                </div>
+                            </div> 
+                            
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-default" onclick="datatransfer.List_PrimarySales()">
+                                  <i class="fas fa-search" style="color: #fd7e14;"></i>
+                                </button>
+                              </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-6">
+                                <!-- small card -->
+                                <a href="javascript:void(0)" onclick="datatransfer.transferData('LoadPrimarySalesData')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Sales Forcasting : Sync Primary Sales Data</h4>
+                                            <p>Fetch Primary Sales Data From SQL Database by Getsalesdata</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                
+                        </div>  
+                        <table id="dtList_PrimarySales" class="table table-bordered table-hover">
+                        </table>
+                        </div> 
+                    </div>
+
+                    <div id="df" class="card-footer clearfix">
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+    $(document).ready(function () {
+       
+    })
+</script>

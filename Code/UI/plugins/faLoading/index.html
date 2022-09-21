@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jQuery Font Awnsome Loading</title>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="jquery.faloading.css"/>
+		<script type="text/javascript" src="jquery.faloading.js"></script>
+
+		<style type="text/css">
+			#myDiv {
+				min-height: 200px;
+				min-width: 200px;
+				background: #ccc;
+				position: relative;
+			}
+		</style>
+
+		<script type="text/javascript">
+			var loading_time = 30000;
+
+			$(function() {
+
+				$("#btnBodyLoading").click(function() {
+					$("body").faLoading('fa-cog');
+
+					setTimeout(function() {
+						$("body").faLoading(false);
+					},loading_time);
+				});
+
+				$("#btnDivLoading").click(function() {
+
+					$("#myDiv").faLoading({
+						"type" : "add",
+					   "icon" : "fa-refresh",
+					   "status" : 'loading',
+					   "text" : false,
+					   "title" : $("#loadingTitle").val()
+					});
+
+					$(".btn-update").show();
+
+					setTimeout(function() {
+						$("#myDiv").faLoading("remove");
+					},loading_time*3);
+
+				});
+
+				$(".btn-update")
+				.click(function() {
+					$("#myDiv").faLoading({
+						"type" : "update",
+					   "icon" :$(this).data('icon'),
+					   "status" :$(this).data('status'),
+					   "text" : $("#updateText").val(),
+					   "title" : $("#updateTitle").val()
+				  	});
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<button id="btnBodyLoading" type="button">Body Loading</button>
+		<div id="myDiv">
+			<button id="btnDivLoading" type="button">Div Loading</button>
+		</div>
+		<br/><br/>
+			<label>Loading Title</label><input type="text" id="loadingTitle" value=""/>
+			<label>Loading Text</label><input type="text" id="loadingText" value="Loading..."/>
+		<br/><br/>
+			<label>Update Title</label><input type="text" id="updateTitle" value="Update Title"/>
+			<label>Update Text</label><input type="text" id="updateText" value="Update Text"/>
+		<br/><br/>
+		<button class="btn-update" type="button" data-icon="fa-check" data-status="success">Update to Success</button>
+		<button class="btn-update" type="button" data-icon="fa-exclamation-triangle" data-status="fail">Update to Fail</button>
+	</body>
+</html>

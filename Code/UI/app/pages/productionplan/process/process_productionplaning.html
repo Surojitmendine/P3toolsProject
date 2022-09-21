@@ -1,0 +1,133 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Production Planing Data Processing</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Production Planing Data Process
+                        </h3>
+
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body">
+                        <div class="row" style="margin-bottom:30px">
+                            <div class="col-sm-1">
+                              <select id="ddlYear" class="form-control form-control-sm select2" style="width: 100%;"
+                                 required></select>
+                            </div>
+            
+                            <div class="col-sm-2">
+                              <select id="ddlMonth" class="form-control form-control-sm select2" style="width: 100%;"
+                                 required></select>
+                            </div>
+                          </div>
+                    
+
+                        <div class="row">
+                            <h2>Sync SQL Data</h2>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-6">
+                                    <!-- small card -->
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncSQLDepotSKUStock','Sync SQL WIP Stock')">
+                                        <div class="small-box bg-success" style="height: 75px;">
+                                            <div class="inner">
+                                                <h4>1. Sync Finish Goods</h4>
+                                                <p>SKU Stock Data Trans from SWIL</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-6">
+                                    <!-- small card -->
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncSQLWIPStock')">
+                                        <div class="small-box bg-success" style="height: 75px;">
+                                            <div class="inner">
+                                                <h4>2. Sync SQL WIP Stock</h4>
+                                                <p>Data Transfer from Tally DB to P3 Database</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>                           
+                        </div>
+                    
+                        <div class="row">
+                            <h2>Data Process for Production Processing</h2>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 col-6">
+                                <!-- small card -->
+                                <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('ProcessAggregateDepotStock','Process Aggregate WIP Stock')">
+                                    <div class="small-box bg-success" style="height: 75px;">
+                                        <div class="inner">
+                                            <h4>Step 1: Process Aggregate Depot Stock
+                                            </h4>
+                                            <p>Process Stock Raw for the Month</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-6">
+                                <!-- small card -->
+                                <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('ProcessAggregateWIPStock','Finial Step: Generate Production Planning')">
+                                    <div class="small-box bg-success" style="height: 75px;">
+                                        <div class="inner">
+                                            <h4>Step 2: Process Aggregate WIP Stock
+                                            </h4>
+                                            <p>Process Factory WIP Stock</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-6">
+                                <!-- small card -->
+                                <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('GenerateProductionPlanning', 'Production Planing Generation Completed successfully')">
+                                    <div class="small-box bg-success" style="height: 75px;">
+                                        <div class="inner">
+                                            <h4>Finial Step: Generate Production Planning
+                                            </h4>
+                                            <p>Process  Production Plan for the Month</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div id="df" class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+    $(document).ready(function () {
+        pro_dataprocessing.Initialize()
+    })
+</script>

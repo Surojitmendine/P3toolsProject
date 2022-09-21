@@ -1,0 +1,151 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Sales Data Processing</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Sales Data Processing
+                        </h3>
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body">
+                        <div class="row" style="margin-bottom:30px">
+                            <div class="col-sm-1">
+                              <select id="ddlYear" class="form-control form-control-sm select2" style="width: 100%;"
+                                 required></select>
+                            </div>
+            
+                            <div class="col-sm-2">
+                              <select id="ddlMonth" class="form-control form-control-sm select2" style="width: 100%;"
+                                 required></select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>Note: (Year and Month should be Projection Month)</label>
+                              </div>
+                          <!--  <div class="col-sm-2">
+                                <select id="ddlForecastingType" class="form-control form-control-sm select2" style="width: 100%;">
+                                   <option value="0">Select Forecasting Type</option>
+                                   <option value="Logistics">Logistics</option>
+                                   <option value="Marketing">Marketing</option>
+                                </select>
+                              </div>-->
+                          </div>
+                    
+                    <div class="row">
+                            <div class="col-lg-4 col-6">
+
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('AggregateSaleData')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Step 1: Process Aggregate Sale Data </h4>
+                                            <p>Run Once Sales data Sync and Uploaded. Aggregate Sales data based on Type(Logistics-Primary, Marketing-Secondary).</p>
+                                            
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-6">
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('GenerateSalesTeamProjection')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Step 2: Generate Sales Team Projection Data
+                                            </h4>
+                                            <p>Generate Sales Team Projection Data </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <div class="col-lg-4 col-6">
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('GenerateMonthlyProjection')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>
+                                                Step 3: Generate Projection Monthly Data
+                                            </h4>
+                                            <p>Based on Last Year QTY this current month Projection will be Generate for Logistics/ Marketing. 
+                                                Generate Depot Wise Division Wise Sale Projection</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    <!-- <div class="row">
+                            <div class="col-lg-4 col-6">
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('GenerateSalesForecasting')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Step 5: Generate Sales Forecasting
+                                            </h4>
+                                            <p>Before this Process Step 4: Upload Sales Projection Excel for Logistics/ Marketing from Import Sales Projection Menu.</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-6">
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('SalesForecastingComparison')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Step 6: Sales Forecasting Comparison
+                                            </h4>
+                                            <p>Generate Sales Forecasting Difference of Logistics/ Marketing Comparison only when Step 5 Complected </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-6">
+                                <a href="javascript:void(0)" onclick="dataprocessing.processData('DownloadProjection')">
+                                    <div class="small-box bg-success" style="height: 100px;">
+                                        <div class="inner">
+                                            <h4>Step 3: Download Projection Data
+                                            </h4>
+                                            <p>Download Excel with Data for the Upload the Edited Projection Value for Logistics/ Marketing. </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div> -->
+                        </div>
+                    </div>
+                    <div id="df" class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+    $(document).ready(function () {
+        dataprocessing.Initialize()
+    })
+</script>

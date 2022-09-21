@@ -1,0 +1,98 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">View and Import Sales Projection Data</h1>
+        </div><!-- /.col -->
+  
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+  
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header d-flex p-0">
+              <ul class="nav nav-pills ml-auto p-2">
+                <li class="nav-item">
+                  <div id="export-area" style="padding-left: 10px;"></div>
+                </li>
+              </ul>
+            </div><!-- /.card-header -->
+  
+            <div class="card-body">
+              <div class="row" style="margin-bottom:20px">
+                <div class="col-sm-2">
+                  <select id="ddlYear" class="form-control select2" style="width: 100%;" required></select>
+                </div>
+  
+                <div class="col-sm-2">
+                  <select id="ddlMonth" class="form-control select2" style="width: 100%;" required></select>
+                </div>
+  
+                <div class="col-sm-2">
+                  <select id="ddlForecastingType" class="form-control form-control-sm select2" style="width: 100%;" required>
+                     <option value="">Forecasting Type</option>
+                     <option value="Logistics">Logistics</option>
+                     <option value="Marketing">Marketing</option>
+                  </select>
+                </div>
+  
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-default" onclick="importsalesprojection.Listimportsalesprojection()">
+                    <i class="fas fa-search" style="color: #fd7e14;"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="row" style="margin-bottom:10px">
+  
+                <div class="col-sm-3">
+                  <label>1. Select Projection Excel file(.xlsx only)</label>
+                  <input type="file" id="FileUpload1" name="FileUpload1" />
+                </div>
+  
+                <div class="col-sm-3">
+                  <label>2. View Uploaded Excel Data</label>
+                  <button type="button" class="btn btn-default" onclick="importsalesprojection.uploadProjection()">
+                    <i class="fas fa-upload" style="color: #fd7e14;"></i>
+                </div>
+                
+                <div class="col-sm-3">
+                  <label>3. Save Uploaded Projection Data </label>
+                  <button type="button" class="btn btn-default" onclick="importsalesprojection.updateProjection()">
+                    <i class="fas fa-save" style="color: #fd7e14;"></i>
+                  </button>
+                </div>
+              </div>
+
+              <table id="dtListimportsalesprojection" class="table table-bordered table-hover">
+              </table>
+  
+            </div>
+  
+            <div id="df" class="card-footer clearfix">
+  
+            </div>
+  
+  
+  
+          </div>
+        </div>
+  
+  
+      </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+  
+  <script>
+    $(document).ready(function () {
+      importsalesprojection.Initialize();
+    })
+  </script>

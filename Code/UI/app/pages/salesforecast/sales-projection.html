@@ -1,0 +1,84 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Sales Projection</h1>
+      </div><!-- /.col -->
+
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <div class="card-header d-flex p-0">
+            <ul class="nav nav-pills ml-auto p-2">
+              <li class="nav-item">
+                <div id="export-area" style="padding-left: 10px;"></div>
+              </li>
+            </ul>
+          </div><!-- /.card-header -->
+
+          <div class="card-body">
+            <div class="row" style="margin-bottom:30px">
+
+              <div class="col-sm-1">
+                <label>Year</label>
+                <select id="ddlYear" class="form-control select2" style="width: 100%;" required></select>
+              </div>
+
+              <div class="col-sm-2">
+                <label>Month</label>
+                <select id="ddlMonth" class="form-control select2" style="width: 100%;" required></select>
+              </div>
+
+              <div class="col-sm-2">
+                <label>Forecasting Type</label>
+                <select id="ddlForecastingType" class="form-control form-control-sm select2" style="width: 100%;" required
+                   >
+                   <option value="">Select</option>
+                   <option value="Logistics">Logistics</option>
+                   <option value="Marketing">Marketing</option>
+                   <option value="SalesTeam">Sales Team</option>
+                </select>
+              </div>
+
+              <div class="col-sm-2" style="padding-top: 27px;">
+                <button type="button" class="btn btn-default" onclick="salesprojection.Listsalesprojection()">
+                  <i class="fas fa-search" style="color: #fd7e14;"></i>
+                </button>
+              </div>
+
+            </div>
+
+            <table id="dtListimportsalesprojection" class="table table-bordered table-hover">
+            </table>
+
+          </div>
+
+          <div id="df" class="card-footer clearfix">
+
+          </div>
+
+
+
+        </div>
+      </div>
+
+
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+  $(document).ready(function () {
+    salesforecasting.Initialize();
+  })
+</script>

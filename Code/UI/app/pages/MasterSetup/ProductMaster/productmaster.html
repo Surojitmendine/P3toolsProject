@@ -1,0 +1,73 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Product Master</h1>
+        </div><!-- /.col -->
+
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="row">
+  
+          <div class="col-md-12">
+            <div class="card card-primary">
+              <div class="card-header d-flex p-0">
+                <h2 class="m-0 text-dark"></h2>
+                
+                <ul class="nav nav-pills ml-auto p-2">
+                  <li class="nav-item">
+                    <button type="button" class="btn btn-info float-left" data-toggle="modal"
+                      onclick="ProductMaster.OpenAddModal()"><i class="fas fa-plus"></i>New Product</button>
+                  </li>
+                  <li class="nav-item">
+                    <div id="export-area" style="padding-left: 10px;"></div>
+                  </li>
+                </ul>
+              </div><!-- /.card-header -->
+
+              <div class="row" style="margin-top:30px">        
+                <div class="col-sm-2">
+                  <select id="ddlCategory" class="form-control form-control-sm select2" style="width: 100%;"></select>
+                </div>    
+
+              <div class="col-sm-2">
+                
+               <button type="button" class="btn btn-default" onclick="ProductMaster.ListProductMaster()">
+                    <i class="fas fa-search" style="color: #fd7e14;"></i>
+                  </button>
+                </div>               
+              </div>
+
+
+              <div class="card-body">
+                <table id="dtProductMasterlist" class="table table-bordered table-hover">
+                </table>  
+              </div>
+              
+              <div id="df" class="card-footer clearfix">
+              </div>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+
+        
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+    <script>
+      $(document).ready(function () {
+        ProductMaster.Initialize();
+      })
+    </script>
+      
+  <!--<script>
+          ProductMaster.ListProductMaster()
+    </script>-->

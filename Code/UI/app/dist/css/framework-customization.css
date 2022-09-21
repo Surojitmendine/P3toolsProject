@@ -1,0 +1,32 @@
+/*faloading*/
+.fa-loading-bg, .fa-loading-icon-wrapper {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%
+}
+
+.fa-loading-bg {
+  top: 0;
+  background: rgba(0,0,0,.2);
+  z-index: 99999
+}
+
+.fa-loading-icon-wrapper {
+  z-index: 999999;
+  top: 50%;
+  text-align: center
+}
+
+.fa-loading-icon {
+  margin-top: -2.5em;
+  font-size: 5em;
+  color: #ffffff
+}
+/*faloading*/
+table thead{
+  background: #03c3f3;
+}
+.table-bordered th {
+    border: 0;
+}
