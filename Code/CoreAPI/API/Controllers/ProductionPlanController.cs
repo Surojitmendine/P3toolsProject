@@ -48,6 +48,7 @@ namespace API.Controllers
         private readonly DBContext _context;
         public IConfiguration Configuration { get; set; }
         public String MSSQLConnection { get; set; }
+        public String MendineMasterConnection { get; set; }
 
         public ProductionPlanController(ILoggerFactory loggerFactory, DBContext db,
             IMapper mapper, UserManager<ApplicationUser> userManager,
@@ -55,6 +56,7 @@ namespace API.Controllers
         {
             Configuration = configuration;
             MSSQLConnection = Configuration.GetConnectionString("MSSQLConnection").ToString();
+            MendineMasterConnection = Configuration.GetConnectionString("MendineMasterConnection").ToString();
             this._mapper = mapper;
             this.userManager = userManager;
             this.webHostEnvironment = webHostEnvironment;
@@ -302,58 +304,58 @@ namespace API.Controllers
         #endregion
 
         #region SaveExcel_FactoryClosingStock
-        //[HttpPost]
-        //[SwaggerOperation(
-        //                   Summary = "Production Plan",
-        //                   Description = "Production Plan",
-        //                   OperationId = "UpdateProjection",
-        //                   Tags = new[] { "Production Plan" }
-        //               )]
+        [HttpPost]
+        [SwaggerOperation(
+                           Summary = "Production Plan",
+                           Description = "Production Plan",
+                           OperationId = "UpdateProjection",
+                           Tags = new[] { "Production Plan" }
+                       )]
 
-        //[SwaggerResponse(200, "Production Plan")]
-        //[SwaggerResponse(204, "Production Plan", typeof(string))]
-        //[SwaggerResponse(400, "Bad Request", typeof(string))]
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
 
-        //public async Task<ActionResult<IEnumerable<factory_closing_stock_Insert_Status>>> SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
-        //{
-        //    dynamic jsonData = body;
+        public IActionResult SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
+        {
+            dynamic jsonData = body;
+            JArray factoryclosingstockList_Data = jsonData.FactoryClosingStock;
+            
+            // Convert JArray To Datatable
+            //DataTable dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
+            // Convert Datatable to List 
+            //List<factory_closing_stock> factoryclosingstockList = new List<factory_closing_stock>();
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    factory_closing_stock fcs = new factory_closing_stock();
+            //    fcs.CompanyId = dt.Rows[i]["CompanyId"].ToString();
+            //    fcs.Stock_date = dt.Rows[i]["Stock_date"].ToString();
+            //    fcs.St_group = dt.Rows[i]["St_group"].ToString();
+            //    fcs.St_category = dt.Rows[i]["St_category"].ToString();
+            //    fcs.product_name = dt.Rows[i]["product_name"].ToString();
+            //    fcs.quantity = clsHelper.fnConvert2Decimal(dt.Rows[i]["quantity"]);
+            //    fcs.UOM = dt.Rows[i]["UOM"].ToString();
+            //    fcs.rate = clsHelper.fnConvert2Decimal(dt.Rows[i]["rate"]);
+            //    fcs.amount = clsHelper.fnConvert2Decimal(dt.Rows[i]["amount"]);
+            //    factoryclosingstockList.Add(fcs);
+            //}
 
-        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
-        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
+            var factoryclosingstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryClosingStock>>(factoryclosingstockList_Data.ToString());
 
-        //    var param = new SqlParameter[] {
-        //                new SqlParameter() {
-        //                    ParameterName = "@TB",
-        //                    SqlDbType =  System.Data.SqlDbType.Structured,
-        //                    TypeName= "dbo.Type_Factory_ClosingStock",
-        //                    Direction = System.Data.ParameterDirection.Input,
-        //                    Value = dt
-        //                }
-        //    };
-        //    var result = await _context.factory_closing_stock_Insert_Status.FromSqlRaw("[dbo].[Proc_Insert_FactoryClosingStock_Excel] @TB", param).ToListAsync();
-        //    return Ok(new { success = result, message = "" });
-        //}
-
-        //public IActionResult SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
-        //{
-        //    dynamic jsonData = body;
-        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
-        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
-
-        //    var records = ProductionPlanLogic.SaveExcel_FactoryClosingStock(MSSQLConnection, dt);
-        //    if (records != null && records.Count() > 0)
-        //    {
-        //        return Ok(new { success = 1, message = "Production Plan", data = records });
-        //    }
-        //    else if (records.Count() <= 0)
-        //    {
-        //        return NoContent();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+            var records = ProductionPlanLogic.SaveExcel_FactoryClosingStock(MendineMasterConnection, factoryclosingstockList);
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         //    public static String SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
         //{

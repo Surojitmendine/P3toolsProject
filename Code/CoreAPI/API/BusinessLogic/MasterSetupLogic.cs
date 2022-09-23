@@ -167,7 +167,11 @@ namespace API.BusinessLogic
 
         }
         #endregion
+        #endregion
 
+        #endregion
+
+        #region -- Product Mapping Master --
         #region -- Update Product Mapping Master --
         public static String Update_ProductMappingMaster(String Connection, MasterSetupEntity.ProductMasterMapping product)
         {
@@ -198,8 +202,7 @@ namespace API.BusinessLogic
         #endregion
 
         #region -- Get by Product Mapping ID --
-
-        public static List<MasterSetupEntity.ProductMasterMapping> GetByID_ProductMappingMaster(String Connection,Int32 Id)
+        public static List<MasterSetupEntity.ProductMasterMapping> GetByID_ProductMappingMaster(String Connection, Int32 Id)
         {
             List<ProductMasterMapping> mlist = new List<ProductMasterMapping>();
             DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_GetByID", Id);
@@ -217,26 +220,7 @@ namespace API.BusinessLogic
             }
             return mlist;
         }
-
-        //public async Task<MasterSetupEntity.ProductMasterMapping> GetByID_ProductMappingMaster(Int32 Id)
-        //{
-        //    try
-        //    {
-        //        var tmp_Product = await this.db.tbl_Master_Product.Where(x => x.PK_ProductID == Id).Select(s => new { s.PK_ProductID, s.ProductCategory, s.ProductCode, s.ProductName, s.PackUnit, s.TallyProductName, s.TallyUOM }).SingleOrDefaultAsync();
-        //        var ProductMaster = this._mapper.Map<MasterSetupEntity.ProductMasterMapping>(tmp_Product);
-        //        return ProductMaster;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-
-        //}
         #endregion
-
-        #endregion
-
-
         #endregion
 
         #region Division Wise Product

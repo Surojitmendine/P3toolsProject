@@ -140,6 +140,41 @@ namespace API.BusinessLogic
         }
         #endregion
 
+
+        private static DataTable DTFactoryClosingStock()
+        {
+            DataTable DT = new DataTable();
+            DT.Columns.Add("CompanyId", typeof(System.String));
+            DT.Columns.Add("Stock_date", typeof(System.String));
+            DT.Columns.Add("St_group", typeof(System.String));
+            DT.Columns.Add("St_category", typeof(System.String));
+            DT.Columns.Add("product_name", typeof(System.String));
+            DT.Columns.Add("quantity", typeof(System.Decimal));
+            DT.Columns.Add("UOM", typeof(System.String));
+            DT.Columns.Add("rate", typeof(System.Decimal));
+            DT.Columns.Add("amount", typeof(System.Decimal));
+            return DT;
+        }
+        public static String SaveExcel_FactoryClosingStock(String Connection, List<ProductionPlan.ImportExcel_FactoryClosingStock> factoryClosingStock)
+        {
+            DataTable factoryClosingStockDT = DTFactoryClosingStock();
+            foreach (var item in factoryClosingStock)
+            {
+                DataRow DR = factoryClosingStockDT.NewRow();
+                DR["CompanyId"] = item.CompanyId;
+                DR["Stock_date"] = item.Stock_date;
+                DR["St_group"] = item.St_group;
+                DR["St_category"] = item.St_category;
+                DR["product_name"] = item.product_name;
+                DR["quantity"] = item.quantity;
+                DR["UOM"] = item.UOM;
+                DR["rate"] = item.rate;
+                DR["amount"] = item.amount;
+                factoryClosingStockDT.Rows.Add(DR);
+            }
+            return clsDatabase.fnDBOperation(Connection, "Proc_Insert_FactoryClosingStock_Excel", factoryClosingStockDT);
+        }
+
         #endregion
 
         #region "PhysicianSamplePlan"
