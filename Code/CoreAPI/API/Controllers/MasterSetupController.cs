@@ -208,9 +208,9 @@ namespace API.Controllers
         [SwaggerResponse(201, "Product Mapping Updated", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
 
-        public async Task<IActionResult> Update_ProductMappingMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterMapping Product)
+        public IActionResult Update_ProductMappingMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterMapping Product)
         {
-            await this.masterSetupLogic.Update_ProductMappingMaster(Product);
+            MasterSetupLogic.Update_ProductMappingMaster(MSSQLConnection, Product);
             return Ok(new { data = "Primary Sales Data Transfer Successfully !!!!!" });
         }
         #endregion
@@ -227,9 +227,9 @@ namespace API.Controllers
         [SwaggerResponse(200, "Product Mapping Type found"/*,typeof(IEnumerable<Vendor>)*/)]
         [SwaggerResponse(204, "Product Mapping Type not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> List_ProductMappingMaster(string Type)
+        public IActionResult List_ProductMappingMaster(string Type)
         {
-            var lstData = this.masterSetupLogic.List_ProductMappingMaster(Type);
+            var lstData = MasterSetupLogic.List_ProductMappingMaster(MSSQLConnection, Type);
 
             if (lstData != null && lstData.Count() > 0)
             {

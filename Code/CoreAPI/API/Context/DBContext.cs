@@ -55,6 +55,10 @@ namespace API.Context
         public virtual DbSet<tbl_SYS_Master_Menu> tbl_SYS_Master_Menu { get; set; }
         public virtual DbSet<tbl_SYS_UserPermission> tbl_SYS_UserPermission { get; set; }
 
+        public virtual DbSet<factory_closing_stock> factory_closing_stock_Insert_Status { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1457,6 +1461,8 @@ namespace API.Context
                     .HasForeignKey(d => d.FK_MenuID)
                     .HasConstraintName("FK_tbl_SYS_UserPermission_tbl_SYS_AspNet_Roles");
             });
+
+
 
             OnModelCreatingPartial(modelBuilder);
         }

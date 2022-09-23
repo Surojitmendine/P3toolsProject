@@ -3,23 +3,30 @@ using API.Context;
 using API.Entity;
 using API.Helper;
 using API.IdentityModels;
+using API.Models;
 using AutoMapper;
+using Common.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -38,16 +45,22 @@ namespace API.Controllers
         private readonly IMemoryCache memoryCache;
         private readonly Functions functions = new Functions();
         private readonly ExcelReader excelReader;
+        private readonly DBContext _context;
+        public IConfiguration Configuration { get; set; }
+        public String MSSQLConnection { get; set; }
 
         public ProductionPlanController(ILoggerFactory loggerFactory, DBContext db,
             IMapper mapper, UserManager<ApplicationUser> userManager,
-            IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache) : base(loggerFactory)
+            IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache, IConfiguration configuration) : base(loggerFactory)
         {
+            Configuration = configuration;
+            MSSQLConnection = Configuration.GetConnectionString("MSSQLConnection").ToString();
             this._mapper = mapper;
             this.userManager = userManager;
             this.webHostEnvironment = webHostEnvironment;
             this.memoryCache = memoryCache;
             excelReader = new ExcelReader();
+            _context = db;
 
             this.productionPlanLogic = new ProductionPlanLogic(db, mapper, userManager, memoryCache);
         }
@@ -191,6 +204,168 @@ namespace API.Controllers
                 return BadRequest();
             }
         }
+        #endregion
+
+        #endregion
+
+        #region "FactoryClosingStock"
+        #region UploadExcel_FactoryClosingStock
+        [HttpPost]
+        [SwaggerOperation(
+                     Summary = "Production Plan",
+                     Description = "Production Plan",
+                     OperationId = "UploadExcel_FactoryClosingStock",
+                     Tags = new[] { "Production Plan" }
+                 )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> UploadExcel_FactoryClosingStock()
+        {
+            try
+            {
+                IFormFile file = Request.Form.Files[0];
+                var parametars = Request.Form.Select(x => new { x.Key, x.Value }).ToList();
+                string fname;
+                fname = file.FileName;
+                string path1 = string.Empty;
+                FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+
+                bool b1 = fileHelper.createDirectory("ExcelUpload");
+                bool b = fileHelper.createDirectory("ExcelUpload/FactoryClosingStock");
+                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/FactoryClosingStock/", fname);
+
+                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                string extension = Path.GetExtension(fname);
+                if (fileHelper.checkFileExists(path1))
+                {
+                    fileHelper.deleteFile(path1);
+                }
+                using (FileStream fs = System.IO.File.Create(path1))
+                {
+                    await file.CopyToAsync(fs);
+                    fs.Flush();
+                }
+                DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
+
+                string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                var FactoryProductionTargetlist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryClosingStock>>(dttojson, settings);
+
+                return Ok(new { success = 1, message = "Factory Closing Stock", data = FactoryProductionTargetlist });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = 0, message = "Factory Closing Stock" });
+            }
+        }
+        #endregion
+
+        #region List Factory Closing Stock
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Production Plan",
+                         Description = "Production Plan",
+                         OperationId = "List_FactoryClosingStock",
+                         Tags = new[] { "List_FactoryClosingStock" }
+                     )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_FactoryClosingStock([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_FactoryClosingStock(MSSQLConnection,Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region SaveExcel_FactoryClosingStock
+        //[HttpPost]
+        //[SwaggerOperation(
+        //                   Summary = "Production Plan",
+        //                   Description = "Production Plan",
+        //                   OperationId = "UpdateProjection",
+        //                   Tags = new[] { "Production Plan" }
+        //               )]
+
+        //[SwaggerResponse(200, "Production Plan")]
+        //[SwaggerResponse(204, "Production Plan", typeof(string))]
+        //[SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        //public async Task<ActionResult<IEnumerable<factory_closing_stock_Insert_Status>>> SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
+        //{
+        //    dynamic jsonData = body;
+
+        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
+        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
+
+        //    var param = new SqlParameter[] {
+        //                new SqlParameter() {
+        //                    ParameterName = "@TB",
+        //                    SqlDbType =  System.Data.SqlDbType.Structured,
+        //                    TypeName= "dbo.Type_Factory_ClosingStock",
+        //                    Direction = System.Data.ParameterDirection.Input,
+        //                    Value = dt
+        //                }
+        //    };
+        //    var result = await _context.factory_closing_stock_Insert_Status.FromSqlRaw("[dbo].[Proc_Insert_FactoryClosingStock_Excel] @TB", param).ToListAsync();
+        //    return Ok(new { success = result, message = "" });
+        //}
+
+        //public IActionResult SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
+        //{
+        //    dynamic jsonData = body;
+        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
+        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
+
+        //    var records = ProductionPlanLogic.SaveExcel_FactoryClosingStock(MSSQLConnection, dt);
+        //    if (records != null && records.Count() > 0)
+        //    {
+        //        return Ok(new { success = 1, message = "Production Plan", data = records });
+        //    }
+        //    else if (records.Count() <= 0)
+        //    {
+        //        return NoContent();
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+
+        //    public static String SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
+        //{
+        //    dynamic jsonData = body;
+
+        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
+        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
+
+        //    return clsDatabase.fnDBOperation(MSSQLConnection, "Proc_Insert_FactoryClosingStock_Excel",dt);
+        //}
+
+
         #endregion
 
         #endregion

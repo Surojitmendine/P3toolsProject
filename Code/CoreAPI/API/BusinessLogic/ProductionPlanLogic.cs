@@ -13,6 +13,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using static API.Entity.ProductionPlan;
+using System.Data;
+using Common.Utility;
 
 namespace API.BusinessLogic
 {
@@ -107,6 +110,34 @@ namespace API.BusinessLogic
 
         }
 
+        #endregion
+
+        #endregion
+
+        #region FactoryClosingStock
+        #region  -- List --
+        public static List<ProductionPlan.ImportExcel_FactoryClosingStock> List_FactoryClosingStock(String Connection, int MonthNo, int YearNo)
+        {
+            List<ImportExcel_FactoryClosingStock> mlist = new List<ImportExcel_FactoryClosingStock>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Get_factory_closing_stock_List", MonthNo, YearNo);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ImportExcel_FactoryClosingStock obj = new ImportExcel_FactoryClosingStock();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                //obj.SLNO = clsHelper.fnConvert2Int(DR["SLNO"]);
+                obj.Stock_date = DR["Stock_date"].ToString();
+                obj.St_group = DR["St_group"].ToString();
+                obj.St_category = DR["St_category"].ToString();
+                obj.product_name = DR["product_name"].ToString();
+                obj.quantity = clsHelper.fnConvert2Decimal(DR["quantity"]);
+                obj.UOM = DR["UOM"].ToString();
+                obj.rate = clsHelper.fnConvert2Decimal(DR["rate"]);
+                obj.amount = clsHelper.fnConvert2Decimal(DR["amount"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+
+        }
         #endregion
 
         #endregion

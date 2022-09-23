@@ -1,11 +1,11 @@
-var importfactoryproductiontarget={
+var importfactoryclosingstock={
 
     Initialize:function(){
         common.FillMonthList('ddlMonth');
         common.FillYearList('ddlYear');
     },
 
-    UploadExcel_FactoryProductionTarget:function(){
+    UploadExcel_FactoryClosingStock:function(){
         if ($('#ddlYear').val() == "0") {
             showToastErrorMessage("Year can not be blank.Select Year and Month")
             return false;
@@ -19,16 +19,16 @@ var importfactoryproductiontarget={
             Month: $('#ddlMonth').val()
         }
 
-        apiCall.ajaxFileUpload('FileUpload1','ProductionPlan/UploadExcel_FactoryProductionTarget',parameters)
+        apiCall.ajaxFileUpload('FileUpload1','ProductionPlan/UploadExcel_FactoryClosingStock',parameters)
         .then(res=>{
-            clearDatatable('dtListPPFactoryProductionTarget')
+            clearDatatable('dtListFactoryClosingStock')
             if(res.success==1){               
-                importfactoryproductiontarget.onSuccess_ListPPFactoryProductionTarget(res.data)               
+                importfactoryclosingstock.onSuccess_ListFactoryClosingStock(res.data)               
             }
         })      
     },    
 
-    ListPPFactoryProductionTarget: function () {
+    ListFactoryClosingStock: function () {
         if ($('#ddlYear').val() == "0") {
             showToastErrorMessage("Year can not be blank.Select Year and Month")
             return false;
@@ -42,19 +42,19 @@ var importfactoryproductiontarget={
             Month: $('#ddlMonth').val(),
             Year: $('#ddlYear').val(),
         }
-        apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_FactoryProductionTarget').then(response => {
+        apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_FactoryClosingStock').then(response => {
             if (typeof response != typeof undefined) {
-                clearDatatable('dtListPPFactoryProductionTarget')
-                importfactoryproductiontarget.onSuccess_ListPPFactoryProductionTarget(response.data)
+                clearDatatable('dtListFactoryClosingStock')
+                importfactoryclosingstock.onSuccess_ListFactoryClosingStock(response.data)
             }
         })
     },
 
-    onSuccess_ListPPFactoryProductionTarget: function (data) {     
+    onSuccess_ListFactoryClosingStock: function (data) {     
     let month =$('#ddlMonth').select2('data')[0].text
     let year =$('#ddlYear').select2('data')[0].text
 
-        var dtListPPFactoryProductionTarget = $('#dtListPPFactoryProductionTarget').DataTable({
+        var dtListFactoryClosingStock = $('#dtListFactoryClosingStock').DataTable({
             bServerSide: false,
             bDestroy: true,
             paging: true,
@@ -73,36 +73,43 @@ var importfactoryproductiontarget={
             aoColumns: [
                 
                 {
-                    mData: "ID", sTitle: "ID", sClass: "head1", bSortable: false,bVisible:false,
+                    mData: "Stock_date", sTitle: "Stock Date", sClass: "head1", bSortable: false,
                 },                
                 {
-                    mData: "MonthName", sTitle: "For Month", sClass: "head1", bSortable: true,
+                    mData: "St_group", sTitle: "Stock Group", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "ProductCode", sTitle: "Product Code", sClass: "head1", bSortable: true,
+                    mData: "St_category", sTitle: "Stock Category", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "ProductName", sTitle: "Product Name", sClass: "head1", bSortable: true,
+                    mData: "product_name", sTitle: "Product Name", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "PackUnit", sTitle: "Pack Unit", sClass: "head1", bSortable: true,
+                    mData: "quantity", sTitle: "Quantity", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "FinalUnits_QTY", sTitle: "Units", sClass: "head1", bSortable: true,
+                    mData: "UOM", sTitle: "UOM", sClass: "head1", bSortable: true,
                 },
+                {
+                    mData: "rate", sTitle: "Rate", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "amount", sTitle: "Amount", sClass: "head1", bSortable: true,
+                },
+                
             ],
 
             bUseRendered: true,
             sPaginationType: "simple_numbers",
             aaSorting: [],
-            "dom": '<<"float-right"l>f<t><"#df"<"float-left" i><"float-right pagination pagination-sm p-1"p>>>',
+            "dom": '<<"float-right"l>f<t><"#df"<"float-left" i><"float-right pagination pagination-sm p-0"p>>>',
             "lengthChange": true,
             "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
 
             fnDrawCallback: function (oSettings) {
                 var info = this.api().page.info();
                 if (info.recordsTotal > 0) {
-                    var tmptable = $('#dtListPPFactoryProductionTarget').DataTable();
+                    var tmptable = $('#dtListFactoryClosingStock').DataTable();
                     tmptable.buttons().destroy();
                     new $.fn.DataTable.Buttons(tmptable, {
                         buttons: [
@@ -118,14 +125,14 @@ var importfactoryproductiontarget={
                     tmptable.buttons(0, null).container().appendTo('#export-area');
                 }
                 else if (info.recordsTotal <= 0) {
-                    var tmptable = $('#dtListPPFactoryProductionTarget').DataTable();
+                    var tmptable = $('#dtListFactoryClosingStock').DataTable();
                     tmptable.buttons().destroy();
                 }
             },
         });
     },
 
-    SaveExcel_FactoryProductionTarget: function () {
+    SaveExcel_FactoryClosingStock: function () {
         if ($('#ddlYear').val() == "0") {
             showToastErrorMessage("Year can not be blank.Select Year and Month")
             return false;
@@ -134,19 +141,20 @@ var importfactoryproductiontarget={
             showToastErrorMessage("Month can not be blank.Select Year and Month")
             return false;
         }
-        let tabledata = $('#dtListPPFactoryProductionTarget').dataTable().fnGetData();
-        
+        let tabledata = $('#dtListFactoryClosingStock').dataTable().fnGetData();
+        console.log(tabledata);
+
         if (tabledata.length > 0) {
-            apiCall.ajaxCall(undefined, 'POST', 'ProductionPlan/SaveExcel_FactoryProductionTarget', { FactoryProductionTarget_Data: tabledata,year:$('#ddlYear').val(),month:$('#ddlMonth').val() })
+            apiCall.ajaxCall(undefined, 'POST', 'ProductionPlan/SaveExcel_FactoryClosingStock', { FactoryClosingStock: tabledata })
                 .then(res => {
                    
                     if (res.success == true) {
                         $("#FileUpload1").val('')
                         $('#ddlYear').val('0').trigger('change')
                         $('#ddlMonth').val('0').trigger('change')
-                        clearDatatable('dtListPPFactoryProductionTarget')
+                        clearDatatable('dtListFactoryClosingStock')
 
-                        showToastSuccessMessage("Factory Production Target Data Save Sucessfully !!")
+                        showToastSuccessMessage("Factory Closing Stock Data Save Sucessfully !!")
                     }
                 })
         }

@@ -169,47 +169,31 @@ namespace API.BusinessLogic
         #endregion
 
         #region -- Update Product Mapping Master --
-        //public async Task<bool> Update_ProductMappingMaster(MasterSetupEntity.ProductMasterMapping product)
-        //{
-        //    bool brecordcreated = false;
-        //    MasterSetupEntity.ProductMasterMapping sanitized = this.functions.SetFKValueNullIfZero(product);
-        //    var tmpProductMaster = this._mapper.Map<tbl_Master_Product>(sanitized);
-        //    this.db.tbl_Master_Product.Add(tmpProductMaster);
-        //    var result = await db.SaveChangesAsync();
-        //    if (result == 1)
-        //    {
-        //        brecordcreated = true;
-        //    }
-        //    return brecordcreated;
-        //}
-
-        public async Task Update_ProductMappingMaster(MasterSetupEntity.ProductMasterMapping product)
+        public static String Update_ProductMappingMaster(String Connection, MasterSetupEntity.ProductMasterMapping product)
         {
-            await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Update_Product_Mapping @TallyProductName={product.TallyProductName},@TallyUOM={product.TallyUOM},@ProductID={product.PK_ProductID}");
+            return clsDatabase.fnDBOperation(Connection, "usp_Update_Product_Mapping", product.TallyProductName, product.TallyUOM, product.PK_ProductID);
         }
 
         #endregion
 
         #region -- List of Product Mapping Master --
-        public List<MasterSetupEntity.ProductMasterMapping> List_ProductMappingMaster(string Type)
+        public static List<MasterSetupEntity.ProductMasterMapping> List_ProductMappingMaster(String Connection, string Type)
         {
-
-            var result = (from Pro in db.tbl_Master_Product
-                          join MasterMonth in db.tbl_Master_ProductCategory on Pro.FK_ProductCategoryID equals MasterMonth.PK_ProductCategoryID into tmpMasterMonth
-                          from lfttmpMasterMonth in tmpMasterMonth.DefaultIfEmpty()
-                          where Pro.TallyProductName == (Type == "Not Mapped" ? null : Pro.TallyProductName)
-                          orderby Pro.ProductCode, Pro.ProductName, Pro.PackUnit
-                          select new MasterSetupEntity.ProductMasterMapping
-                          {
-                              PK_ProductID = Pro.PK_ProductID,
-                              ProductCode = Pro.ProductCode,
-                              ProductCategory = lfttmpMasterMonth.CategoryName,
-                              ProductName = Pro.ProductName,
-                              PackUnit = Pro.PackUnit,
-                              TallyProductName = Pro.TallyProductName,
-                              TallyUOM = Pro.TallyUOM
-                          }).ToList();
-            return result;
+            List<ProductMasterMapping> mlist = new List<ProductMasterMapping>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_ListByType", Type);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductMasterMapping obj = new ProductMasterMapping();
+                obj.PK_ProductID = clsHelper.fnConvert2Int(DR["PK_ProductID"]);
+                obj.ProductCategory = DR["ProductCategory"].ToString();
+                obj.ProductCode = DR["ProductCode"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.PackUnit = clsHelper.fnConvert2Int(DR["PackUnit"]);
+                obj.TallyProductName = DR["TallyProductName"].ToString();
+                obj.TallyUOM = DR["TallyUOM"].ToString();
+                mlist.Add(obj);
+            }
+            return mlist;
         }
         #endregion
 
