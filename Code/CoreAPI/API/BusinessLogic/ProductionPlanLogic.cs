@@ -52,70 +52,61 @@ namespace API.BusinessLogic
 
         #endregion
 
-        #region "FactoryProductionTarget"
+        #region "Tally Product Batch"
 
-        #region -- SaveExcel --
-        public async Task<bool> SaveExcel_FactoryProductionTarget (ApplicationUser user, Int32 Year, Int32 Month, List<ProductionPlan.ImportExcel_FactoryProductionTarget> factoryProductionTarget)
+        #region  -- List TallyProductBatch --
+        public static List<ProductionPlan.ImportExcel_TallyProductBatch> List_TallyProductBatch(String Connection)
         {
-            var existingrecords = db.tbl_P3_Production_FactoryProductionTarget_AGG.Where(x => x.ForYear == Year && x.ForMonth == Month).Select(s => s).ToList();
-            if (existingrecords.Count > 0)
+            List<ImportExcel_TallyProductBatch> mlist = new List<ImportExcel_TallyProductBatch>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "uspGet_Tally_Product_Batch_List");
+            foreach (DataRow DR in DT.Rows)
             {
-                db.RemoveRange(existingrecords);
-                // var deleted = await db.SaveChangesAsync();
+                ImportExcel_TallyProductBatch obj = new ImportExcel_TallyProductBatch();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.ProductName = DR["product_name"].ToString();
+                obj.UOM = DR["UOM"].ToString();
+                obj.BatchSize = DR["Batch_size"].ToString();
+                obj.BOMName = DR["BOM_name"].ToString();
+                mlist.Add(obj);
             }
-            // ADD NEW RECORDS ....
-            bool bresult = false;
-            var newfactoryProduction = factoryProductionTarget.Where(Ps => string.IsNullOrEmpty(Ps.ID.ToString()) == true || Ps.ID <= 0).ToList();
-            var updatedfactoryProduction = factoryProductionTarget.Where(projection => projection.ID > 0).ToList();
-            var listnewfactoryProduction = this._mapper.Map<List<tbl_P3_Production_FactoryProductionTarget_AGG>>(newfactoryProduction);
-            var listupdatedfactoryProduction = this._mapper.Map<List<tbl_P3_Production_FactoryProductionTarget_AGG>>(updatedfactoryProduction);
+            return mlist;
 
-            listnewfactoryProduction.ForEach(x =>
-            {
-                x.CreatedDate = DateTime.Now;
-                x.FactoryProductionTargetDate = DateTime.Now;
-                x.FK_CreatedByID = user.Id;
-            });
-
-            this.db.tbl_P3_Production_FactoryProductionTarget_AGG.AddRange(listnewfactoryProduction);
-            var result = await this.db.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                bresult = true;
-            }
-            return bresult;
         }
         #endregion
-        #region  -- List --
-        public List<ProductionPlan.ImportExcel_FactoryProductionTarget> List_FactoryProductionTarget(int MonthNo, int YearNo)
+
+        #region SaveExcel Tally Product Batch
+        private static DataTable DTTallyProductBatch()
         {
-            var result = (from sp in db.tbl_P3_Production_FactoryProductionTarget_AGG
-                          join m in db.tbl_Master_Month on sp.ForMonth equals m.PK_MonthID into tmpm
-                          from lftm in tmpm.DefaultIfEmpty()
-                          where sp.ForYear == YearNo && sp.ForMonth == MonthNo
-                          orderby sp.ProductName, sp.PackUnit
-                          select new ProductionPlan.ImportExcel_FactoryProductionTarget
-                          {
-                              ID = sp.PK_FactoryProductionTargetID,
-                              MonthName = lftm.ShortMonthName + "-" + YearNo, //sp.FactoryProductionTargetDate.ToString("MMMM"),
-                              ProductCode = sp.ProductCode,
-                              ProductName = sp.ProductName,
-                              PackUnit = sp.PackUnit,
-                              FinalUnits_QTY = (decimal)sp.FinalUnits_QTY
-
-                          }).ToList();
-
-            return result;
-
+            DataTable DT = new DataTable();
+            DT.Columns.Add("CompanyId", typeof(System.String));
+            DT.Columns.Add("ProductName", typeof(System.String));
+            DT.Columns.Add("UOM", typeof(System.String));
+            DT.Columns.Add("BatchSize", typeof(System.String));
+            DT.Columns.Add("BOMName", typeof(System.String));
+            return DT;
+        }
+        public static String SaveExcel_TallyProductBatch(String Connection, List<ProductionPlan.ImportExcel_TallyProductBatch> tallyproductbatch)
+        {
+            DataTable tallyproductbatchDT = DTTallyProductBatch();
+            foreach (var item in tallyproductbatch)
+            {
+                DataRow DR = tallyproductbatchDT.NewRow();
+                DR["CompanyId"] = item.CompanyId;
+                DR["ProductName"] = item.ProductName;
+                DR["UOM"] = item.UOM;
+                DR["BatchSize"] = item.BatchSize;
+                DR["BOMName"] = item.BOMName;
+                tallyproductbatchDT.Rows.Add(DR);
+            }
+            return clsDatabase.fnDBOperation(Connection, "Proc_Insert_TallyProductBatch_Excel", tallyproductbatchDT);
         }
 
         #endregion
 
         #endregion
 
-        #region FactoryClosingStock
-        #region  -- List --
+        #region Factory Closing Stock
+        #region  -- List FactoryClosingStock --
         public static List<ProductionPlan.ImportExcel_FactoryClosingStock> List_FactoryClosingStock(String Connection, int MonthNo, int YearNo)
         {
             List<ImportExcel_FactoryClosingStock> mlist = new List<ImportExcel_FactoryClosingStock>();
@@ -140,7 +131,7 @@ namespace API.BusinessLogic
         }
         #endregion
 
-
+        #region SaveExcel Factory Closing Stock
         private static DataTable DTFactoryClosingStock()
         {
             DataTable DT = new DataTable();
@@ -175,6 +166,8 @@ namespace API.BusinessLogic
             return clsDatabase.fnDBOperation(Connection, "Proc_Insert_FactoryClosingStock_Excel", factoryClosingStockDT);
         }
 
+        #endregion
+        
         #endregion
 
         #region "PhysicianSamplePlan"

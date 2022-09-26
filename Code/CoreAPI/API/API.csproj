@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExcelUpload\FactoryClosingStock\" />
+    <Folder Include="ExcelUpload\TallyProductBatch\" />
     <Folder Include="ExcelUpload\SalesProjection\" />
     <Folder Include="Uploads\" />
   </ItemGroup>

@@ -114,10 +114,10 @@ var importfactoryclosingstock={
                     new $.fn.DataTable.Buttons(tmptable, {
                         buttons: [
                             {
-                                text: 'Download Factory Production Target',
+                                text: 'Download Factory Closing Stock',
                                 extend: 'excel',
                                 className: 'btn btn-info float-right ',//fas fa-file-excel
-                                title: "FactoryProductionTarget",
+                                title: "FactoryClosingStock",
                                 extension: '.xls',
                             },
                         ]

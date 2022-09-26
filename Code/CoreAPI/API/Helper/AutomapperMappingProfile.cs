@@ -30,8 +30,8 @@ public class AutomapperMappingProfile : Profile {
         CreateMap<tbl_P3_Production_PhysicianSample_AGG, ProductionPlan.ImportExcel_PhysicianSamplePlan>();
         CreateMap<ProductionPlan.ImportExcel_PhysicianSamplePlan, tbl_P3_Production_PhysicianSample_AGG>();
 
-        CreateMap<tbl_P3_Production_FactoryProductionTarget_AGG, ProductionPlan.ImportExcel_FactoryProductionTarget>();
-        CreateMap<ProductionPlan.ImportExcel_FactoryProductionTarget, tbl_P3_Production_FactoryProductionTarget_AGG>();
+        //CreateMap<tbl_P3_Production_FactoryProductionTarget_AGG, ProductionPlan.ImportExcel_FactoryProductionTarget>();
+        //CreateMap<ProductionPlan.ImportExcel_FactoryProductionTarget, tbl_P3_Production_FactoryProductionTarget_AGG>();
 
         CreateMap<tbl_P3_SecondarySaleTransDetails_Uploaded, SalesForecastEntity.Import_SecondarySales>();
         CreateMap<SalesForecastEntity.Import_SecondarySales, tbl_P3_SecondarySaleTransDetails_Uploaded>();

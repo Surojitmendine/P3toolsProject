@@ -7,16 +7,13 @@ namespace API.Entity
 {
     public static class ProductionPlan
     {
-        public class ImportExcel_FactoryProductionTarget
+        public class ImportExcel_TallyProductBatch
         {
-            public int ID { get; set; }
-            public Int32 ForYear { get; set; }
-            public Int32 ForMonth { get; set; }
-            public string MonthName { get; set; }
-            public string ProductCode { get; set; }
+            public String CompanyId { get; set; }
             public string ProductName { get; set; }
-            public string PackUnit { get; set; }
-            public decimal FinalUnits_QTY { get; set; }
+            public string UOM { get; set; }
+            public string BatchSize { get; set; }
+            public string BOMName { get; set; }
         }
 
         public class ImportExcel_PhysicianSamplePlan

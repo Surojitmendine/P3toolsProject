@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Import Physician Sample Plan Excel</h1>
+        <h1 class="m-0 text-dark">Import Tally Product Batch Excel</h1>
       </div><!-- /.col -->
 
     </div><!-- /.row -->
@@ -28,15 +28,15 @@
 
           <div class="card-body">
 
-            <div class="row" style="margin-bottom:20px">
-              <div class="col-sm-1">
+            <div class="row d-none" style="margin-bottom:20px">
+              <div class="col-sm-2">
                 <select id="ddlYear" class="form-control select2" style="width: 100%;" required></select>
               </div>
               <div class="col-sm-2">
                 <select id="ddlMonth" class="form-control select2" style="width: 100%;" required></select>
               </div>
               <div class="col-sm-2">
-                <button type="button" class="btn btn-default" onclick="importPhysicianSamplePlan.List_PhysicianSamplePlan()">
+                <button type="button" class="btn btn-default" onclick="importTallyProductBatch.List_TallyProductBatch()">
                   <i class="fas fa-search" style="color: #fd7e14;"></i>
                 </button>
               </div>
@@ -44,27 +44,27 @@
             
             <div class="row" style="margin-bottom:20px">
 
-              <div class="col-sm-3">
-                <label>1. Select Physician Sample Plan Excel file</label>
+              <div class="col-sm-4">
+                <label>1. Select Tally Product Batch Excel file</label>
                 <input type="file" id="FileUpload1" name="FileUpload1" />
               </div>
 
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 <label>2. View Uploaded Excel Data</label>
-                <button type="button" class="btn btn-default" onclick="importPhysicianSamplePlan.UploadExcel_PhysicianSamplePlan()">
+                <button type="button" class="btn btn-default" onclick="importTallyProductBatch.UploadExcel_TallyProductBatch()">
                   <i class="fas fa-upload" style="color: #fd7e14;"></i>
               </div>
               
               <div class="col-sm-4">
-                <label>3. Save Physician Sample Plan Data </label>
-                <button type="button" class="btn btn-default" onclick="importPhysicianSamplePlan.SaveExcel_PhysicianSamplePlan()">
+                <label>3. Save Tally Product Batch Data </label>
+                <button type="button" class="btn btn-default" onclick="importTallyProductBatch.SaveExcel_PhysicianSamplePlan()">
                   <i class="fas fa-save" style="color: #fd7e14;"></i>
                 </button>
               </div>
             </div>
           
 
-            <table id="dtList_PhysicianSamplePlan" class="table table-bordered table-hover">
+            <table id="dtList_TallyProductBatch" class="table table-bordered table-hover">
             </table>
 
           </div>
@@ -85,6 +85,7 @@
 
 <script>
   $(document).ready(function () {
-      importPhysicianSamplePlan.Initialize();
+    //importTallyProductBatch.Initialize();
+    importTallyProductBatch.List_TallyProductBatch()
   })
 </script>

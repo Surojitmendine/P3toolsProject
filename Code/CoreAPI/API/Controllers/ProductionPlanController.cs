@@ -68,14 +68,14 @@ namespace API.Controllers
         }
         #endregion
 
-        #region "FactoryProductionTarget"
+        #region "TallyProductBatch"
 
-        #region UploadExcel_FactoryProductionTarget
+        #region UploadExcel_TallyProductBatch
         [HttpPost]
         [SwaggerOperation(
                      Summary = "Production Plan",
                      Description = "Production Plan",
-                     OperationId = "UploadExcel_FactoryProductionTarget",
+                     OperationId = "UploadExcel_TallyProductBatch",
                      Tags = new[] { "Production Plan" }
                  )]
 
@@ -83,7 +83,7 @@ namespace API.Controllers
         [SwaggerResponse(204, "Production Plan", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
 
-        public async Task<IActionResult> UploadExcel_FactoryProductionTarget()
+        public async Task<IActionResult> UploadExcel_TallyProductBatch()
         {
             try
             {
@@ -95,8 +95,8 @@ namespace API.Controllers
                 FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
 
                 bool b1 = fileHelper.createDirectory("ExcelUpload");
-                bool b = fileHelper.createDirectory("ExcelUpload/FactoryProduction");
-                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/FactoryProduction/", fname);
+                bool b = fileHelper.createDirectory("ExcelUpload/TallyProductBatch");
+                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/TallyProductBatch/", fname);
 
                 string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
                 string extension = Path.GetExtension(fname);
@@ -111,46 +111,29 @@ namespace API.Controllers
                 }
                 DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
 
-                foreach (DataColumn column in dt.Columns)
-                {
-                    if (column.ColumnName.Contains("UnitsQTY") == true)
-                    {
-                        column.ColumnName = "FinalUnits_QTY";
-                    }
-                }
                 string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
                 var settings = new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 };
-                var  FactoryProductionTargetlist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryProductionTarget>>(dttojson, settings);
+                var FactoryTallyProductBatchlist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_TallyProductBatch>>(dttojson, settings);
 
-                var month = Convert.ToInt32(parametars.Find(x => x.Key == "Month").Value.ToString());
-                var year = Convert.ToInt32(parametars.Find(x => x.Key == "Year").Value.ToString());
-
-                 FactoryProductionTargetlist.ForEach(x =>
-                {
-                    x.ForMonth = month;
-                    x.ForYear = year;
-                    x.MonthName = this.functions.MonthName(month - 1) + " " + year.ToString();
-                });
-
-                return Ok(new { success = 1, message = "Factory Production Target", data =  FactoryProductionTargetlist });
+                return Ok(new { success = 1, message = "Tally Product Batch", data = FactoryTallyProductBatchlist });
             }
             catch (Exception ex)
             {
-                return Ok(new { success = 0, message = "Factory Production Target" });
+                return Ok(new { success = 0, message = "Tally Product Batch" });
             }
         }
         #endregion
 
-        #region SaveExcel_FactoryProductionTarget
+        #region SaveExcel_TallyProductBatch
         [HttpPost]
         [SwaggerOperation(
                            Summary = "Production Plan",
                            Description = "Production Plan",
-                           OperationId = "UpdateProjection",
+                           OperationId = "UpdateTallyProductBatch",
                            Tags = new[] { "Production Plan" }
                        )]
 
@@ -158,40 +141,46 @@ namespace API.Controllers
         [SwaggerResponse(204, "Production Plan", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
 
-        public async Task<IActionResult> SaveExcel_FactoryProductionTarget([FromBody, SwaggerParameter("FactoryProductionTarget_Data", Required = true)] JObject body)
+        public IActionResult SaveExcel_TallyProductBatch([FromBody, SwaggerParameter("TallyProductBatch", Required = true)] JObject body)
         {
-            var user = await this.GetCurrentUser();
             dynamic jsonData = body;
+            JArray tallyproductbatchList_Data = jsonData.TallyProductBatch;
 
-            JArray factoryProductionTarget_Data = jsonData.FactoryProductionTarget_Data;
+            var tallyproductbatchList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_TallyProductBatch>>(tallyproductbatchList_Data.ToString());
 
-            Int32 year = Convert.ToInt32(jsonData.year);
-            Int32 month = Convert.ToInt32(jsonData.month);
-
-            var FactoryProductionTarget_Data = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryProductionTarget>>(factoryProductionTarget_Data.ToString());
-
-            var result = await this.productionPlanLogic.SaveExcel_FactoryProductionTarget(user, year, month, FactoryProductionTarget_Data);
-            return Ok(new { success = result, message = "" });
+            var records = ProductionPlanLogic.SaveExcel_TallyProductBatch(MendineMasterConnection, tallyproductbatchList);
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
+
         #endregion
 
-        #region List Factory Production Target
+        #region List Tally Product Batch
         [HttpGet]
         [SwaggerOperation(
                          Summary = "Production Plan",
                          Description = "Production Plan",
-                         OperationId = "List_FactoryProductionTarget",
-                         Tags = new[] { "List_FactoryProductionTarget" }
+                         OperationId = "List_TallyProductBatch",
+                         Tags = new[] { "List_TallyProductBatch" }
                      )]
 
         [SwaggerResponse(200, "Production Plan")]
         [SwaggerResponse(204, "Production Plan", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
         //string ForecastingType
-        public IActionResult List_FactoryProductionTarget([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
-          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        public IActionResult List_TallyProductBatch()
         {
-            var records = this.productionPlanLogic.List_FactoryProductionTarget(Month, Year);
+            var records = ProductionPlanLogic.List_TallyProductBatch(MendineMasterConnection);
 
             if (records != null && records.Count() > 0)
             {
@@ -258,9 +247,9 @@ namespace API.Controllers
                     NullValueHandling = NullValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 };
-                var FactoryProductionTargetlist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryClosingStock>>(dttojson, settings);
+                var FactoryClosingStocklist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryClosingStock>>(dttojson, settings);
 
-                return Ok(new { success = 1, message = "Factory Closing Stock", data = FactoryProductionTargetlist });
+                return Ok(new { success = 1, message = "Factory Closing Stock", data = FactoryClosingStocklist });
             }
             catch (Exception ex)
             {
@@ -357,17 +346,6 @@ namespace API.Controllers
             }
         }
 
-        //    public static String SaveExcel_FactoryClosingStock([FromBody, SwaggerParameter("FactoryClosingStock", Required = true)] JObject body)
-        //{
-        //    dynamic jsonData = body;
-
-        //    JArray factoryProductionTarget_Data = jsonData.FactoryClosingStock;
-        //    var dt = JsonConvert.DeserializeObject<DataTable>(factoryProductionTarget_Data.ToString());
-
-        //    return clsDatabase.fnDBOperation(MSSQLConnection, "Proc_Insert_FactoryClosingStock_Excel",dt);
-        //}
-
-
         #endregion
 
         #endregion
@@ -391,8 +369,6 @@ namespace API.Controllers
         {
             try
             {
-
-
                 IFormFile file = Request.Form.Files[0];
 
                 var parametars = Request.Form.Select(x => new { x.Key, x.Value }).ToList();
