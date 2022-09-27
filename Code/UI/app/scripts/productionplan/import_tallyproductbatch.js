@@ -119,7 +119,7 @@ var importTallyProductBatch = {
     },
 
 
-    SaveExcel_PhysicianSamplePlan: function () {
+    SaveExcel_TallyProductBatch: function () {
         // if ($('#ddlYear').val() == "0") {
         //     showToastErrorMessage("Year can not be blank.Select Year and Month")
         //     return false;

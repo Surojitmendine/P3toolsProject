@@ -42,6 +42,32 @@ namespace API.Entity
             public Decimal amount { get; set; }
         }
 
+        public class ImportExcel_DepotTransitStock
+        {
+            public string CompanyId { get; set; }
+            public string Stock_date { get; set; }
+            public string St_group { get; set; }
+            public string St_category { get; set; }
+            public string product_name { get; set; }
+            public Decimal quantity { get; set; }
+            public string UOM { get; set; }
+            public Decimal rate { get; set; }
+            public Decimal amount { get; set; }
+        }
+
+        public class ImportExcel_DepotClosingStock
+        {
+            public string CompanyId { get; set; }
+            public string Stock_date { get; set; }
+            public string St_group { get; set; }
+            public string St_category { get; set; }
+            public string product_name { get; set; }
+            public Decimal quantity { get; set; }
+            public string UOM { get; set; }
+            public Decimal rate { get; set; }
+            public Decimal amount { get; set; }
+        }
+
         public class ProductionPlan_VolumeConversion
         {
             public string ForMonth { get; set; }

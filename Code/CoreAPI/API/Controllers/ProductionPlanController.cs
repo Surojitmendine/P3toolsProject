@@ -350,6 +350,270 @@ namespace API.Controllers
 
         #endregion
 
+        #region "DepotTransitStock"
+
+        #region UploadExcel_DepotTransitStock
+        [HttpPost]
+        [SwaggerOperation(
+                     Summary = "Production Plan",
+                     Description = "Production Plan",
+                     OperationId = "UploadExcel_DepotTransitStock",
+                     Tags = new[] { "Production Plan" }
+                 )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> UploadExcel_DepotTransitStock()
+        {
+            try
+            {
+                IFormFile file = Request.Form.Files[0];
+                var parametars = Request.Form.Select(x => new { x.Key, x.Value }).ToList();
+                string fname;
+                fname = file.FileName;
+                string path1 = string.Empty;
+                FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+
+                bool b1 = fileHelper.createDirectory("ExcelUpload");
+                bool b = fileHelper.createDirectory("ExcelUpload/DepotTransitStock");
+                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/DepotTransitStock/", fname);
+
+                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                string extension = Path.GetExtension(fname);
+                if (fileHelper.checkFileExists(path1))
+                {
+                    fileHelper.deleteFile(path1);
+                }
+                using (FileStream fs = System.IO.File.Create(path1))
+                {
+                    await file.CopyToAsync(fs);
+                    fs.Flush();
+                }
+                DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
+
+                string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                var DepotTransitStocklist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotTransitStock>>(dttojson, settings);
+
+                return Ok(new { success = 1, message = "Depot Transit Stock", data = DepotTransitStocklist });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = 0, message = "Depot Transit Stock" });
+            }
+        }
+        #endregion
+
+        #region SaveExcel_DepotTransitStock
+        [HttpPost]
+        [SwaggerOperation(
+                           Summary = "Production Plan",
+                           Description = "Production Plan",
+                           OperationId = "SaveExcel_DepotTransitStock",
+                           Tags = new[] { "Production Plan" }
+                       )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public IActionResult SaveExcel_DepotTransitStock([FromBody, SwaggerParameter("DepotTransitStock", Required = true)] JObject body)
+        {
+            dynamic jsonData = body;
+            JArray depottransitstockList_Data = jsonData.DepotTransitStock;
+
+            var depottransitstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotTransitStock>>(depottransitstockList_Data.ToString());
+
+            var records = ProductionPlanLogic.SaveExcel_DepotTransitStock(MendineMasterConnection, depottransitstockList);
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region List Depot Transit Stock
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Production Plan",
+                         Description = "Production Plan",
+                         OperationId = "List_DepotTransitStock",
+                         Tags = new[] { "List_DepotTransitStock" }
+                     )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_DepotTransitStock([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_DepotTransitStock(MendineMasterConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region "DepotClosingStock"
+
+        #region UploadExcel_DepotClosingStock
+        [HttpPost]
+        [SwaggerOperation(
+                     Summary = "Production Plan",
+                     Description = "Production Plan",
+                     OperationId = "UploadExcel_DepotClosingStock",
+                     Tags = new[] { "Production Plan" }
+                 )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> UploadExcel_DepotClosingStock()
+        {
+            try
+            {
+                IFormFile file = Request.Form.Files[0];
+                var parametars = Request.Form.Select(x => new { x.Key, x.Value }).ToList();
+                string fname;
+                fname = file.FileName;
+                string path1 = string.Empty;
+                FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+
+                bool b1 = fileHelper.createDirectory("ExcelUpload");
+                bool b = fileHelper.createDirectory("ExcelUpload/DepotClosingStock");
+                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/DepotClosingStock/", fname);
+
+                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                string extension = Path.GetExtension(fname);
+                if (fileHelper.checkFileExists(path1))
+                {
+                    fileHelper.deleteFile(path1);
+                }
+                using (FileStream fs = System.IO.File.Create(path1))
+                {
+                    await file.CopyToAsync(fs);
+                    fs.Flush();
+                }
+                DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
+
+                string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                var DepotClosingStocklist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotClosingStock>>(dttojson, settings);
+
+                return Ok(new { success = 1, message = "Depot Closing Stock", data = DepotClosingStocklist });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = 0, message = "Depot Closing Stock" });
+            }
+        }
+        #endregion
+
+        #region SaveExcel_DepotClosingStock
+        [HttpPost]
+        [SwaggerOperation(
+                           Summary = "Production Plan",
+                           Description = "Production Plan",
+                           OperationId = "SaveExcel_DepotClosingStock",
+                           Tags = new[] { "Production Plan" }
+                       )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public IActionResult SaveExcel_DepotClosingStock([FromBody, SwaggerParameter("DepotClosingStock", Required = true)] JObject body)
+        {
+            dynamic jsonData = body;
+            JArray depotclosingstockList_Data = jsonData.DepotClosingStock;
+
+            var depotclosingstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotClosingStock>>(depotclosingstockList_Data.ToString());
+
+            var records = ProductionPlanLogic.SaveExcel_DepotClosingStock(MendineMasterConnection, depotclosingstockList);
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region List Depot Closing Stock
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Production Plan",
+                         Description = "Production Plan",
+                         OperationId = "List_DepotClosingStock",
+                         Tags = new[] { "List_DepotClosingStock" }
+                     )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_DepotClosingStock([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_DepotClosingStock(MendineMasterConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region "Physician Sample Plan"
 
         #region UploadExcel_PhysicianSamplePlan

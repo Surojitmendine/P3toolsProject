@@ -167,7 +167,137 @@ namespace API.BusinessLogic
         }
 
         #endregion
-        
+
+        #endregion
+
+        #region "Depot Transit Stock"
+
+        #region  -- List DepotTransitStock --
+        public static List<ProductionPlan.ImportExcel_DepotTransitStock> List_DepotTransitStock(String Connection, int MonthNo, int YearNo)
+        {
+            List<ImportExcel_DepotTransitStock> mlist = new List<ImportExcel_DepotTransitStock>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Get_depot_transit_stock_List", MonthNo, YearNo);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ImportExcel_DepotTransitStock obj = new ImportExcel_DepotTransitStock();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.Stock_date = DR["Stock_date"].ToString();
+                obj.St_group = DR["St_group"].ToString();
+                obj.St_category = DR["St_category"].ToString();
+                obj.product_name = DR["product_name"].ToString();
+                obj.quantity = clsHelper.fnConvert2Decimal(DR["quantity"]);
+                obj.UOM = DR["UOM"].ToString();
+                obj.rate = clsHelper.fnConvert2Decimal(DR["rate"]);
+                obj.amount = clsHelper.fnConvert2Decimal(DR["amount"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+
+        }
+        #endregion
+
+        #region SaveExcel Depot Transit Stock
+        private static DataTable DTDepotTransitStock()
+        {
+            DataTable DT = new DataTable();
+            DT.Columns.Add("CompanyId", typeof(System.String));
+            DT.Columns.Add("Stock_date", typeof(System.String));
+            DT.Columns.Add("St_group", typeof(System.String));
+            DT.Columns.Add("St_category", typeof(System.String));
+            DT.Columns.Add("product_name", typeof(System.String));
+            DT.Columns.Add("quantity", typeof(System.Decimal));
+            DT.Columns.Add("UOM", typeof(System.String));
+            DT.Columns.Add("rate", typeof(System.Decimal));
+            DT.Columns.Add("amount", typeof(System.Decimal));
+            return DT;
+        }
+        public static String SaveExcel_DepotTransitStock(String Connection, List<ProductionPlan.ImportExcel_DepotTransitStock> depottransitStock)
+        {
+            DataTable depottransitStockDT = DTDepotTransitStock();
+            foreach (var item in depottransitStock)
+            {
+                DataRow DR = depottransitStockDT.NewRow();
+                DR["CompanyId"] = item.CompanyId;
+                DR["Stock_date"] = item.Stock_date;
+                DR["St_group"] = item.St_group;
+                DR["St_category"] = item.St_category;
+                DR["product_name"] = item.product_name;
+                DR["quantity"] = item.quantity;
+                DR["UOM"] = item.UOM;
+                DR["rate"] = item.rate;
+                DR["amount"] = item.amount;
+                depottransitStockDT.Rows.Add(DR);
+            }
+            return clsDatabase.fnDBOperation(Connection, "Proc_Insert_DepotTransitStock_Excel", depottransitStockDT);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region "Depot Transit Stock"
+
+        #region  -- List DepotClosingStock --
+        public static List<ProductionPlan.ImportExcel_DepotClosingStock> List_DepotClosingStock(String Connection, int MonthNo, int YearNo)
+        {
+            List<ImportExcel_DepotClosingStock> mlist = new List<ImportExcel_DepotClosingStock>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Get_depot_closing_stock_List", MonthNo, YearNo);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ImportExcel_DepotClosingStock obj = new ImportExcel_DepotClosingStock();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.Stock_date = DR["Stock_date"].ToString();
+                obj.St_group = DR["St_group"].ToString();
+                obj.St_category = DR["St_category"].ToString();
+                obj.product_name = DR["product_name"].ToString();
+                obj.quantity = clsHelper.fnConvert2Decimal(DR["quantity"]);
+                obj.UOM = DR["UOM"].ToString();
+                obj.rate = clsHelper.fnConvert2Decimal(DR["rate"]);
+                obj.amount = clsHelper.fnConvert2Decimal(DR["amount"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+
+        }
+        #endregion
+
+        #region SaveExcel Depot Closing Stock
+        private static DataTable DTDepotClosingStock()
+        {
+            DataTable DT = new DataTable();
+            DT.Columns.Add("CompanyId", typeof(System.String));
+            DT.Columns.Add("Stock_date", typeof(System.String));
+            DT.Columns.Add("St_group", typeof(System.String));
+            DT.Columns.Add("St_category", typeof(System.String));
+            DT.Columns.Add("product_name", typeof(System.String));
+            DT.Columns.Add("quantity", typeof(System.Decimal));
+            DT.Columns.Add("UOM", typeof(System.String));
+            DT.Columns.Add("rate", typeof(System.Decimal));
+            DT.Columns.Add("amount", typeof(System.Decimal));
+            return DT;
+        }
+        public static String SaveExcel_DepotClosingStock(String Connection, List<ProductionPlan.ImportExcel_DepotClosingStock> depotclosingStock)
+        {
+            DataTable depotclosingStockDT = DTDepotClosingStock();
+            foreach (var item in depotclosingStock)
+            {
+                DataRow DR = depotclosingStockDT.NewRow();
+                DR["CompanyId"] = item.CompanyId;
+                DR["Stock_date"] = item.Stock_date;
+                DR["St_group"] = item.St_group;
+                DR["St_category"] = item.St_category;
+                DR["product_name"] = item.product_name;
+                DR["quantity"] = item.quantity;
+                DR["UOM"] = item.UOM;
+                DR["rate"] = item.rate;
+                DR["amount"] = item.amount;
+                depotclosingStockDT.Rows.Add(DR);
+            }
+            return clsDatabase.fnDBOperation(Connection, "Proc_Insert_DepotClosingStock_Excel", depotclosingStockDT);
+        }
+
+        #endregion
+
         #endregion
 
         #region "PhysicianSamplePlan"
