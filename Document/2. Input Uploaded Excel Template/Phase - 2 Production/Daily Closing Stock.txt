@@ -1,0 +1,5 @@
+Select created_on,ProductName,Pack,Sum(ClosingBalance) ClosingBalance,NRV
+From Daily_ClosingStock_WebPortal 
+Where convert(varchar,created_on,103) = '31/08/2022'
+Group by created_on,ProductName,Pack,NRV
+Order By ProductName   ---- ADJULYN 200 -> 2392

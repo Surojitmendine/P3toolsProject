@@ -837,7 +837,7 @@ namespace API.BusinessLogic
                               && (string.IsNullOrEmpty(DepotName) == true ? sf.DepotName == sf.DepotName : arrDepotName.Any(ax => ax.Contains(sf.DepotName)))
                               && (string.IsNullOrEmpty(Product) == true ? sf.ProductName == sf.ProductName : arrProduct.Any(ax => ax.Contains(sf.ProductName)))
                               && (string.IsNullOrEmpty(PackUnit) == true ? sf.PackUnit == sf.PackUnit : arrPackUnit.Any(ax => ax.Contains(sf.PackUnit)))
-                            
+                               
                               orderby sf.DivisionName, sf.DepotName, sf.ProductName, sf.PackUnit
 
                               select new SalesForecastEntity.SaleProjection_SalesTeam

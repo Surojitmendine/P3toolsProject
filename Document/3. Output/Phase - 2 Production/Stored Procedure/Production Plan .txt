@@ -1,0 +1,178 @@
+************************* 1. Tally Product Batch ***********************************
+
+Alter  PROCEDURE [dbo].[Proc_Insert_TallyProductBatch_Excel]       
+ @TB [dbo].Type_Tally_ProductBatch READONLY      
+AS      
+BEGIN      
+ -- SET NOCOUNT ON added to prevent extra result sets from      
+ -- interfering with SELECT statements.      
+ SET NOCOUNT ON;      
+ Declare @status varchar(max)      
+      
+  BEGIN TRY      
+   Begin tran      
+   INSERT INTO [MendineMaster].[dbo].tally_product_batch       
+   ([CompanyId], [product_name], [UOM], [Batch_size], [BOM_name])        
+   SELECT LTRIM(RTRIM([CompanyId])), LTRIM(RTRIM([product_name])), 
+   LTRIM(RTRIM([UOM])), LTRIM(RTRIM([Batch_size])), LTRIM(RTRIM([BOM_name])) FROM @TB       
+   Commit tran      
+   set @status='Success'      
+  End try      
+  BEGIN CATCH      
+        SELECT @status=  ERROR_MESSAGE() ;        
+     END CATCH      
+  Select @status status      
+END 
+
+************************* END ***********************************
+
+************************* 2. List Of Tally Product Batch ***********************************
+
+Create Proc uspGet_Tally_Product_Batch_List  
+AS  
+BEGIN  
+ Select CompanyId,product_name,UOM,Batch_size,BOM_name   
+ From tally_product_batch  
+END  
+
+************************* END ***********************************
+
+************************* 3. Factory Closing Stock ***********************************
+
+Alter  PROCEDURE [dbo].[Proc_Insert_FactoryClosingStock_Excel]     
+ @TB [dbo].Type_Factory_ClosingStock READONLY    
+AS    
+BEGIN    
+ -- SET NOCOUNT ON added to prevent extra result sets from    
+ -- interfering with SELECT statements.    
+ SET NOCOUNT ON;    
+ Declare @status varchar(max)    
+    
+  BEGIN TRY    
+   Begin tran    
+   INSERT INTO [MendineMaster].[dbo].factory_closing_stock     
+   ([CompanyId], [Stock_date], [St_group], [St_category], [product_name], [quantity], [UOM], [rate], [amount])      
+   SELECT LTRIM(RTRIM([CompanyId])), Convert(datetime,[Stock_date],103), 
+   LTRIM(RTRIM([St_group])), LTRIM(RTRIM([St_category])), LTRIM(RTRIM([product_name])), 
+   LTRIM(RTRIM([quantity])), LTRIM(RTRIM([UOM])), LTRIM(RTRIM([rate])), LTRIM(RTRIM([amount])) 
+   FROM @TB     
+   Commit tran    
+   set @status='Success'    
+  End try    
+  BEGIN CATCH    
+        SELECT @status=  ERROR_MESSAGE() ;      
+     END CATCH    
+  Select @status status    
+END    
+
+************************* END ***********************************
+
+************************* 4. List Of Factory Closing Stock ***********************************
+
+--  usp_Get_factory_closing_stock_List 2,2022      
+CREATE Proc usp_Get_factory_closing_stock_List      
+@Month int,      
+@Year int      
+AS      
+BEGIN      
+ Select CompanyId, Convert(Varchar,Stock_date,103) Stock_date, St_group, St_category, product_name,      
+ quantity, UOM, rate, amount       
+ From [103.253.125.131,5000].[MendineMaster].[dbo].factory_closing_stock       
+ Where Month(Stock_date) = @Month And Year(Stock_date) = @Year      
+ order by SLNO      
+END
+
+************************* END ***********************************
+
+************************* 5. Transit Stock ***********************************
+
+Alter  PROCEDURE [dbo].[Proc_Insert_DepotTransitStock_Excel]       
+ @TB [dbo].Type_Depot_TransitStock READONLY      
+AS      
+BEGIN      
+ -- SET NOCOUNT ON added to prevent extra result sets from      
+ -- interfering with SELECT statements.      
+ SET NOCOUNT ON;      
+ Declare @status varchar(max)      
+      
+  BEGIN TRY      
+   Begin tran      
+   INSERT INTO [MendineMaster].[dbo].Depot_transit_stock_PS       
+   ([CompanyId], [Stock_date], [St_group], [St_category], [product_name], [quantity], [UOM], [rate], [amount])        
+   SELECT LTRIM(RTRIM([CompanyId])), Convert(datetime,[Stock_date],103), LTRIM(RTRIM([St_group])), 
+   LTRIM(RTRIM([St_category])), LTRIM(RTRIM([product_name])), LTRIM(RTRIM([quantity])), 
+   LTRIM(RTRIM([UOM])), LTRIM(RTRIM([rate])), LTRIM(RTRIM([amount])) FROM @TB       
+   Commit tran      
+   set @status='Success'      
+  End try      
+  BEGIN CATCH      
+        SELECT @status=  ERROR_MESSAGE() ;        
+     END CATCH      
+  Select @status status      
+END 
+
+************************* END ***********************************
+
+************************* 6. List Of Depot Transit Stock ***********************************
+
+--  usp_Get_depot_transit_stock_List 2,2022        
+CREATE Proc usp_Get_depot_transit_stock_List        
+@Month int,        
+@Year int        
+AS        
+BEGIN        
+ Select CompanyId, Convert(Varchar,Stock_date,103) Stock_date, St_group, St_category, product_name,        
+ quantity, UOM, rate, amount         
+ From [dbo].Depot_transit_stock_PS          
+ Where Month(Stock_date) = @Month And Year(Stock_date) = @Year        
+ order by SLNO        
+END
+
+************************* END ***********************************
+
+************************* 7. Depot Closing Stock ***********************************
+
+Alter  PROCEDURE [dbo].[Proc_Insert_DepotClosingStock_Excel]       
+ @TB [dbo].Type_Depot_ClosingStock READONLY      
+AS      
+BEGIN      
+ -- SET NOCOUNT ON added to prevent extra result sets from      
+ -- interfering with SELECT statements.      
+ SET NOCOUNT ON;      
+ Declare @status varchar(max)      
+      
+  BEGIN TRY      
+   Begin tran      
+   INSERT INTO [MendineMaster].[dbo].Depot_closing_stock_PS       
+   ([CompanyId], [Stock_date], [St_group], [St_category], [product_name], [quantity], [UOM], [rate], [amount])        
+   SELECT LTRIM(RTRIM([CompanyId])), Convert(datetime,[Stock_date],103), 
+   LTRIM(RTRIM([St_group])), LTRIM(RTRIM([St_category])), LTRIM(RTRIM([product_name])), 
+   LTRIM(RTRIM([quantity])), LTRIM(RTRIM([UOM])), LTRIM(RTRIM([rate])), LTRIM(RTRIM([amount]))
+   FROM @TB       
+   Commit tran      
+   set @status='Success'      
+  End try      
+  BEGIN CATCH      
+        SELECT @status=  ERROR_MESSAGE() ;        
+     END CATCH      
+  Select @status status      
+END 
+
+************************* END ***********************************
+
+************************* 8. List Of Depot Closing Stock ***********************************
+
+--  usp_Get_depot_closing_stock_List 2,2022        
+CREATE Proc usp_Get_depot_closing_stock_List        
+@Month int,        
+@Year int        
+AS        
+BEGIN        
+ Select CompanyId, Convert(Varchar,Stock_date,103) Stock_date, St_group, St_category, product_name,        
+ quantity, UOM, rate, amount         
+ From [dbo].Depot_closing_stock_PS          
+ Where Month(Stock_date) = @Month And Year(Stock_date) = @Year        
+ order by SLNO        
+END
+
+************************* END ***********************************

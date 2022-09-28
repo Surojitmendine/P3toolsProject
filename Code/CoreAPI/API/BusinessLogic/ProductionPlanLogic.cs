@@ -235,7 +235,7 @@ namespace API.BusinessLogic
 
         #endregion
 
-        #region "Depot Transit Stock"
+        #region "Depot Closing Stock"
 
         #region  -- List DepotClosingStock --
         public static List<ProductionPlan.ImportExcel_DepotClosingStock> List_DepotClosingStock(String Connection, int MonthNo, int YearNo)
