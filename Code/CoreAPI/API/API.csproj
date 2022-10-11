@@ -52,6 +52,7 @@
     <Folder Include="ExcelUpload\FactoryClosingStock\" />
     <Folder Include="ExcelUpload\DepotTransitStock\" />
     <Folder Include="ExcelUpload\DepotClosingStock\" />
+    <Folder Include="ExcelUpload\PhysicianSampleForecast\" />
     <Folder Include="ExcelUpload\TallyProductBatch\" />
     <Folder Include="ExcelUpload\SalesProjection\" />
     <Folder Include="Uploads\" />

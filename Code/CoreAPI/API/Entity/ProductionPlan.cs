@@ -68,6 +68,21 @@ namespace API.Entity
             public Decimal amount { get; set; }
         }
 
+        public class ImportExcel_PhysicianSampleForecast
+        {
+            public string CompanyId { get; set; }
+            public int ForecastForYear { get; set; }
+            public string ForecastForMonth { get; set; }
+            public string St_group { get; set; }
+            public string St_category { get; set; }
+            public string Product_Name { get; set; }
+            public Decimal Quantity { get; set; }
+            public int Pack { get; set; }
+            public string UOM { get; set; }
+            public Decimal Rate { get; set; }
+            public Decimal Amount { get; set; }
+        }
+
         public class ProductionPlan_VolumeConversion
         {
             public string ForMonth { get; set; }

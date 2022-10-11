@@ -300,6 +300,78 @@ namespace API.BusinessLogic
 
         #endregion
 
+        #region "Physician Sample Forecasting"
+
+        #region  -- List PhysicianSampleForecasting --
+        public static List<ProductionPlan.ImportExcel_PhysicianSampleForecast> List_PhysicianSampleForecast(String Connection, int MonthNo, int YearNo)
+        {
+            List<ImportExcel_PhysicianSampleForecast> mlist = new List<ImportExcel_PhysicianSampleForecast>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Get_Physician_Sample_Forecast_List", MonthNo, YearNo);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ImportExcel_PhysicianSampleForecast obj = new ImportExcel_PhysicianSampleForecast();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.ForecastForYear = clsHelper.fnConvert2Int(DR["ForecastForYear"]);
+                obj.ForecastForMonth = DR["ForecastForMonth"].ToString();
+                obj.St_group = DR["St_group"].ToString();
+                obj.St_category = DR["St_category"].ToString();
+                obj.Product_Name = DR["Product_Name"].ToString();
+                obj.Quantity = clsHelper.fnConvert2Decimal(DR["Quantity"]);
+                obj.Pack = clsHelper.fnConvert2Int(DR["Pack"]);
+                obj.UOM = DR["UOM"].ToString();
+                obj.Rate = clsHelper.fnConvert2Decimal(DR["Rate"]);
+                obj.Amount = clsHelper.fnConvert2Decimal(DR["Amount"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+
+        }
+        #endregion
+
+        #region SaveExcel Physician Sample Forecasting
+        private static DataTable DTPhysicianSampleForecasting()
+        {
+            DataTable DT = new DataTable();
+            DT.Columns.Add("CompanyId", typeof(System.String));
+            DT.Columns.Add("ForecastForYear", typeof(System.Int16));
+            DT.Columns.Add("ForecastForMonth", typeof(System.Int16));
+            DT.Columns.Add("St_group", typeof(System.String));
+            DT.Columns.Add("St_category", typeof(System.String));
+            DT.Columns.Add("Product_Name", typeof(System.String));
+            DT.Columns.Add("Quantity", typeof(System.Decimal));
+            DT.Columns.Add("Pack", typeof(System.Int16));
+            DT.Columns.Add("UOM", typeof(System.String));
+            DT.Columns.Add("Rate", typeof(System.Decimal));
+            DT.Columns.Add("Amount", typeof(System.Decimal));
+            return DT;
+        }
+
+        public static String SaveExcel_PhysicianSampleForecasting(String Connection, List<ProductionPlan.ImportExcel_PhysicianSampleForecast> physiciansampleforecasting)
+        {
+            DataTable physiciansampleforecastingDT = DTPhysicianSampleForecasting();
+            foreach (var item in physiciansampleforecasting)
+            {
+                DataRow DR = physiciansampleforecastingDT.NewRow();
+                DR["CompanyId"] = item.CompanyId;
+                DR["ForecastForYear"] = item.ForecastForYear;
+                DR["ForecastForMonth"] = item.ForecastForMonth;
+                DR["St_group"] = item.St_group;
+                DR["St_category"] = item.St_category;
+                DR["Product_Name"] = item.Product_Name;
+                DR["Quantity"] = item.Quantity;
+                DR["Pack"] = clsHelper.fnConvert2Int(item.Pack);
+                DR["UOM"] = item.UOM;
+                DR["Rate"] = item.Rate;
+                DR["Amount"] = item.Amount;
+                physiciansampleforecastingDT.Rows.Add(DR);
+            }
+            return clsDatabase.fnDBOperation(Connection, "Proc_Insert_PhysicianSampleForecasting_Excel", physiciansampleforecastingDT);
+        }
+
+        #endregion
+
+        #endregion
+
         #region "PhysicianSamplePlan"
 
         #region -- SaveExcel --

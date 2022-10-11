@@ -155,7 +155,7 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 1, message = "Production Plan", data = records });
             }
             else
             {
@@ -282,7 +282,7 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 1, message = "Production Plan", data = records });
             }
             else
             {
@@ -471,7 +471,7 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 1, message = "Production Plan", data = records });
             }
             else
             {
@@ -603,7 +603,7 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 1, message = "Production Plan", data = records });
             }
             else
             {
@@ -613,6 +613,154 @@ namespace API.Controllers
         #endregion
 
         #endregion
+
+
+        #region "Physician Sample Forecasting"
+
+        #region UploadExcel_PhysicianSampleForecast
+        [HttpPost]
+        [SwaggerOperation(
+                     Summary = "Production Plan",
+                     Description = "Production Plan",
+                     OperationId = "UploadExcel_PhysicianSampleForecast",
+                     Tags = new[] { "Production Plan" }
+                 )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> UploadExcel_PhysicianSampleForecast()
+        {
+            try
+            {
+                IFormFile file = Request.Form.Files[0];
+                var parametars = Request.Form.Select(x => new { x.Key, x.Value }).ToList();
+                string fname;
+                fname = file.FileName;
+                string path1 = string.Empty;
+                FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+
+                bool b1 = fileHelper.createDirectory("ExcelUpload");
+                bool b = fileHelper.createDirectory("ExcelUpload/PhysicianSampleForecast");
+                path1 = string.Format("{0}/{1}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/PhysicianSampleForecast/", fname);
+
+                string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                string extension = Path.GetExtension(fname);
+                if (fileHelper.checkFileExists(path1))
+                {
+                    fileHelper.deleteFile(path1);
+                }
+                using (FileStream fs = System.IO.File.Create(path1))
+                {
+                    await file.CopyToAsync(fs);
+                    fs.Flush();
+                }
+                DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
+
+                // Remove Null Rows in Datatable
+                for (int i = dt.Rows.Count-1; i >= 0; i--)
+                {
+                    var a = dt.Rows[i][1];
+                    if (dt.Rows[i][1].ToString() == "" || dt.Rows[i][1] == DBNull.Value)
+                    {
+                        dt.Rows[i].Delete();
+                    }
+                }
+                dt.AcceptChanges();
+
+                string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                var PhysicianSampleForecastlist = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_PhysicianSampleForecast>>(dttojson, settings);
+
+                
+
+                return Ok(new { success = 1, message = "Physician Sample Forecast", data = PhysicianSampleForecastlist });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = 0, message = "Physician Sample Forecast" });
+            }
+        }
+        #endregion
+
+        #region SaveExcel_PhysicianSampleForecasting
+        [HttpPost]
+        [SwaggerOperation(
+                           Summary = "Production Plan",
+                           Description = "Production Plan",
+                           OperationId = "SaveExcel_PhysicianSampleForecasting",
+                           Tags = new[] { "Production Plan" }
+                       )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public IActionResult SaveExcel_PhysicianSampleForecasting([FromBody, SwaggerParameter("PhysicianSampleForecasting", Required = true)] JObject body)
+        {
+            dynamic jsonData = body;
+            JArray physiciansampleforecastingList_Data = jsonData.PhysicianSampleForecasting;
+
+            var physiciansampleforecastingList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_PhysicianSampleForecast>>(physiciansampleforecastingList_Data.ToString());
+
+            var records = ProductionPlanLogic.SaveExcel_PhysicianSampleForecasting(MendineMasterConnection, physiciansampleforecastingList);
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region List Physician Sample Forecasting
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Production Plan",
+                         Description = "Production Plan",
+                         OperationId = "List_PhysicianSampleForecast",
+                         Tags = new[] { "List_PhysicianSampleForecast" }
+                     )]
+
+        [SwaggerResponse(200, "Production Plan")]
+        [SwaggerResponse(204, "Production Plan", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_PhysicianSampleForecast([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_PhysicianSampleForecast(MendineMasterConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return Ok(new { success = 1, message = "Production Plan", data = records });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #endregion
+
+
 
         #region "Physician Sample Plan"
 
