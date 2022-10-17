@@ -75,6 +75,12 @@ var importPhysicianSampleForecast = {
                     mData: "ForecastForYear", sTitle: "Year", sClass: "head1", bSortable: false,
                 }, 
                 {
+                    mData: "Depot", sTitle: "Depot", sClass: "head1", bSortable: false,
+                },
+                {
+                    mData: "Division", sTitle: "Division", sClass: "head1", bSortable: false,
+                },
+                {
                     mData: "St_group", sTitle: "Stock Group", sClass: "head1", bSortable: true,
                 },
                 {

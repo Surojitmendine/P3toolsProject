@@ -313,6 +313,8 @@ namespace API.BusinessLogic
                 obj.CompanyId = DR["CompanyId"].ToString();
                 obj.ForecastForYear = clsHelper.fnConvert2Int(DR["ForecastForYear"]);
                 obj.ForecastForMonth = DR["ForecastForMonth"].ToString();
+                obj.Depot = DR["Depot"].ToString();
+                obj.Division = DR["Division"].ToString();
                 obj.St_group = DR["St_group"].ToString();
                 obj.St_category = DR["St_category"].ToString();
                 obj.Product_Name = DR["Product_Name"].ToString();
@@ -335,6 +337,8 @@ namespace API.BusinessLogic
             DT.Columns.Add("CompanyId", typeof(System.String));
             DT.Columns.Add("ForecastForYear", typeof(System.Int16));
             DT.Columns.Add("ForecastForMonth", typeof(System.Int16));
+            DT.Columns.Add("Depot", typeof(System.String));
+            DT.Columns.Add("Division", typeof(System.String));
             DT.Columns.Add("St_group", typeof(System.String));
             DT.Columns.Add("St_category", typeof(System.String));
             DT.Columns.Add("Product_Name", typeof(System.String));
@@ -355,6 +359,8 @@ namespace API.BusinessLogic
                 DR["CompanyId"] = item.CompanyId;
                 DR["ForecastForYear"] = item.ForecastForYear;
                 DR["ForecastForMonth"] = item.ForecastForMonth;
+                DR["Depot"] = item.Depot;
+                DR["Division"] = item.Division;
                 DR["St_group"] = item.St_group;
                 DR["St_category"] = item.St_category;
                 DR["Product_Name"] = item.Product_Name;
@@ -515,20 +521,20 @@ namespace API.BusinessLogic
             int result = 0;
             switch (SpToCall)
             {
-                case "SyncSQLDepotSKUStock":
-                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Production_01_TransferDepotStockFromEasyReport @YearNo={Year},@MonthNo={Month}");
+                case "SyncForecastedProductionQtyIP":
+                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC PRC_Forecasted_Production_Quantity @Month={Month},@Year={Year}");
                     break;
 
-                case "SyncSQLWIPStock":
-                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Production_03_TransferWIPStockFromEasyReport @YearNo={Year},@MonthNo={Month}");
+                case "SyncForecastedProductionVolumeIP":
+                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC PRC_Forecasted_Production_Volume_IP @Month={Month},@Year={Year}");
                     break;
 
-                case "ProcessAggregateDepotStock":
-                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Production_02_Process_AggregateDepotStock @YearNo={Year},@MonthNo={Month}");
+                case "SyncForecastedProductionQtyPS":
+                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC PRC_Forecasted_Production_Quantity_PS @Month={Month},@Year={Year}");
                     break;
 
-                case "ProcessAggregateWIPStock":
-                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Production_04_Process_AggregateWIPStock @YearNo={Year},@MonthNo={Month}");
+                case "SyncForecastedProductionVolumePS":
+                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC PRC_Forecasted_Production_Volume_PS @Month={Month},@Year={Year}");
                     break;
 
                 case "GenerateProductionPlanning":

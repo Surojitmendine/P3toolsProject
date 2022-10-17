@@ -73,6 +73,8 @@ namespace API.Entity
             public string CompanyId { get; set; }
             public int ForecastForYear { get; set; }
             public string ForecastForMonth { get; set; }
+            public string Depot { get; set; }
+            public string Division { get; set; }
             public string St_group { get; set; }
             public string St_category { get; set; }
             public string Product_Name { get; set; }

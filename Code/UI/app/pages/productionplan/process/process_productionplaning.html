@@ -48,11 +48,10 @@
                         <div class="row">
                             <div class="col-lg-4 col-6">
                                     <!-- small card -->
-                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncSQLDepotSKUStock','Sync SQL WIP Stock')">
-                                        <div class="small-box bg-success" style="height: 75px;">
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncForecastedProductionQtyIP','Sync SQL WIP Stock')">
+                                        <div class="small-box bg-success" style="height: 60px;">
                                             <div class="inner">
-                                                <h4>1. Sync Finish Goods</h4>
-                                                <p>SKU Stock Data Trans from SWIL</p>
+                                                <h5>1. Forecasted Production Quantity IP</h5>
                                             </div>
                                         </div>
                                     </a>
@@ -60,15 +59,36 @@
 
                                 <div class="col-lg-4 col-6">
                                     <!-- small card -->
-                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncSQLWIPStock')">
-                                        <div class="small-box bg-success" style="height: 75px;">
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncForecastedProductionVolumeIP')">
+                                        <div class="small-box bg-success" style="height: 60px;">
                                             <div class="inner">
-                                                <h4>2. Sync SQL WIP Stock</h4>
-                                                <p>Data Transfer from Tally DB to P3 Database</p>
+                                                <h5>2. Forecasted Production Volume IP</h5>
                                             </div>
                                         </div>
                                     </a>
-                                </div>                           
+                                </div>   
+                                
+                                <div class="col-lg-4 col-6">
+                                    <!-- small card -->
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncForecastedProductionQtyPS')">
+                                        <div class="small-box bg-success" style="height: 60px;">
+                                            <div class="inner">
+                                                <h5>3. Forecasted Production Quantity PS</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <div class="col-lg-4 col-6">
+                                    <!-- small card -->
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncForecastedProductionVolumePS')">
+                                        <div class="small-box bg-success" style="height: 60px;">
+                                            <div class="inner">
+                                                <h5>4. Forecasted Production Volume PS</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                         </div>
                     
                         <div class="row">
