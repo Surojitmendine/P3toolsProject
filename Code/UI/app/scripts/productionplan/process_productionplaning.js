@@ -5,6 +5,15 @@ var pro_dataprocessing = {
         common.FillYearList('ddlYear');
     },
 
+    SyncProductionPlanTask : function () {
+        apiCall.ajaxCall(undefined, 'POST', 'ProductionPlan/Update_SyncProductionPlanTask',undefined)
+        .then((res)=>{
+            showToastSuccessMessage(res.message);
+        })
+
+        
+    },
+
     CallAPI: function (sptocall, customizedtext) {
 
         customizedtext=(typeof customizedtext==typeof undefined)?'':`Please Press Next ${customizedtext} to Process Planning`

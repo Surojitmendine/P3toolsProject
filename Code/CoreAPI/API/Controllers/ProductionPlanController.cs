@@ -1008,6 +1008,8 @@ namespace API.Controllers
         }
         #endregion
 
+        // Pallab
+        #region -- Production Planning Data Processing --
         [HttpGet]
         public async Task<IActionResult> ProductionPlaning_DataProcessing(Int32 Year, Int32 Month, string SpToCall)
         {
@@ -1017,6 +1019,33 @@ namespace API.Controllers
             else
                 return Ok(new { success = false, message = "" });
         }
+        #endregion
+
+        #region -- Update Sync Production Plan Task  --
+        [HttpPost]
+
+        [SwaggerOperation(
+                          Summary = "Update Sync ProductionPlan Task",
+                          Description = "Update Sync ProductionPlan Task",
+                          OperationId = "UpdateSyncProductionPlanTask",
+                          Tags = new[] { "Update Sync ProductionPlan Task" }
+                      )]
+        [SwaggerResponse(201, "Sync ProductionPlan Task Updated", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Update_SyncProductionPlanTask()
+        {
+            var result = ProductionPlanLogic.Update_Sync_Production_Plan_Task(MSSQLConnection);
+
+            if (result  =="Success")
+            {
+                return Ok(new { success = 1, message = "ProductionPlan Task Updated successfully." });
+            }
+            else
+            {
+                return BadRequest(new { success = 0, message = "ProductionPlan Task not update due to internal error." });
+            }
+        }
+        #endregion
 
         #endregion
     }

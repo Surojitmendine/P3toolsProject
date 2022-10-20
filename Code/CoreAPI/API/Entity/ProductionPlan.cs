@@ -120,5 +120,12 @@ namespace API.Entity
             public decimal FinalChargeInUnit { get; set; }
 
         }
+
+
+        public class Sync_ProductionPlan_Task
+        {
+            public string TaskName { get; set; }
+            public bool? IsProcessed { get; set; }
+        }
     }
 }

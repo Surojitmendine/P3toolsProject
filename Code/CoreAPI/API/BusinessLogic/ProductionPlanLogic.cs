@@ -329,6 +329,7 @@ namespace API.BusinessLogic
             return mlist;
 
         }
+
         #endregion
 
         #region SaveExcel Physician Sample Forecasting
@@ -515,6 +516,8 @@ namespace API.BusinessLogic
         }
         #endregion
 
+        // Pallab 
+        #region -- Production Planning Data Processing --
         public async Task<Int32> ProductionPlaning_DataProcessing(Int32 Year, Int32 Month, string SpToCall)
         {
             //var startDate = new DateTime(Year, Month, 1);
@@ -544,6 +547,17 @@ namespace API.BusinessLogic
             }
             return result;
         }
+
+        #endregion
+
+        #region -- Update Sync Production Plan Task --
+        public static String Update_Sync_Production_Plan_Task(String Connection)
+        {
+            var Result = clsDatabase.fnDBOperation(Connection, "usp_Update_Sync_Production_Plan_Task");
+            return Result;
+        }
+
+        #endregion
 
         #endregion
 
