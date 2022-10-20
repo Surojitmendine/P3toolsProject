@@ -1011,8 +1011,11 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> ProductionPlaning_DataProcessing(Int32 Year, Int32 Month, string SpToCall)
         {
-            await this.productionPlanLogic.ProductionPlaning_DataProcessing(Year, Month, SpToCall);
-            return Ok(new { success = true, message = "" });
+            int status = await this.productionPlanLogic.ProductionPlaning_DataProcessing(Year, Month, SpToCall);
+            if(status >0 )
+                return Ok(new { success = true, message = "" });
+            else
+                return Ok(new { success = false, message = "" });
         }
 
         #endregion

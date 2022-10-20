@@ -29,7 +29,7 @@
 
                     <div class="card-body">
                         <div class="row" style="margin-bottom:30px">
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                               <select id="ddlYear" class="form-control form-control-sm select2" style="width: 100%;"
                                  required></select>
                             </div>
@@ -38,6 +38,9 @@
                               <select id="ddlMonth" class="form-control form-control-sm select2" style="width: 100%;"
                                  required></select>
                             </div>
+                            <div class="col-sm-6">
+                                <label>Note: (Year and Month should be Production Planing Month and Year)</label>
+                              </div>
                           </div>
                     
 
@@ -89,13 +92,24 @@
                                         </div>
                                     </a>
                                 </div>
+
+                                <div class="col-lg-4 col-6">
+                                    <!-- small card -->
+                                    <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('SyncFinalForecastedProductionVolume')">
+                                        <div class="small-box bg-success" style="height: 60px;">
+                                            <div class="inner">
+                                                <h5>5. Final Forecasted Production Volume</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                         </div>
                     
-                        <div class="row">
+                        <div class="row d-none">
                             <h2>Data Process for Production Processing</h2>
                         </div>
 
-                        <div class="row">
+                        <div class="row d-none">
                             <div class="col-lg-4 col-6">
                                 <!-- small card -->
                                 <a href="javascript:void(0)" onclick="pro_dataprocessing.CallAPI('ProcessAggregateDepotStock','Process Aggregate WIP Stock')">

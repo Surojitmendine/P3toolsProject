@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using static API.Entity.ProductionPlan;
 using System.Data;
 using Common.Utility;
+using System.Data.SqlClient;
 
 namespace API.BusinessLogic
 {
@@ -537,8 +538,8 @@ namespace API.BusinessLogic
                     result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC PRC_Forecasted_Production_Volume_PS @Month={Month},@Year={Year}");
                     break;
 
-                case "GenerateProductionPlanning":
-                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC usp_Production_05_ProcessProductionPlanning @YearNo={Year},@MonthNo={Month}");
+                case "SyncFinalForecastedProductionVolume":
+                    result = await this.db.Database.ExecuteSqlInterpolatedAsync($"EXEC Proc_Final_Forecasted_Production_Volume @Month={Month},@Year={Year}");
                     break;
             }
             return result;

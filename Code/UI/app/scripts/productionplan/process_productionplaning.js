@@ -26,8 +26,12 @@ var pro_dataprocessing = {
         
         apiCall.ajaxCall(undefined, 'GET', 'ProductionPlan/ProductionPlaning_DataProcessing', ajaxdata)
             .then((res) => {
+                console.log(res);
                 if (res.success == true) {
                     showToastSuccessMessage(`Task Completed Successfully. ${customizedtext}`)
+                }
+                else{
+                    showToastErrorMessage("Please Complete Previous Process")
                 }
 
             })
