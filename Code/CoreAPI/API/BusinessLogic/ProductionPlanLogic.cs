@@ -559,6 +559,59 @@ namespace API.BusinessLogic
 
         #endregion
 
+        #region -- Get ProductWise BatchSize --
+        public static List<ProductionPlan.ProductWise_BatchSize> Get_ProductWise_BatchSize(String Connection, String ProductName)
+        {
+            List<ProductWise_BatchSize> mlist = new List<ProductWise_BatchSize>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_BatchSize_ProductWise", ProductName);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductWise_BatchSize obj = new ProductWise_BatchSize();
+                obj.BatchSize = clsHelper.fnConvert2Int(DR["Batchsize"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #region -- Get ProductName --
+        public static List<ProductionPlan.ProductionPlan_ProductName> Get_ProductName(String Connection)
+        {
+            List<ProductionPlan_ProductName> mlist = new List<ProductionPlan_ProductName>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_Productionplan_ProductName");
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductionPlan_ProductName obj = new ProductionPlan_ProductName();
+                obj.ProductName = DR["ProductName"].ToString();
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #region -- List of Chargeable Batch Product --
+        public static List<ProductionPlan.ProductionPlan_ChargeableBatchList> List_ChargeableBatchProduct(String Connection, Int32 Month, Int32 Year, String ProductName, String BatchSize)
+        {
+            List<ProductionPlan_ChargeableBatchList> mlist = new List<ProductionPlan_ChargeableBatchList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Chargeable_UnitFactor_Batch", Month, Year, ProductName, BatchSize);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductionPlan_ChargeableBatchList obj = new ProductionPlan_ChargeableBatchList();
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.ForMonth = DR["ForMonth"].ToString();
+                obj.ForYear = clsHelper.fnConvert2Int(DR["ForYear"]);
+                obj.ProductUOM = DR["ProductUOM"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.Final_Forecasted_Production_Volume_LT = clsHelper.fnConvert3Decimal(DR["Final_Forecasted_Production_Volume_LT"].ToString());
+                obj.Batchsize = clsHelper.fnConvert3Decimal(DR["Batchsize"].ToString());
+                obj.UnitFactor = clsHelper.fnConvert2Int(DR["UnitFactor"]);
+                obj.UserUnitFactor = clsHelper.fnConvert2Int(DR["UserUnitFactor"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
         #endregion
 
     }

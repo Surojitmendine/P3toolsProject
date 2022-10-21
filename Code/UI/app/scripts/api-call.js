@@ -79,21 +79,21 @@ var apiCall = {
             $.each(ApiParameter, function (key, value) {
                 queryParams += key + '=' + value + '&'
             });
-
             queryParams = queryParams.slice(0, -1);
         }
+        // Mayukh
+        //console.log(queryParams);
         //console.log(DataFormat == 'object' ? JSON.stringify(formatedData) : formatedData)
         switch (RequestType) {
             case 'GET':
-
                 xhr = $.ajax({
                     type: 'GET',
                     async: true,
                     url: queryParams == '' ? apiEndpoint + Url : apiEndpoint + Url + '?' + queryParams,
+                    cache : true,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 })
-
                 break;
 
             case 'POST':

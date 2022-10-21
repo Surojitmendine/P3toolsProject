@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static API.Entity.ProductionPlan;
 
 namespace API.Controllers
 {
@@ -658,17 +659,6 @@ namespace API.Controllers
                 }
                 DataTable dt = excelReader.ExtractExcelSheetValuesToDataTable(path1, "");
 
-                // Remove Null Rows in Datatable
-                for (int i = dt.Rows.Count-1; i >= 0; i--)
-                {
-                    var a = dt.Rows[i][1];
-                    if (dt.Rows[i][1].ToString() == "" || dt.Rows[i][1] == DBNull.Value)
-                    {
-                        dt.Rows[i].Delete();
-                    }
-                }
-                dt.AcceptChanges();
-
                 string dttojson = JsonConvert.SerializeObject(dt, Formatting.Indented);
                 var settings = new JsonSerializerSettings
                 {
@@ -1043,6 +1033,101 @@ namespace API.Controllers
             else
             {
                 return BadRequest(new { success = 0, message = "ProductionPlan Task not update due to internal error." });
+            }
+        }
+        #endregion
+
+        #region -- Get ProductName --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get ProductName",
+                         Description = "Get ProductName",
+                         OperationId = "GetProductName",
+                         Tags = new[] { "ProductName" }
+                     )]
+        [SwaggerResponse(201, "ProductName found", typeof(ProductionPlan_ProductName))]
+        [SwaggerResponse(204, "ProductName not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Get_ProductName()
+        {
+            var ProductName = ProductionPlanLogic.Get_ProductName(MSSQLConnection);
+
+            if (ProductName.Count > 0)
+            {
+                return Ok(new { success = 1, message = "ProductName found", data = ProductName });
+            }
+            else if (ProductName.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region -- Get ProductWise BatchSize --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get ProductWise BatchSize",
+                         Description = "Get ProductWise BatchSize",
+                         OperationId = "GetProductWiseBatchSize",
+                         Tags = new[] { "ProductWise BatchSize" }
+                     )]
+        [SwaggerResponse(201, "ProductWise BatchSize found", typeof(ProductWise_BatchSize))]
+        [SwaggerResponse(204, "ProductWise BatchSize not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Get_ProductWise_BatchSize([FromQuery, SwaggerParameter("ProductName", Required = true)] String ProductName)
+        {
+            var BatchSize = ProductionPlanLogic.Get_ProductWise_BatchSize(MSSQLConnection, ProductName);
+
+            if (BatchSize.Count > 0)
+            {
+                return Ok(new { success = 1, message = "BatchSize found", data = BatchSize });
+            }
+            else if (BatchSize.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region -- List of Chargeable Batch Product --
+        [HttpGet]
+        [SwaggerOperation(
+                          Summary = "Get List of Chargeable Batch Product",
+                          Description = "Get List of Chargeable Batch Product",
+                          OperationId = "ListChargeableBatch",
+                          Tags = new[] { "Chargeable Batch" }
+                      )]
+
+        [SwaggerResponse(200, "Chargeable Batch Product found"/*,typeof(IEnumerable<Vendor>)*/)]
+        [SwaggerResponse(204, "Chargeable Batch Product not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult List_ChargeableBatchProduct(Int32 Month, Int32 Year, String ProductName, String BatchSize)
+        {
+            var lstData = ProductionPlanLogic.List_ChargeableBatchProduct(MSSQLConnection, Month, Year, ProductName, BatchSize);
+
+            if (lstData != null && lstData.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "ChargeableBatchProduct list", data = lstData });
+            }
+            else if (lstData == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
             }
         }
         #endregion

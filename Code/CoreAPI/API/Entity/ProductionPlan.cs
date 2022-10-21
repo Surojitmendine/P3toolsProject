@@ -127,5 +127,28 @@ namespace API.Entity
             public string TaskName { get; set; }
             public bool? IsProcessed { get; set; }
         }
+
+        public class ProductWise_BatchSize
+        {
+            public int BatchSize { get; set; }
+        }
+        public class ProductionPlan_ProductName
+        {
+            public String ProductName { get; set; }
+        }
+
+        public class ProductionPlan_ChargeableBatchList
+        {
+            public string CompanyId { get; set; }
+            public int ForYear { get; set; }
+            public string ForMonth { get; set; }
+            public string ProductName { get; set; }
+            public string ProductUOM { get; set; }
+            public Decimal Final_Forecasted_Production_Volume_LT { get; set; }
+            public Decimal Batchsize { get; set; }
+            public int UnitFactor { get; set; }
+            public int UserUnitFactor { get; set; }
+            
+        }
     }
 }

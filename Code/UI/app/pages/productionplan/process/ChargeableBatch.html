@@ -29,15 +29,23 @@
             <div class="card-body">
               <div class="row" style="margin-bottom:20px">
                 <div class="col-sm-2">
-                  <select id="ddlYear" class="form-control select2" onchange="chargeablebatch.SyncProductionPlanTask()" style="width: 100%;" required></select>
+                  <select id="ddlYear" class="form-control select2" style="width: 100%;" required></select>
                 </div>
   
                 <div class="col-sm-2">
                   <select id="ddlMonth" class="form-control select2" style="width: 100%;" required></select>
                 </div>
 
+                <div class="col-sm-2">
+                  <select id="ddlProductName" class="form-control select2" onchange="chargeablebatch.GetProductWiseBatchSize()" style="width: 100%;" required></select>
+                </div>
+
+                <div class="col-sm-2">
+                  <select id="ddlBatchSize" class="form-control select2" style="width: 100%;" required></select>
+                </div>
+
                 <div class="col-sm-2";">
-                  <button type="button" class="btn btn-default" onclick="importfactoryclosingstock.ListFactoryClosingStock()">
+                  <button type="button" class="btn btn-default" onclick="chargeablebatch.ListChargeableBatch()">
                     <i class="fas fa-search" style="color: #fd7e14;"></i>
                   </button>
                 </div>
@@ -69,5 +77,6 @@
   <script>
     $(document).ready(function () {
         chargeablebatch.Initialize();
+        chargeablebatch.GetProductName();
     })
   </script>
