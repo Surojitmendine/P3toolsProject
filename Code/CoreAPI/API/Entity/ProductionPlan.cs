@@ -139,6 +139,7 @@ namespace API.Entity
 
         public class ProductionPlan_ChargeableBatchList
         {
+            public long SLNO { get; set; }
             public string CompanyId { get; set; }
             public int ForYear { get; set; }
             public string ForMonth { get; set; }

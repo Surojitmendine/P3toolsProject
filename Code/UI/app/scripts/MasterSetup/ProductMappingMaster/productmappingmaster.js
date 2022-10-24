@@ -124,7 +124,7 @@ var ProductMappingMaster = {
 
     reloadDatatable: function () {
         clearDatatable("dtProductMappingMasterlist")
-        this.ListProductMaster();
+        this.ListProductMappingMaster();
     },
 
     UpdateProductMappingMaster: function (sptocall) {

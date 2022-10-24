@@ -1132,6 +1132,57 @@ namespace API.Controllers
         }
         #endregion
 
+        #region -- Get Batch Wise Unit Factor By SL NO --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get Batch Wise Unit Factor By SL NO",
+                         Description = "Get Batch Wise Unit Factor By SL NO",
+                         OperationId = "GetBatchWiseUnitFactorBySLNO",
+                         Tags = new[] { "Batch Wise Unit Factor By SLNO" }
+                     )]
+        [SwaggerResponse(201, "Batch Wise Unit Factor found")]
+        [SwaggerResponse(204, "Batch Wise Unit Factor not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult GetByID_BatchWiseUnitFactor([FromQuery, SwaggerParameter("SL NO", Required = true)] Int32 SLNO)
+        {
+            var BatchWiseUnitFactor = ProductionPlanLogic.GetByID_BatchWiseUnitFactor(MSSQLConnection, SLNO);
+
+            if (BatchWiseUnitFactor.Count > 0)
+            {
+                return Ok(new { success = 1, message = "Batch Wise Unit Factor found", data = BatchWiseUnitFactor });
+            }
+            else if (BatchWiseUnitFactor.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region -- Update Batch Wise Unit Factor By SL NO --
+        [HttpPost]
+
+        [SwaggerOperation(
+                   Summary = "Update Batch Wise Unit Factor By SL NO",
+                   Description = "Update Batch Wise Unit Factor By SL NO",
+                   OperationId = "UpdateBatchWiseUnitFactorBySLNO",
+                   Tags = new[] { "Update Batch Wise Unit Factor By SL NO" }
+               )]
+        [SwaggerResponse(201, "Batch Wise Unit Factor Updated", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public IActionResult Update_BatchWiseUnitFactorBySLNO([FromBody, SwaggerParameter("Update Batch Wise Unit Factor By SL NO", Required = true)] ProductionPlan_ChargeableBatchList ChargeableBatchID)
+        {
+            ProductionPlanLogic.Update_BatchWiseUnitFactorBySLNO(MSSQLConnection, ChargeableBatchID);
+            return Ok(new { data = "Batch Wise User Unit Factor Data Updated Successfully !!!!!" });
+        }
+        #endregion
+
         #endregion
     }
 }

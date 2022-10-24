@@ -597,6 +597,7 @@ namespace API.BusinessLogic
             foreach (DataRow DR in DT.Rows)
             {
                 ProductionPlan_ChargeableBatchList obj = new ProductionPlan_ChargeableBatchList();
+                obj.SLNO = clsHelper.fnConvert2Long(DR["SLNO"]);
                 obj.CompanyId = DR["CompanyId"].ToString();
                 obj.ForMonth = DR["ForMonth"].ToString();
                 obj.ForYear = clsHelper.fnConvert2Int(DR["ForYear"]);
@@ -610,6 +611,38 @@ namespace API.BusinessLogic
             }
             return mlist;
         }
+        #endregion
+
+        #region -- Get Chargeable Batch Product By SL NO --
+        public static List<ProductionPlan.ProductionPlan_ChargeableBatchList> GetByID_BatchWiseUnitFactor(String Connection, Int32 SLNO)
+        {
+            List<ProductionPlan_ChargeableBatchList> mlist = new List<ProductionPlan_ChargeableBatchList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_Chargeable_UnitFactor_Batch_By_SLNO", SLNO);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductionPlan_ChargeableBatchList obj = new ProductionPlan_ChargeableBatchList();
+                obj.SLNO = clsHelper.fnConvert2Long(DR["SLNO"]);
+                obj.CompanyId = DR["CompanyId"].ToString();
+                obj.ForMonth = DR["ForMonth"].ToString();
+                obj.ForYear = clsHelper.fnConvert2Int(DR["ForYear"]);
+                obj.ProductUOM = DR["ProductUOM"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.Final_Forecasted_Production_Volume_LT = clsHelper.fnConvert3Decimal(DR["Final_Forecasted_Production_Volume_LT"].ToString());
+                obj.Batchsize = clsHelper.fnConvert3Decimal(DR["Batchsize"].ToString());
+                obj.UnitFactor = clsHelper.fnConvert2Int(DR["UnitFactor"]);
+                obj.UserUnitFactor = clsHelper.fnConvert2Int(DR["UserUnitFactor"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #region -- Update Batch Wise Unit Factor By SL NO --
+        public static String Update_BatchWiseUnitFactorBySLNO(String Connection, ProductionPlan.ProductionPlan_ChargeableBatchList productBatchsizeUF)
+        {
+            return clsDatabase.fnDBOperation(Connection, "usp_Update_Chargeable_BatchSize_UnitFactor", productBatchsizeUF.SLNO, productBatchsizeUF.UserUnitFactor);
+        }
+
         #endregion
 
         #endregion
