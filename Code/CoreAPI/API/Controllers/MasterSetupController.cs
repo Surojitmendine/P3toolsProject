@@ -50,6 +50,70 @@ namespace API.Controllers
         }
         #region -- PRODUCT MASTER ---
 
+        #region -- Get Product Type Name --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get ProductTypeName",
+                         Description = "Get ProductTypeName",
+                         OperationId = "GetProductTypeName",
+                         Tags = new[] { "ProductTypeName" }
+                     )]
+        [SwaggerResponse(201, "ProductTypeName found")]
+        [SwaggerResponse(204, "ProductTypeName not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Get_ProductTypeName()
+        {
+            var ProductTypeName = MasterSetupLogic.Get_ProductTypeName(MSSQLConnection);
+
+            if (ProductTypeName.Count > 0)
+            {
+                return Ok(new { success = 1, message = "ProductTypeName found", data = ProductTypeName });
+            }
+            else if (ProductTypeName.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
+        #region -- Get Product Type Wise Category --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get ProductTypeWise Category",
+                         Description = "Get ProductTypeWise Category",
+                         OperationId = "GetProductTypeWiseCategory",
+                         Tags = new[] { "ProductTypeWise Category" }
+                     )]
+        [SwaggerResponse(201, "Get ProductTypeWise Category found", typeof(ProductTypeWise_CategoryName))]
+        [SwaggerResponse(204, "Get ProductTypeWise Category not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Get_ProductTypeWise_Category([FromQuery, SwaggerParameter("ProductTypeName", Required = true)] String ProductTypeName)
+        {
+            var CategoryName = MasterSetupLogic.Get_ProductTypeWise_Category(MSSQLConnection, ProductTypeName);
+
+            if (CategoryName.Count > 0)
+            {
+                return Ok(new { success = 1, message = "CategoryName found", data = CategoryName });
+            }
+            else if (CategoryName.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
         #region Product Master Search Fields
         [HttpGet]
         [SwaggerOperation(
@@ -84,22 +148,22 @@ namespace API.Controllers
         #region -- List of Product --
         [HttpGet]
         [SwaggerOperation(
-                          Summary = "Get List of all Product Type",
-                          Description = "Get List of all Product Type",
-                          OperationId = "ListProductType",
-                          Tags = new[] { "Product" }
+                          Summary = "Get List of all Product",
+                          Description = "Get List of all Product",
+                          OperationId = "ProductList",
+                          Tags = new[] { "Product List" }
                       )]
 
-        [SwaggerResponse(200, "Product Type found"/*,typeof(IEnumerable<Vendor>)*/)]
-        [SwaggerResponse(204, "Product Type not found", typeof(string))]
+        [SwaggerResponse(200, "Product List found"/*,typeof(IEnumerable<Vendor>)*/)]
+        [SwaggerResponse(204, "Product List not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> List_ProductMaster()
+        public IActionResult List_ProductMaster(string ProductTypeName, string CategoryName)
         {
-            var lstData = this.masterSetupLogic.List_ProductMaster();
+            var lstData = MasterSetupLogic.List_ProductMaster(MSSQLConnection, ProductTypeName, CategoryName);
 
             if (lstData != null && lstData.Count() > 0)
             {
-                return Ok(new { success = 1, message = "ProductType list", data = lstData });
+                return Ok(new { success = 1, message = "Product list", data = lstData });
             }
             else if (lstData == null)
             {
@@ -123,16 +187,16 @@ namespace API.Controllers
                )]
         [SwaggerResponse(201, "Product Created", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> AddNew_ProductMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMaster Product)
+        public IActionResult AddNew_ProductMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterList Product)
         {
-            var result = await this.masterSetupLogic.AddNew_ProductMaster(Product);
-            if (result == true)
+            var result = MasterSetupLogic.AddNew_ProductMaster(MSSQLConnection, Product);
+            if (result != null && result.Count() > 0)
             {
-                return Ok(new { success = 1, message = "Product Created successfully." });
+                return Ok(new { success = 1, data = "Product Created successfully." });
             }
             else
             {
-                return BadRequest(new { success = 0, message = "Product not created due to internal error." });
+                return BadRequest(new { success = 0, data = "Product not created due to internal error." });
             }
         }
         #endregion
@@ -148,23 +212,14 @@ namespace API.Controllers
                       )]
         [SwaggerResponse(201, "Product Updated", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> Update_ProductMaster([FromBody, SwaggerParameter("Update exsisting Product's Details", Required = true)] ProductMaster Product)
+        public IActionResult Update_ProductMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterList Product)
         {
-            var applicationUser = await this.GetCurrentUser();
-            var result = await this.masterSetupLogic.Update_ProductMaster(Product, applicationUser);
-
-            if (result == true)
-            {
-                return Ok(new { success = 1, message = "Product update successfully." });
-            }
-            else
-            {
-                return BadRequest(new { success = 0, message = "Product not update due to internal error." });
-            }
+            MasterSetupLogic.Update_ProductMaster(MSSQLConnection, Product);
+            return Ok(new { data = "Product Details Updated Successfully !!!!!" });
         }
         #endregion
 
-        #region -- Get by ID --
+        #region -- Get Product by ID --
         [HttpGet]
 
         [SwaggerOperation(
@@ -176,15 +231,15 @@ namespace API.Controllers
         [SwaggerResponse(201, "Product found", typeof(Divisionwise_ProductEntity))]
         [SwaggerResponse(204, "Product not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> GetByID_ProductMaster([FromQuery, SwaggerParameter("Product's ID", Required = true)] Int32 ProductID)
+        public IActionResult GetByID_ProductMaster([FromQuery, SwaggerParameter("Product's ID", Required = true)] Int32 ProductID, String ProductCategory)
         {
-            var Product = await this.masterSetupLogic.GetByID_ProductMaster(ProductID);
+            var Product = MasterSetupLogic.GetByID_ProductMaster(MSSQLConnection, ProductID, ProductCategory);
 
-            if (Product != null)
+            if (Product.Count > 0)
             {
                 return Ok(new { success = 1, message = "Product found", data = Product });
             }
-            else if (Product == null)
+            else if (Product.Count == 0)
             {
                 return NoContent();
             }
@@ -210,10 +265,10 @@ namespace API.Controllers
         [SwaggerResponse(201, "Product Mapping Updated", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
 
-        public IActionResult Update_ProductMappingMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterMapping Product)
+        public IActionResult Update_ProductMappingMaster([FromBody, SwaggerParameter("Update Product Mapping's Details", Required = true)] ProductMasterMapping Product)
         {
             MasterSetupLogic.Update_ProductMappingMaster(MSSQLConnection, Product);
-            return Ok(new { data = "Primary Sales Data Transfer Successfully !!!!!" });
+            return Ok(new { data = "Product Mapping Details Updated Successfully !!!!!" });
         }
         #endregion
 

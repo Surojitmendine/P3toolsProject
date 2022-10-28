@@ -48,6 +48,36 @@ namespace API.BusinessLogic
 
         #region PRODUCT MASTER
 
+        #region -- Get Product Type Name --
+        public static List<MasterSetupEntity.Product_Master_ProductTypeName> Get_ProductTypeName(String Connection)
+        {
+            List<Product_Master_ProductTypeName> mlist = new List<Product_Master_ProductTypeName>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_ProductTypeName");
+            foreach (DataRow DR in DT.Rows)
+            {
+                Product_Master_ProductTypeName obj = new Product_Master_ProductTypeName();
+                obj.ProductTypeName = DR["ProductTypeName"].ToString();
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #region -- Get ProductWise BatchSize --
+        public static List<MasterSetupEntity.ProductTypeWise_CategoryName> Get_ProductTypeWise_Category(String Connection, String ProductTypeName)
+        {
+            List<ProductTypeWise_CategoryName> mlist = new List<ProductTypeWise_CategoryName>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_CategoryName", ProductTypeName);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductTypeWise_CategoryName obj = new ProductTypeWise_CategoryName();
+                obj.CategoryName = DR["CategoryName"].ToString();
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
         #region -- Division Product  SearchFields
         public async Task<dynamic[]> ProductMaster_SearchFields()
         {
@@ -67,106 +97,73 @@ namespace API.BusinessLogic
         }
         #endregion
 
-        #region --  Product Master--
-
         #region -- List of Product Master --
-        public List<MasterSetupEntity.ProductMaster> List_ProductMaster()
+        public static List<MasterSetupEntity.ProductMasterList> List_ProductMaster(String Connection, string ProductTypeName, string CategoryName)
         {
-
-            var result = (from Pro in db.tbl_Master_Product
-                          join MasterMonth in db.tbl_Master_ProductCategory on Pro.FK_ProductCategoryID equals MasterMonth.PK_ProductCategoryID into tmpMasterMonth
-                          from lfttmpMasterMonth in tmpMasterMonth.DefaultIfEmpty()
-                          orderby Pro.ProductCode, Pro.ProductName, Pro.PackUnit                          
-                          select new MasterSetupEntity.ProductMaster
-                          {
-                              PK_ProductID = Pro.PK_ProductID,
-                              ProductCode = Pro.ProductCode,
-                              Category = lfttmpMasterMonth.CategoryName,
-                              ProductName = Pro.ProductName,
-                              PackUnit = Pro.PackUnit,
-                              ProductType = Pro.ProductType,
-                              ProductCategory = Pro.ProductCategory,
-                              ProductUOM = Pro.ProductUOM,
-                              FactorValue = (decimal)Pro.FactorValue,
-                              BatchSize = (decimal)Pro.BatchSize,
-                              NRVRate = (decimal)Pro.NRVRate,
-                              NRVEffectiveRateFrom = Pro.NRVEffectiveRateFrom,
-                          }).ToList();
-            return result;
+            List<ProductMasterList> mlist = new List<ProductMasterList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_ProductMaster_List", ProductTypeName, CategoryName);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductMasterList obj = new ProductMasterList();
+                obj.PK_ProductID = clsHelper.fnConvert2Long(DR["PK_ProductID"]);
+                obj.CategoryName = DR["CategoryName"].ToString();
+                obj.ProductCode = DR["ProductCode"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.ProductUOM = DR["ProductUOM"].ToString();
+                obj.PackUnit = DR["PackUnit"].ToString();
+                obj.ProductCategory = DR["ProductCategory"].ToString();
+                obj.FactorValue = clsHelper.fnConvert3Decimal(DR["FactorValue"]);
+                obj.BatchSize = clsHelper.fnConvert3Decimal(DR["BatchSize"]);
+                obj.NRVRate = clsHelper.fnConvert3Decimal(DR["NRVRate"]);
+                obj.NRVEffectiveRateFrom = DR["NRVEffectiveRateFrom"].ToString();
+                mlist.Add(obj);
+            }
+            return mlist;
         }
         #endregion
 
         #region -- Add New Product Master --
-        public async Task<bool> AddNew_ProductMaster(MasterSetupEntity.ProductMaster product)
+        public static String AddNew_ProductMaster(String Connection, MasterSetupEntity.ProductMasterList product)
         {
-            bool brecordcreated = false;
-            MasterSetupEntity.ProductMaster sanitized = this.functions.SetFKValueNullIfZero(product);
-            var tmpProductMaster = this._mapper.Map<tbl_Master_Product>(sanitized);
-            this.db.tbl_Master_Product.Add(tmpProductMaster);
-            var result = await db.SaveChangesAsync();
-            if (result == 1)
-            {
-                brecordcreated = true;
-            }
-            return brecordcreated;
+            return clsDatabase.fnDBOperation(Connection, "PRC_Add_Product_Master", product.CategoryName,
+                product.ProductCode, product.ProductName, product.ProductUOM, product.PackUnit, product.ProductCategory,
+                product.FactorValue, product.BatchSize, product.NRVRate, product.NRVEffectiveRateFrom);
         }
         #endregion
 
         #region -- Update Product Master --
-        public async Task<bool> Update_ProductMaster(MasterSetupEntity.ProductMaster d, ApplicationUser applicationUser)
+        public static String Update_ProductMaster(String Connection, MasterSetupEntity.ProductMasterList product)
         {
-            bool brecordupdated = false;
-            var tbl_Master_Product = new tbl_Master_Product()
-            {
-                PK_ProductID = d.PK_ProductID,
-                FK_ProductCategoryID = d.FK_ProductCategoryID,
-                ProductCode = d.ProductCode,
-                ProductName = d.ProductName,
-                ProductType = d.ProductType,
-                PackUnit = d.PackUnit,
-                ProductCategory = d.ProductCategory,
-                ProductUOM = d.ProductUOM,
-                FactorValue = d.FactorValue,
-                BatchSize = d.BatchSize,
-                NRVRate = d.NRVRate,
-                NRVEffectiveRateFrom = d.NRVEffectiveRateFrom,
-            };
-            db.tbl_Master_Product.Attach(tbl_Master_Product);
-            db.Entry(tbl_Master_Product).Property(x => x.ProductCode).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.ProductName).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.ProductType).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.PackUnit).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.FactorValue).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.BatchSize).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.FactorValue).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.NRVRate).IsModified = true;
-            db.Entry(tbl_Master_Product).Property(x => x.NRVEffectiveRateFrom).IsModified = true;
-            var result = await db.SaveChangesAsync();
-            if (result == 1)
-            {
-                brecordupdated = true;
-            }
-            return brecordupdated;
+            return clsDatabase.fnDBOperation(Connection, "PRC_Update_Product_Master", product.PK_ProductID, product.CategoryName,
+                product.ProductCode,product.ProductName,product.ProductUOM,product.PackUnit,product.ProductCategory,
+                product.FactorValue,product.BatchSize,product.NRVRate,product.NRVEffectiveRateFrom);
         }
 
         #endregion
 
         #region -- Get by Product ID --
-        public async Task<MasterSetupEntity.ProductMaster> GetByID_ProductMaster(Int32 Id)
+        public static List<MasterSetupEntity.ProductMasterList> GetByID_ProductMaster(String Connection, Int32 ID,String ProductCategory)
         {
-            try
+            List<ProductMasterList> mlist = new List<ProductMasterList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Product_GetByID", ID, ProductCategory);
+            foreach (DataRow DR in DT.Rows)
             {
-                var tmp_Product = await this.db.tbl_Master_Product.Where(x => x.PK_ProductID == Id).Select(s => s).SingleOrDefaultAsync();
-                var ProductMaster = this._mapper.Map<MasterSetupEntity.ProductMaster>(tmp_Product);
-                return ProductMaster;
+                ProductMasterList obj = new ProductMasterList();
+                obj.PK_ProductID = clsHelper.fnConvert2Long(DR["PK_ProductID"]);
+                obj.CategoryName = DR["CategoryName"].ToString();
+                obj.ProductCode = DR["ProductCode"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.ProductUOM = DR["ProductUOM"].ToString();
+                obj.PackUnit = DR["PackUnit"].ToString();
+                obj.ProductCategory = DR["ProductCategory"].ToString();
+                obj.FactorValue = clsHelper.fnConvert3Decimal(DR["FactorValue"]);
+                obj.BatchSize = clsHelper.fnConvert3Decimal(DR["BatchSize"]);
+                obj.NRVRate = clsHelper.fnConvert3Decimal(DR["NRVRate"]);
+                obj.NRVEffectiveRateFrom = DR["NRVEffectiveRateFrom"].ToString();
+                mlist.Add(obj);
             }
-            catch(Exception ex)
-            {
-                return null;
-            }
-
+            return mlist;
         }
-        #endregion
         #endregion
 
         #endregion

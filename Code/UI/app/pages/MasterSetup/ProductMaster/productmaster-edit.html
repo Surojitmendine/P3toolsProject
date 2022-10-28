@@ -1,0 +1,94 @@
+<div class="modal fade" role="dialog" id="modEditProductMaster" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+          <h4 class="modal-title">Product Information</h4>
+          <button type="button" class="close" onclick="ProductMaster.CloseEditModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" id="formEditProductMaster">
+            <input type="hidden" id="hdnPK_ProductID" value="0" data-ParameterName="PK_ProductID" />
+            <div class="card-body">
+  
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtProductCategory">Category</label>
+                  <input type="text" class="form-control" id="txtProductCategory" placeholder="Enter Category"
+                    data-ParameterName="ProductCategory" required />
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <label for="txtProductCode">Product Code</label>
+                  <input type="text" class="form-control" id="txtProductCode" placeholder="Enter Product Code"
+                    data-ParameterName="ProductCode" required />
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtProductName">Product Name</label>
+                  <input type="text" class="form-control" id="txtProductName" placeholder="Enter Product Name"
+                    data-ParameterName="ProductName" required />
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <label for="txtPackUnit">Pack Unit</label>
+                  <input type="number" class="form-control" id="txtPackUnit" placeholder="Enter Pack Unit"
+                    data-ParameterName="PackUnit" />
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtProductType">Product Type</label>
+                  <input type="text" class="form-control" id="txtProductType" placeholder="Enter Product Type"
+                    data-ParameterName="ProductType" required />
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <label for="txtProductUOM">Product UOM</label>
+                  <input type="text" class="form-control" id="txtProductUOM" placeholder="Enter Product UOM"
+                    data-ParameterName="ProductUOM" />
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtFactorValue">Factor Value</label>
+                  <input type="number" class="form-control" id="txtFactorValue" placeholder="Enter Factor Value"
+                    data-ParameterName="FactorValue" />
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <label for="txtBatchSize">Batch Size</label>
+                  <input type="number" class="form-control" id="txtBatchSize" placeholder="Enter BatchSize"
+                    data-ParameterName="BatchSize" />
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="txtNRVRate">NRV Rate</label>
+                  <input type="number" class="form-control" id="txtNRVRate" placeholder="Enter NRVRate"
+                    data-ParameterName="NRVRate" />
+                </div>
+  
+                <div class="form-group col-md-6">
+                  <label for="txtNRVEffectiveRateFrom">NRV Effective Rate From</label>
+                  <input type="date" class="form-control" id="txtNRVEffectiveRateFrom"
+                    placeholder="Enter NRV Effective Date From" data-ParameterName="NRVEffectiveRateFrom" />
+                </div>
+              </div>
+            </div>
+            <!--<!-- /.card-body -->
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between bg-info">
+          <button type="button" class="btn btn-default" onclick="ProductMaster.CloseEditModal()">Close</button>
+          <button type="button" onclick="ProductMaster.EditProductMaster()" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>

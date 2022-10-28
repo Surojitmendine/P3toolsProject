@@ -55,5 +55,31 @@ namespace API.Entity
             public string TallyProductName { get; set; }
             public string TallyUOM { get; set; }
         }
+
+        public class Product_Master_ProductTypeName
+        {
+            public String ProductTypeName { get; set; }
+        }
+
+        public class ProductTypeWise_CategoryName
+        {
+            public String CategoryName { get; set; }
+        }
+
+        public class ProductMasterList
+        {
+            public long PK_ProductID { get; set; }
+            public String CategoryName { get; set; }
+            public String ProductCode { get; set; }
+            public String ProductName { get; set; }
+            public String ProductUOM { get; set; }
+            public String PackUnit{ get; set; }
+            public String ProductCategory { get; set; }
+            public Decimal FactorValue { get; set; }
+            public Decimal BatchSize { get; set; }
+            public Decimal NRVRate { get; set; }  
+            public String NRVEffectiveRateFrom { get; set; }
+        }
+
     }
 }

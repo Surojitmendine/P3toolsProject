@@ -4,7 +4,6 @@ var chargeablebatch = {
         common.FillYearList('ddlYear');
     },
 
-
     GetProductName: function(){
         apiCall.ajaxCall(undefined, 'GET', 'ProductionPlan/Get_ProductName',undefined)
         .then((res)=>{
@@ -12,8 +11,15 @@ var chargeablebatch = {
             $("#ddlProductName").append("<option value=0>Select Product</option>");
             $("#ddlBatchSize").append("<option value=" + "" + ">Select BatchSize</option>");
             $.each(res.data, function (index, value) {
-                //console.log(this.ProductName);
+                // console.log(this.ProductName);
                 $("#ddlProductName").append("<option value=" + this.ProductName + ">" + this.ProductName + "</option>");
+
+            });  
+            
+            $("#ddlProductName").select2({
+                multiple: false,
+                closeOnSelect: true,
+                theme: 'bootstrap4'
             });
         })
 
@@ -23,10 +29,6 @@ var chargeablebatch = {
         var obj = {
             ProductName: $("#ddlProductName").val()
         };
-        if($("#ddlProductName").val() == "0"){
-            showToastErrorMessage("Product Name can not be blank.Select Product Name")
-            return false;
-        }
 
         apiCall.ajaxCallWithReturnData(obj, "GET", 'ProductionPlan/Get_ProductWise_BatchSize')
         .then((res)=>{
@@ -38,6 +40,12 @@ var chargeablebatch = {
             });
             
         })
+
+        $("#ddlBatchSize").select2({
+            multiple: true,
+            closeOnSelect: true,
+            theme: 'bootstrap4'
+        });
 
     },
 
@@ -56,12 +64,15 @@ var chargeablebatch = {
             return false;
         }
         
+        var Batch_Size = $('#ddlBatchSize :selected').map(function () {
+            return $(this).text();
+        }).get().join(',');
 
         var queryparams = {
             Month: $('#ddlMonth').val(),
             Year: $('#ddlYear').val(),
             ProductName: $("#ddlProductName").val(),
-            BatchSize: $("#ddlBatchSize").val()
+            BatchSize: Batch_Size
         };
         console.log(queryparams);
         clearDatatable('dtListChargeableBatch')
@@ -110,7 +121,7 @@ var chargeablebatch = {
                     previous: "<",
                     next: ">"
                 },
-                info: "Showing _Chargeable_EBatch",
+                info: "Showing _START_ - _END_ of _TOTAL_ Chargeable Batch",
             },
             aoColumns: [
                 {
