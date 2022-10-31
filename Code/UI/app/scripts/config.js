@@ -5,5 +5,5 @@ var config={
     /* Development Server */
     apiEndpoint : "http://localhost:5000/api/"
     /* Live Server */
-    // apiEndpoint : "https://p3api.mendine.co.in/api/"
+    //  apiEndpoint : "https://p3api.mendine.co.in/api/"
 }

@@ -255,8 +255,14 @@ var ProductMaster = {
 
         apiCall.ajaxCall(undefined, 'POST', 'MasterSetup/AddNew_ProductMaster',ajaxdata)
         .then((res)=>{
+            console.log(res.success + ',' + res.data);
             $("#modAddProductMaster").modal('hide');
-            showToastSuccessMessage(res.data);
+            if(res.success == 1){
+                showToastSuccessMessage(res.data);
+            }
+            else{
+                showToastErrorMessage(res.data);
+            }
             ProductMaster.reloadDatatable();
         })
 

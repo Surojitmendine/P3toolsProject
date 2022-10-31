@@ -87,15 +87,14 @@ namespace API.Entity
 
         public class ProductionPlan_VolumeConversion
         {
-            public string ForMonth { get; set; }
-            public string ProductType { get; set; }
-            public string Category { get; set; }
+            public String ForecastingForMonth { get; set; }
+            public int ForecastingForYear { get; set; }
+            public string ProductCode { get; set; }
             public string ProductName { get; set; }
             public int PackUnit { get; set; }
-            public decimal ProjectionForecastQTY { get; set; }
-            public decimal Factor { get; set; }
-            public decimal FactorProjectionForecastQTY { get; set; }
-            public decimal VolumeInLtrs { get; set; }
+            public decimal NextMonth_FinalForecastingQTY { get; set; }
+            public decimal NoOfPCS { get; set; }
+            public decimal LTR { get; set; }
         }
 
         public class ProductionPlan_VolumeCharge

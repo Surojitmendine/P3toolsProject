@@ -899,38 +899,7 @@ namespace API.Controllers
 
         #region Production Plan
 
-        #region List Volume Conversion
-        [HttpGet]
-        [SwaggerOperation(
-                         Summary = "Volume Conversion",
-                         Description = "Volume Conversion",
-                         OperationId = "List_PhysicianSamplePlan",
-                         Tags = new[] { "List_VolumeConversion" }
-                     )]
-
-        [SwaggerResponse(200, "Volume Conversion")]
-        [SwaggerResponse(204, "Volume Conversion", typeof(string))]
-        [SwaggerResponse(400, "Bad Request", typeof(string))]
-        //string ForecastingType
-        public IActionResult List_ProductionPlan_VolumeConversion([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
-          [FromQuery, SwaggerParameter("Year", Required = true)] int Year, string Product)
-        {
-            var records = this.productionPlanLogic.List_ProductionPlan_VolumeConversion(Month, Year);
-
-            if (records != null && records.Count() > 0)
-            {
-                return Ok(new { success = 1, message = "Volume Conversion", data = records });
-            }
-            else if (records.Count() <= 0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        #endregion
+        
 
         #region List Volume Charge
         [HttpGet]
@@ -1181,6 +1150,41 @@ namespace API.Controllers
             ProductionPlanLogic.Update_BatchWiseUnitFactorBySLNO(MSSQLConnection, ChargeableBatchID);
             return Ok(new { data = "Batch Wise User Unit Factor Data Updated Successfully !!!!!" });
         }
+        #endregion
+
+        #region -- Production Frecasting 
+        #region List Volume Conversion
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Volume Conversion",
+                         Description = "Volume Conversion",
+                         OperationId = "List_PhysicianSamplePlan",
+                         Tags = new[] { "List_VolumeConversion" }
+                     )]
+
+        [SwaggerResponse(200, "Volume Conversion")]
+        [SwaggerResponse(204, "Volume Conversion", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_ProductionPlan_VolumeConversion([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_ProductionPlan_VolumeConversion(MSSQLConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Volume Conversion", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
         #endregion
 
         #endregion

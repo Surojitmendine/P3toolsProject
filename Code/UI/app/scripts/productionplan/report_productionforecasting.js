@@ -3,34 +3,25 @@ var ProductionPlanforecasting = {
     Initialize: function () {
         common.FillMonthList('ddlMonth');
         common.FillYearList('ddlYear');
-
-        apiCall.ajaxCallWithReturnData(undefined, 'GET', 'SalesForecast/ForcastingDetailsSearchFields').then(response => {
-            if (typeof response != typeof undefined) {
-                ProductionPlanforecasting.FillcomboProduct(response.data.products)
-            }
-        })
     },
 
-    FillcomboProduct: function (data) {
-        $('#ddlProductName').empty();
-        $('#ddlProductName').select2({
-            multiple: true,
-            data: data,
-            closeOnSelect: true,
-            theme: 'bootstrap4',
-            placeholder: {
-                id: '', // the value of the option
-                text: 'Select Product'
-            },
-        });
-    },
+    
 
     Search: function () {
+
+        if ($('#ddlYear').val() == "0") {
+            showToastErrorMessage("Year can not be blank.Select Year and Month")
+            return false;
+        }
+        if ($('#ddlMonth').val() == "0") {
+            showToastErrorMessage("Month can not be blank.Select Year and Month")
+            return false;
+        }
 
         var queryparams = {
             Month: $('#ddlMonth').val(),
             Year: $('#ddlYear').val(),
-            Product: $('#ddlProductName').val().join(),
+            //Product: $('#ddlProductName').val().join(),
         }
 
         clearDatatable('dtList_VolumeConversion')
@@ -44,6 +35,7 @@ var ProductionPlanforecasting = {
         ).done((VolumeConversion, VolumeCharge, FinalChargeUnit) => {
             let hasdata = false
             if (typeof VolumeConversion[0] != typeof undefined) {
+                
                 hasdata = true
                 ProductionPlanforecasting.onSuccess_ListVolumeConversion(VolumeConversion[0].data)
             }
@@ -109,13 +101,13 @@ var ProductionPlanforecasting = {
             },
             aoColumns: [
                 {
-                    mData: "ForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
+                    mData: "ForecastingForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "ProductType", sTitle: "Product Type", sClass: "head1", bSortable: true,
+                    mData: "ForecastingForYear", sTitle: "Year", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "Category", sTitle: "Category", sClass: "head1", bSortable: true,
+                    mData: "ProductCode", sTitle: "Product Code", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "ProductName", sTitle: "Product Name", sClass: "head1", bSortable: true,
@@ -124,16 +116,13 @@ var ProductionPlanforecasting = {
                     mData: "PackUnit", sTitle: "Pack Unit", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "ProjectionForecastQTY", sTitle: "Forecast QTY", sClass: "head1", bSortable: true,
+                    mData: "NextMonth_FinalForecastingQTY", sTitle: "Final Forecasting QTY", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "Factor", sTitle: "Factor", sClass: "head1", bSortable: true,
+                    mData: "NoOfPCS", sTitle: "No Of PCS", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "FactorProjectionForecastQTY", sTitle: "Factor Projection QTY", sClass: "head1", bSortable: true,
-                },
-                {
-                    mData: "VolumeInLtrs", sTitle: "Volume (In Ltrs)", sClass: "head1", bSortable: true,
+                    mData: "LTR", sTitle: "Volume (In Ltrs)", sClass: "head1", bSortable: true,
                 }
             ],
 

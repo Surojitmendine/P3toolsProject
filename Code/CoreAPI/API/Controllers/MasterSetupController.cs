@@ -196,7 +196,7 @@ namespace API.Controllers
             }
             else
             {
-                return BadRequest(new { success = 0, data = "Product not created due to internal error." });
+                return Ok(new { success = 0, data = "Product not created due to Same Product Name." });
             }
         }
         #endregion
