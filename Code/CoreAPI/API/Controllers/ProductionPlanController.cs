@@ -899,41 +899,6 @@ namespace API.Controllers
 
         #region Production Plan
 
-        
-
-        #region List Volume Charge
-        [HttpGet]
-        [SwaggerOperation(
-                         Summary = "Volume Charge",
-                         Description = "Volume Charge",
-                         OperationId = "List_ProductionPlan_VolumeCharge",
-                         Tags = new[] { "List_VolumeCharge" }
-                     )]
-
-        [SwaggerResponse(200, "Volume Charge")]
-        [SwaggerResponse(204, "Volume Charge", typeof(string))]
-        [SwaggerResponse(400, "Bad Request", typeof(string))]
-        //string ForecastingType
-        public IActionResult List_ProductionPlan_VolumeCharge([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
-          [FromQuery, SwaggerParameter("Year", Required = true)] int Year, string Product)
-        {
-            var records = this.productionPlanLogic.List_ProductionPlan_VolumeCharge(Month, Year);
-
-            if (records != null && records.Count() > 0)
-            {
-                return Ok(new { success = 1, message = "Volume Charge", data = records });
-            }
-            else if (records.Count() <= 0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        #endregion
-
         #region List Volume Final Charge Unit
         [HttpGet]
         [SwaggerOperation(
@@ -1152,7 +1117,7 @@ namespace API.Controllers
         }
         #endregion
 
-        #region -- Production Frecasting 
+        #region -- Production Frecasting Volume Conversion, Volume Charge & Final Charge
         #region List Volume Conversion
         [HttpGet]
         [SwaggerOperation(
@@ -1185,6 +1150,40 @@ namespace API.Controllers
             }
         }
         #endregion
+
+        #region List Volume Charge
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Volume Charge",
+                         Description = "Volume Charge",
+                         OperationId = "List_ProductionPlan_VolumeCharge",
+                         Tags = new[] { "List_VolumeCharge" }
+                     )]
+
+        [SwaggerResponse(200, "Volume Charge")]
+        [SwaggerResponse(204, "Volume Charge", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+        public IActionResult List_ProductionPlan_VolumeCharge([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_ProductionPlan_VolumeCharge(MSSQLConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Volume Charge", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
         #endregion
 
         #endregion

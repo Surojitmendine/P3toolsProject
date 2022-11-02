@@ -446,28 +446,6 @@ namespace API.BusinessLogic
 
         #region Production Plan
 
-        #region  -- Volume Charge --
-        public List<ProductionPlan.ProductionPlan_VolumeCharge> List_ProductionPlan_VolumeCharge(int MonthNo, int YearNo)
-        {
-            var result = (from sp in db.tbl_P3_Production_Forecasting_Product
-                          join m in db.tbl_Master_Month on sp.ForMonth equals m.PK_MonthID into tmpm
-                          from lftm in tmpm.DefaultIfEmpty()
-                          where sp.ForYear == YearNo && sp.ForMonth == MonthNo
-                          orderby sp.ProductName
-                          select new ProductionPlan.ProductionPlan_VolumeCharge
-                          {
-                              ForMonth = lftm.MonthName + "-" + YearNo,
-                              ProductName = sp.ProductName,
-                              VolumeInLtrs = Convert.ToDecimal(sp.Volumn),
-                              WIPInLtrs = Convert.ToDecimal(sp.WIPQTY),
-                              ChargeableVolumeInLtrs = Convert.ToDecimal(sp.ChargeableVolume_InLtr),
-                              BatchSize = Convert.ToDecimal(sp.BatchSize),
-                              FinalChargeInLtrs = Convert.ToDecimal(sp.FinalChargeableVolume_InLtr)
-                          }).ToList();
-            return result;
-        }
-        #endregion
-
         #region  -- Volume Final Charge Unit --
         public List<ProductionPlan.ProductionPlan_FinalChargeUnit> List_ProductionPlan_FinalChargeUnit(int MonthNo, int YearNo)
         {
@@ -619,7 +597,7 @@ namespace API.BusinessLogic
 
         #endregion
 
-        #region -- Production Frecasting 
+        #region -- Production Frecasting Volume Conversion, Volume Charge & Final Charge
         #region  -- Volume Conversion --
 
         public static List<ProductionPlan.ProductionPlan_VolumeConversion> List_ProductionPlan_VolumeConversion(String Connection, Int32 Month, Int32 Year)
@@ -631,17 +609,49 @@ namespace API.BusinessLogic
                 ProductionPlan_VolumeConversion obj = new ProductionPlan_VolumeConversion();
                 obj.ForecastingForMonth = DR["ForecastingForMonth"].ToString();
                 obj.ForecastingForYear = clsHelper.fnConvert2Int(DR["ForecastingForYear"]);
+                obj.ProductType = DR["ProductType"].ToString();
+                obj.ProductCategory = DR["ProductCategory"].ToString();
                 obj.ProductCode = DR["ProductCode"].ToString();
                 obj.ProductName = DR["ProductName"].ToString();
                 obj.PackUnit = clsHelper.fnConvert2Int(DR["PackUnit"]);
+                obj.FactorValue = clsHelper.fnConvert2Decimal(DR["FactorValue"].ToString());
                 obj.NextMonth_FinalForecastingQTY = clsHelper.fnConvert2Decimal(DR["NextMonth_FinalForecastingQTY"].ToString());
                 obj.NoOfPCS = clsHelper.fnConvert3Decimal(DR["NoOfPCS"].ToString());
                 obj.LTR = clsHelper.fnConvert3Decimal(DR["LTR"].ToString());
+                obj.StockTransit = clsHelper.fnConvert3Decimal(DR["StockTransit"].ToString());
+                obj.DepotClosingStock = clsHelper.fnConvert3Decimal(DR["DepotClosingStock"].ToString());
+                obj.FactoryClosingStock = clsHelper.fnConvert3Decimal(DR["FactoryClosingStock"].ToString());
+                obj.ProductionForecastQTY = clsHelper.fnConvert3Decimal(DR["ProductionForecastQTY"].ToString());
                 mlist.Add(obj);
             }
             return mlist;
         }
         #endregion
+
+        #region  -- Volume Charge --
+        public static List<ProductionPlan.ProductionPlan_VolumeCharge> List_ProductionPlan_VolumeCharge(String Connection, int Month, int Year)
+        {
+            List<ProductionPlan_VolumeCharge> mlist = new List<ProductionPlan_VolumeCharge>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Sales_Forecasting_Comparision_Volume_Charge", Month, Year);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductionPlan_VolumeCharge obj = new ProductionPlan_VolumeCharge();
+                obj.ForecastingForMonth = DR["ForecastingForMonth"].ToString();
+                obj.ForecastingForYear = clsHelper.fnConvert2Int(DR["ForecastingForYear"]);
+                obj.ProductType = DR["ProductType"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.BatchSize = clsHelper.fnConvert2Decimal(DR["BatchSize"].ToString());
+                obj.ProductionForecastVol = clsHelper.fnConvert2Decimal(DR["ProductionForecastVol"].ToString());
+                obj.WIP = clsHelper.fnConvert2Decimal(DR["WIP"].ToString());
+                obj.ChargeableVolume = clsHelper.fnConvert3Decimal(DR["ChargeableVolume"].ToString());
+                obj.ChargeableBatchCount = clsHelper.fnConvert3Decimal(DR["ChargeableBatchCount"].ToString());
+                obj.FinalCharge = clsHelper.fnConvert3Decimal(DR["FinalCharge"].ToString());
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
 
         #endregion
 

@@ -24,37 +24,71 @@ var ProductionPlanforecasting = {
             //Product: $('#ddlProductName').val().join(),
         }
 
-        clearDatatable('dtList_VolumeConversion')
-        clearDatatable('dtList_VolumeCharge')
-        clearDatatable('dtList_FinalChargeUnit')
+        // clearDatatable('dtList_VolumeConversion')
+        // clearDatatable('dtList_VolumeCharge')
+        // clearDatatable('dtList_FinalChargeUnit')
 
-        $.when(
-            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeConversion'),
-            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeCharge'),
-            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_FinalChargeUnit')
-        ).done((VolumeConversion, VolumeCharge, FinalChargeUnit) => {
-            let hasdata = false
-            if (typeof VolumeConversion[0] != typeof undefined) {
+        if($('#ddlProductionForecasting').val() == 'Volume Conversion'){
+            clearDatatable('dtList_VolumeConversion')
+            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeConversion')
+            .done(function (response) {
+                console.log(response);
+                clearDatatable('dtList_VolumeConversion')
+                if (typeof response !== typeof undefined) {
+                    ProductionPlanforecasting.onSuccess_ListVolumeConversion(response.data)
+
+                    clearDatatable('dtList_VolumeCharge')
+                    clearDatatable('dtList_FinalChargeUnit')
+                }
+        
+            })
+        }
+
+        else if($('#ddlProductionForecasting').val() == 'Volume Charge'){
+            clearDatatable('dtList_VolumeCharge')
+            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeCharge')
+            .done(function (response) {
+                console.log(response)
+                //clearDatatable('dtList_VolumeCharge')
+                if (typeof response !== typeof undefined) {
+                    ProductionPlanforecasting.onSuccess_ListVolumeCharge(response.data)
+                    
+                    clearDatatable('dtList_VolumeConversion')
+                    clearDatatable('dtList_FinalChargeUnit')
+                }
+        
+            })
+        }
+
+        // $.when(
+        //     apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeConversion'),
+        //     apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_VolumeCharge'),
+        //     apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_FinalChargeUnit')
+        // ).done((VolumeConversion, VolumeCharge, FinalChargeUnit) => {
+        //     let hasdata = false
+        //     console.log(VolumeCharge);
+        //     if (typeof VolumeConversion[0] != typeof undefined) {
                 
-                hasdata = true
-                ProductionPlanforecasting.onSuccess_ListVolumeConversion(VolumeConversion[0].data)
-            }
+        //         hasdata = true
+        //         ProductionPlanforecasting.onSuccess_ListVolumeConversion(VolumeConversion[0].data)
+        //     }
 
-            if (typeof VolumeCharge[0] != typeof undefined) {
-                hasdata = true
-                ProductionPlanforecasting.onSuccess_ListVolumeCharge(VolumeCharge[0].data)
-            }
+        //     if (typeof VolumeCharge[0] != typeof undefined) {
+        //         hasdata = true
+        //         ProductionPlanforecasting.onSuccess_ListVolumeCharge(VolumeCharge[0].data)
+        //     }
 
-            if (typeof FinalChargeUnit[0] != typeof undefined) {
-                hasdata = true
-                ProductionPlanforecasting.onSuccess_ListFinalChargeUnit(FinalChargeUnit[0].data)
-            }
-            if (hasdata == true) {
-                $('#btnExport').show()              
-            }
+        //     if (typeof FinalChargeUnit[0] != typeof undefined) {
+        //         hasdata = true
+        //         ProductionPlanforecasting.onSuccess_ListFinalChargeUnit(FinalChargeUnit[0].data)
+        //     }
+        //     if (hasdata == true) {
+        //         $('#btnExport').show()            
+        //     }
 
+        //     //ProductionPlanforecasting.Initialize();  
 
-        })
+        // })
 
     },
 
@@ -69,11 +103,11 @@ var ProductionPlanforecasting = {
             dataArr.push(VolumeConversion)
             sheetArr.push('Volume Conversion')
         }
-        if(VolumeCharge.length>0){
+        else if(VolumeCharge.length>0){
             dataArr.push(VolumeCharge)
             sheetArr.push('Volume Charge')
         }
-        if(FinalChargeUnit.length>0){
+        else if(FinalChargeUnit.length>0){
             dataArr.push(FinalChargeUnit)
             sheetArr.push('Final ChargeUnit')
         }
@@ -106,6 +140,14 @@ var ProductionPlanforecasting = {
                 {
                     mData: "ForecastingForYear", sTitle: "Year", sClass: "head1", bSortable: true,
                 },
+
+                {
+                    mData: "ProductType", sTitle: "Product Type", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "ProductCategory", sTitle: "Product Category", sClass: "head1", bSortable: true,
+                },
+
                 {
                     mData: "ProductCode", sTitle: "Product Code", sClass: "head1", bSortable: true,
                 },
@@ -116,10 +158,25 @@ var ProductionPlanforecasting = {
                     mData: "PackUnit", sTitle: "Pack Unit", sClass: "head1", bSortable: true,
                 },
                 {
+                    mData: "FactorValue", sTitle: "Factor", sClass: "head1", bSortable: true,
+                },
+                {
                     mData: "NextMonth_FinalForecastingQTY", sTitle: "Final Forecasting QTY", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "NoOfPCS", sTitle: "No Of PCS", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "DepotClosingStock", sTitle: "Depot Closing Stock", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "StockTransit", sTitle: "Stock Transit", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "FactoryClosingStock", sTitle: "Factory Closing Stock", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "ProductionForecastQTY", sTitle: "Production Forecast QTY", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "LTR", sTitle: "Volume (In Ltrs)", sClass: "head1", bSortable: true,
@@ -177,26 +234,35 @@ var ProductionPlanforecasting = {
             },
             aoColumns: [
                 {
-                    mData: "ForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
+                    mData: "ForecastingForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "ProductName", sTitle: "Product Name", sClass: "head1", bSortable: true,
+                    mData: "ForecastingForYear", sTitle: "Year", sClass: "head1", bSortable: true,
                 },
 
                 {
-                    mData: "VolumeInLtrs", sTitle: "Volume(In Ltrs)", sClass: "head1", bSortable: true,
+                    mData: "ProductType", sTitle: "Product Type", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "WIPInLtrs", sTitle: "WIP (In Ltrs)", sClass: "head1", bSortable: true,
-                },
-                {
-                    mData: "ChargeableVolumeInLtrs", sTitle: "Chargeable Volume (In Ltrs)", sClass: "head1", bSortable: true,
+                    mData: "ProductName", sTitle: "Product Name", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "BatchSize", sTitle: "Batch Size", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "FinalChargeInLtrs", sTitle: "Final Charge (In Ltrs)", sClass: "head1", bSortable: true,
+                    mData: "ProductionForecastVol", sTitle: "Production Forecast Vol", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "WIP", sTitle: "WIP", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "ChargeableVolume", sTitle: "Chargeable Volume", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "ChargeableBatchCount", sTitle: "Chargeable Batch Count", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "FinalCharge", sTitle: "Final Charge", sClass: "head1", bSortable: true,
                 }
             ],
 

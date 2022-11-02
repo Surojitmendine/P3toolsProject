@@ -89,23 +89,33 @@ namespace API.Entity
         {
             public String ForecastingForMonth { get; set; }
             public int ForecastingForYear { get; set; }
+            public string ProductType { get; set; }
+            public string ProductCategory { get; set; }
             public string ProductCode { get; set; }
             public string ProductName { get; set; }
             public int PackUnit { get; set; }
+            public Decimal FactorValue { get; set; }
             public decimal NextMonth_FinalForecastingQTY { get; set; }
             public decimal NoOfPCS { get; set; }
             public decimal LTR { get; set; }
+            public Decimal DepotClosingStock { get; set; }
+            public Decimal StockTransit { get; set; }
+            public Decimal FactoryClosingStock { get; set; }
+            public Decimal ProductionForecastQTY { get; set; }
         }
 
         public class ProductionPlan_VolumeCharge
         {
-            public string ForMonth { get; set; }
+            public String ForecastingForMonth { get; set; }
+            public int ForecastingForYear { get; set; }
+            public string ProductType { get; set; }
             public string ProductName { get; set; }
-            public decimal VolumeInLtrs { get; set; }
-            public decimal WIPInLtrs { get; set; }
-            public decimal ChargeableVolumeInLtrs { get; set; }
-            public decimal BatchSize { get; set; }
-            public decimal FinalChargeInLtrs { get; set; }
+            public Decimal BatchSize { get; set; }
+            public decimal ProductionForecastVol { get; set; }
+            public decimal WIP { get; set; }
+            public decimal ChargeableVolume { get; set; }
+            public Decimal ChargeableBatchCount { get; set; }
+            public Decimal FinalCharge { get; set; }
         }
 
         public class ProductionPlan_FinalChargeUnit
