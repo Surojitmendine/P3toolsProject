@@ -125,7 +125,7 @@ var chargeablebatch = {
             },
             aoColumns: [
                 {
-                    mData: "SLNO", sTitle: "SLNO", sClass: "head1", bSortable: true, bVisible: false,
+                    mData: "SLNO", sTitle: "SLNO", sClass: "head1", bSortable: true, bVisible: true,
                 },
                 {
                     mData: "CompanyId", sTitle: "CompanyId", sClass: "head1", bSortable: true, bVisible: false,

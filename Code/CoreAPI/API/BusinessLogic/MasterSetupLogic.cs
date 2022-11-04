@@ -168,6 +168,65 @@ namespace API.BusinessLogic
 
         #endregion
 
+        #region -- BATCH SIZE MASTER -- 
+        #region -- Add New BatchSize Master --
+        public static String AddNew_BatchSizeMaster(String Connection, MasterSetupEntity.BatchSizeMasterList batchsize)
+        {
+            return clsDatabase.fnDBOperation(Connection, "PRC_Add_BatchSize_Master", 
+                batchsize.ProductType, batchsize.ProductName,batchsize.UOM,batchsize.BatchSize);
+        }
+        #endregion
+
+        #region -- List of Batch Size Master --
+        public static List<MasterSetupEntity.BatchSizeMasterList> List_BatchSizeMaster(String Connection)
+        {
+            List<BatchSizeMasterList> mlist = new List<BatchSizeMasterList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Get_BatchSize_Master_List");
+            foreach (DataRow DR in DT.Rows)
+            {
+                BatchSizeMasterList obj = new BatchSizeMasterList();
+                obj.BatchSizeID = clsHelper.fnConvert2Long(DR["BatchSizeID"]);
+                obj.ProductType = DR["ProductType"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.UOM = DR["UOM"].ToString();
+                obj.BatchSize = clsHelper.fnConvert3Decimal(DR["BatchSize"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #region -- Update Batch Size Master --
+        public static String Update_BatchSizeMaster(String Connection, MasterSetupEntity.BatchSizeMasterList batchsize)
+        {
+            return clsDatabase.fnDBOperation(Connection, "PRC_Update_BatchSize_Master", batchsize.BatchSizeID, batchsize.ProductName, batchsize.UOM,
+                batchsize.BatchSize);
+        }
+
+        #endregion
+
+        #region -- Get by Batch SIze ID --
+        public static List<MasterSetupEntity.BatchSizeMasterList> GetByID_BatchSizeMaster(String Connection, Int32 BatchSizeID)
+        {
+            List<BatchSizeMasterList> mlist = new List<BatchSizeMasterList>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_BatchSize_GetByID", BatchSizeID);
+            foreach (DataRow DR in DT.Rows)
+            {
+                BatchSizeMasterList obj = new BatchSizeMasterList();
+                obj.BatchSizeID = clsHelper.fnConvert2Long(DR["BatchSizeID"]);
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.UOM = DR["UOM"].ToString();
+                obj.ProductType = DR["ProductType"].ToString();
+                obj.BatchSize = clsHelper.fnConvert3Decimal(DR["BatchSize"]);
+                
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
+        #endregion
+
+        #endregion
+
         #region -- Product Mapping Master --
         #region -- Update Product Mapping Master --
         public static String Update_ProductMappingMaster(String Connection, MasterSetupEntity.ProductMasterMapping product)

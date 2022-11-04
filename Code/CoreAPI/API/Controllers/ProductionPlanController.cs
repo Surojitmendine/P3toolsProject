@@ -899,39 +899,6 @@ namespace API.Controllers
 
         #region Production Plan
 
-        #region List Volume Final Charge Unit
-        [HttpGet]
-        [SwaggerOperation(
-                         Summary = "Volume Final Charge Unit",
-                         Description = "Volume Final Charge Unit",
-                         OperationId = "List_ProductionPlan_FinalChargeUnit",
-                         Tags = new[] { "List_ProductionPlan_FinalChargeUnit" }
-                     )]
-
-        [SwaggerResponse(200, "Volume Final Charge Unit")]
-        [SwaggerResponse(204, "Volume Final Charge Unit", typeof(string))]
-        [SwaggerResponse(400, "Bad Request", typeof(string))]
-        //string ForecastingType
-        public IActionResult List_ProductionPlan_FinalChargeUnit([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
-          [FromQuery, SwaggerParameter("Year", Required = true)] int Year, string Product)
-        {
-            var records = this.productionPlanLogic.List_ProductionPlan_FinalChargeUnit(Month, Year);
-
-            if (records != null && records.Count() > 0)
-            {
-                return Ok(new { success = 1, message = "Volume Final Charge Unit", data = records });
-            }
-            else if (records.Count() <= 0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        #endregion
-
         // Pallab
         #region -- Production Planning Data Processing --
         [HttpGet]
@@ -1175,7 +1142,41 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 0, message = "No Data In Volume Charge", data = records });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #region List Volume Final Charge Unit
+        [HttpGet]
+        [SwaggerOperation(
+                         Summary = "Volume Final Charge Unit",
+                         Description = "Volume Final Charge Unit",
+                         OperationId = "List_ProductionPlan_FinalChargeUnit",
+                         Tags = new[] { "List_ProductionPlan_FinalChargeUnit" }
+                     )]
+
+        [SwaggerResponse(200, "Volume Final Charge Unit")]
+        [SwaggerResponse(204, "Volume Final Charge Unit", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        //string ForecastingType
+
+        public IActionResult List_ProductionPlan_FinalChargeUnit([FromQuery, SwaggerParameter("Month", Required = true)] int Month,
+          [FromQuery, SwaggerParameter("Year", Required = true)] int Year)
+        {
+            var records = ProductionPlanLogic.List_ProductionPlan_FinalChargeUnit(MSSQLConnection, Month, Year);
+
+            if (records != null && records.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Final Charge Unit", data = records });
+            }
+            else if (records.Count() <= 0)
+            {
+                return Ok(new { success = 0, message = "No Data In Final Charge Unit", data = records });
             }
             else
             {

@@ -212,7 +212,7 @@ namespace API.Controllers
                       )]
         [SwaggerResponse(201, "Product Updated", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public IActionResult Update_ProductMaster([FromBody, SwaggerParameter("Add Product's Details", Required = true)] ProductMasterList Product)
+        public IActionResult Update_ProductMaster([FromBody, SwaggerParameter("Update Product's Details", Required = true)] ProductMasterList Product)
         {
             MasterSetupLogic.Update_ProductMaster(MSSQLConnection, Product);
             return Ok(new { data = "Product Details Updated Successfully !!!!!" });
@@ -250,6 +250,115 @@ namespace API.Controllers
         }
 
         #endregion
+        #endregion
+
+        #region -- BATCH SIZE MASTER --
+        #region -- Add New Product --
+        [HttpPost]
+
+        [SwaggerOperation(
+                   Summary = "Add New Batch Size",
+                   Description = "Add New Batch Size",
+                   OperationId = "AddNewBatchSize",
+                   Tags = new[] { "BatchSize Setup" }
+               )]
+        [SwaggerResponse(201, "BatchSize Created", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult AddNew_BatchSizeMaster([FromBody, SwaggerParameter("Add BatchSize's Details", Required = true)] BatchSizeMasterList BatchSize)
+        {
+            var result = MasterSetupLogic.AddNew_BatchSizeMaster(MSSQLConnection, BatchSize);
+            if (result != null && result.Count() > 0)
+            {
+                return Ok(new { success = 1, data = "BatchSize Created successfully." });
+            }
+            else
+            {
+                return Ok(new { success = 0, data = "BatchSize not created due to Same Batch Name." });
+            }
+        }
+        #endregion
+
+        #region -- List of Batch Size --
+        [HttpGet]
+        [SwaggerOperation(
+                          Summary = "Get List of all Batch Size",
+                          Description = "Get List of all Batch Size",
+                          OperationId = "BatchSizeList",
+                          Tags = new[] { "Batch Size List" }
+                      )]
+
+        [SwaggerResponse(200, "Batch Size List found"/*,typeof(IEnumerable<Vendor>)*/)]
+        [SwaggerResponse(204, "Batch Size List not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult List_BatchSizeMaster()
+        {
+            var lstData = MasterSetupLogic.List_BatchSizeMaster(MSSQLConnection);
+
+            if (lstData != null && lstData.Count() > 0)
+            {
+                return Ok(new { success = 1, message = "Batch Size Master list", data = lstData });
+            }
+            else if (lstData == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #region -- Update Batch Size --
+        [HttpPost]
+
+        [SwaggerOperation(
+                          Summary = "Update exsisting Batch Size",
+                          Description = "Update exsisting Batch Size",
+                          OperationId = "UpdateBatchSize",
+                          Tags = new[] { "Batch Size Setup" }
+                      )]
+        [SwaggerResponse(201, "Batch Size Updated", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult Update_BatchSizeMaster([FromBody, SwaggerParameter("Update BatchSize's Details", Required = true)] BatchSizeMasterList BatchSize)
+        {
+            MasterSetupLogic.Update_BatchSizeMaster(MSSQLConnection, BatchSize);
+            return Ok(new { data = "Batch Size Details Updated Successfully !!!!!" });
+        }
+        #endregion
+
+        #region -- Get Batch Size by ID --
+        [HttpGet]
+
+        [SwaggerOperation(
+                         Summary = "Get Batch Size by ID",
+                         Description = "Get Batch Size by ID",
+                         OperationId = "GetBatchSizeByID",
+                         Tags = new[] { "Batch Size Setup" }
+                     )]
+        [SwaggerResponse(201, "Batch Size found", typeof(Divisionwise_ProductEntity))]
+        [SwaggerResponse(204, "Batch Size not found", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+        public IActionResult GetByID_BatchSizeMaster([FromQuery, SwaggerParameter("BatchSize's ID", Required = true)] Int32 BatchSizeID)
+        {
+            var BatchSize = MasterSetupLogic.GetByID_BatchSizeMaster(MSSQLConnection, BatchSizeID);
+
+            if (BatchSize.Count > 0)
+            {
+                return Ok(new { success = 1, message = "Batch Size found", data = BatchSize });
+            }
+            else if (BatchSize.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region-- PRODUCT MAPPING MASTER --

@@ -120,13 +120,14 @@ namespace API.Entity
 
         public class ProductionPlan_FinalChargeUnit
         {
-            public string ForMonth { get; set; }
+            public string ForecastingForMonth { get; set; }
+            public int ForecastingForYear { get; set; }
             public string ProductType { get; set; }
-            public string Category { get; set; }
+            public string ProductCategory { get; set; }
             public string ProductName { get; set; }
             public int PackUnit { get; set; }
-            public decimal FactorProjectionForecastQTY { get; set; }
-            public decimal FinalChargeInUnit { get; set; }
+            public decimal NoOfPCS { get; set; }
+            public int FinalChargeUnit { get; set; }
 
         }
 

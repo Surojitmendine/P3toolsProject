@@ -81,5 +81,14 @@ namespace API.Entity
             public String NRVEffectiveRateFrom { get; set; }
         }
 
+        public class BatchSizeMasterList
+        {
+            public long BatchSizeID { get; set; }
+            public String ProductType { get; set; }
+            public String ProductName { get; set; }
+            public String UOM { get; set; }
+            public Decimal BatchSize { get; set; }
+        }
+
     }
 }

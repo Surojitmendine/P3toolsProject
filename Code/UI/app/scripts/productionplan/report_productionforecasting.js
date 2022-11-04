@@ -3,6 +3,13 @@ var ProductionPlanforecasting = {
     Initialize: function () {
         common.FillMonthList('ddlMonth');
         common.FillYearList('ddlYear');
+
+        $("#ddlProductionForecasting").select2({
+            multiple: false,
+            closeOnSelect: true,
+            theme: 'bootstrap4'
+        });
+
     },
 
     
@@ -34,9 +41,14 @@ var ProductionPlanforecasting = {
             .done(function (response) {
                 console.log(response);
                 clearDatatable('dtList_VolumeConversion')
-                if (typeof response !== typeof undefined) {
+                if (typeof response !== typeof undefined || response.success !== 0 ) {
                     ProductionPlanforecasting.onSuccess_ListVolumeConversion(response.data)
 
+                    clearDatatable('dtList_VolumeCharge')
+                    clearDatatable('dtList_FinalChargeUnit')
+                }
+                else{
+                    ProductionPlanforecasting.onSuccess_ListVolumeConversion(response.data)
                     clearDatatable('dtList_VolumeCharge')
                     clearDatatable('dtList_FinalChargeUnit')
                 }
@@ -50,11 +62,37 @@ var ProductionPlanforecasting = {
             .done(function (response) {
                 console.log(response)
                 //clearDatatable('dtList_VolumeCharge')
-                if (typeof response !== typeof undefined) {
+                if (typeof response !== typeof undefined || response.success !== 0) {
                     ProductionPlanforecasting.onSuccess_ListVolumeCharge(response.data)
                     
                     clearDatatable('dtList_VolumeConversion')
                     clearDatatable('dtList_FinalChargeUnit')
+                }
+                else{
+                    ProductionPlanforecasting.onSuccess_ListVolumeCharge(response.data)
+                    clearDatatable('dtList_VolumeConversion')
+                    clearDatatable('dtList_FinalChargeUnit')
+                }
+        
+            })
+        }
+
+        else if($('#ddlProductionForecasting').val() == 'Final Charge Unit'){
+            clearDatatable('dtList_FinalChargeUnit')
+            apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'ProductionPlan/List_ProductionPlan_FinalChargeUnit')
+            .done(function (response) {
+                console.log(response)
+                //clearDatatable('dtList_VolumeCharge')
+                if (typeof response !== typeof undefined || response.success !== 0) {
+                    ProductionPlanforecasting.onSuccess_ListFinalChargeUnit(response.data)
+                    
+                    clearDatatable('dtList_VolumeConversion')
+                    clearDatatable('dtList_VolumeCharge')
+                }
+                else{
+                    ProductionPlanforecasting.onSuccess_ListFinalChargeUnit(response.data)
+                    clearDatatable('dtList_VolumeConversion')
+                    clearDatatable('dtList_VolumeCharge')
                 }
         
             })
@@ -317,13 +355,16 @@ var ProductionPlanforecasting = {
             },
             aoColumns: [
                 {
-                    mData: "ForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
+                    mData: "ForecastingForMonth", sTitle: "Month", sClass: "head1", bSortable: true,
+                },
+                {
+                    mData: "ForecastingForYear", sTitle: "Year", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "ProductType", sTitle: "Product Type", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "Category", sTitle: "Category", sClass: "head1", bSortable: true,
+                    mData: "ProductCategory", sTitle: "Category", sClass: "head1", bSortable: true,
                 },
                 {
                     mData: "ProductName", sTitle: "Product Name", sClass: "head1", bSortable: true,
@@ -332,10 +373,10 @@ var ProductionPlanforecasting = {
                     mData: "PackUnit", sTitle: "Pack Unit", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "FactorProjectionForecastQTY", sTitle: "Factor Projection QTY", sClass: "head1", bSortable: true,
+                    mData: "NoOfPCS", sTitle: "No Of Pcs", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: "FinalChargeInUnit", sTitle: "Final Charge In Unit", sClass: "head1", bSortable: true,
+                    mData: "FinalChargeUnit", sTitle: "Final Charge In Unit", sClass: "head1", bSortable: true,
                 }
             ],
 

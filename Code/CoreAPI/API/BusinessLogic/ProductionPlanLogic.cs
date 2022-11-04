@@ -446,28 +446,6 @@ namespace API.BusinessLogic
 
         #region Production Plan
 
-        #region  -- Volume Final Charge Unit --
-        public List<ProductionPlan.ProductionPlan_FinalChargeUnit> List_ProductionPlan_FinalChargeUnit(int MonthNo, int YearNo)
-        {
-            var result = (from sp in db.tbl_P3_Production_Forecasting_SKU
-                          join m in db.tbl_Master_Month on sp.ForMonth equals m.PK_MonthID into tmpm
-                          from lftm in tmpm.DefaultIfEmpty()
-                          where sp.ForYear == YearNo && sp.ForMonth == MonthNo
-                          orderby sp.ProductName, sp.PackUnit
-                          select new ProductionPlan.ProductionPlan_FinalChargeUnit
-                          {
-                              ForMonth = lftm.MonthName + "-" + YearNo,
-                              ProductType = sp.ProductType,
-                              Category = sp.ProductCategory,
-                              ProductName = sp.ProductName,
-                              PackUnit = Convert.ToInt32(sp.PackUnit),
-                              FactorProjectionForecastQTY = Convert.ToDecimal(sp.FactorForecastQTY),
-                              FinalChargeInUnit = Convert.ToDecimal(sp.FinalChargeableVolume_InLtr)
-                          }).ToList();
-            return result;
-        }
-        #endregion
-
         // Pallab 
         #region -- Production Planning Data Processing --
         public async Task<Int32> ProductionPlaning_DataProcessing(Int32 Year, Int32 Month, string SpToCall)
@@ -652,7 +630,29 @@ namespace API.BusinessLogic
         }
         #endregion
 
+        #region  -- Volume Final Charge Unit --
+        public static List<ProductionPlan.ProductionPlan_FinalChargeUnit> List_ProductionPlan_FinalChargeUnit(String Connection, int Month, int Year)
+        {
+            List<ProductionPlan_FinalChargeUnit> mlist = new List<ProductionPlan_FinalChargeUnit>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "PRC_Production_ForeCasting_FinalChargeUnit", Month, Year);
+            foreach (DataRow DR in DT.Rows)
+            {
+                ProductionPlan_FinalChargeUnit obj = new ProductionPlan_FinalChargeUnit();
+                obj.ForecastingForMonth = DR["ForecastingForMonth"].ToString();
+                obj.ForecastingForYear = clsHelper.fnConvert2Int(DR["ForecastingForYear"]);
+                obj.ProductType = DR["ProductType"].ToString();
+                obj.ProductCategory = DR["ProductCategory"].ToString();
+                obj.ProductName = DR["ProductName"].ToString();
+                obj.PackUnit = clsHelper.fnConvert2Int(DR["PackUnit"]);
+                obj.NoOfPCS = clsHelper.fnConvert3Decimal(DR["NoOfPCS"].ToString());
+                obj.FinalChargeUnit = clsHelper.fnConvert2Int(DR["FinalChargeUnit"]);
+                mlist.Add(obj);
+            }
+            return mlist;
+        }
 
+
+        #endregion
         #endregion
 
         #endregion
