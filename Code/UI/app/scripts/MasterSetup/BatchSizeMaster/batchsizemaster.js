@@ -47,7 +47,7 @@ var BatchSizeMaster = {
                     mData: "BatchSize", sTitle: "Batch Size", sClass: "head1", bSortable: true,
                 },
                 {
-                    mData: null, defaultContent: "", sTitle: "Action", sClass: "head1", bSortable: true,
+                    mData: null, defaultContent: "", sTitle: "Edit", sClass: "head1", bSortable: true,
                     mRender: function (data, type, full) {
                         console.log("hi")
                         var markup = '<a href="javascript:void(0)" onclick="BatchSizeMaster.GetByID_BatchSizeMaster(' + full.BatchSizeID +  ')">Edit</a>'
@@ -77,7 +77,7 @@ var BatchSizeMaster = {
                                 title: "BatchSizeMasterList",
                                 extension: '.xls',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                                    columns: [0, 1, 2, 3, 4]
                                 },
                             },
                         ]

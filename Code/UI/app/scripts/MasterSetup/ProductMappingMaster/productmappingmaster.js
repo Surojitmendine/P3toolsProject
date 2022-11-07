@@ -3,6 +3,7 @@ var ProductMappingMaster = {
     ListProductMappingMaster: function () {
         var queryparams = {
             Type: $('#ddlType').val(),
+            ProductCategory: $('#ddlProductCategory').val()
         }
         clearDatatable('dtProductMappingMasterlist')
         apiCall.ajaxCallWithReturnData(queryparams, 'GET', 'MasterSetup/List_ProductMappingMaster')
@@ -61,7 +62,7 @@ var ProductMappingMaster = {
                     mData: null, defaultContent: "", sTitle: "Edit", sClass: "head1", bSortable: true,
                     mRender: function (data, type, full) {
                         console.log("hi")
-                        var markup = '<a href="javascript:void(0)" onclick="ProductMappingMaster.GetByID_ProductMappingMaster(' + full.PK_ProductID + ')" >Edit</a>'
+                        var markup = '<a href="javascript:void(0)" onclick="ProductMappingMaster.GetByID_ProductMappingMaster(' + full.PK_ProductID + ',' +  '\'' + full.ProductCategory + '\'' + ')" >Edit</a>'
                         // onclick="ProductMaster.GetByID_ProductMaster(' + full.PK_ProductID + ')"
                         return markup;
                     }
@@ -131,12 +132,12 @@ var ProductMappingMaster = {
 
         var ajaxdata = {
             PK_ProductID: $('#hdnPK_ProductID').val(),
-            // ProductCategory: $('#txtProductCategory').val(),
             // ProductCode: $('#txtProductCode').val(),
             // ProductName: $('#txtProductName').val(),
             // PackUnit: $('#txtPackUnit').val(),
             TallyProductName: $('#txtTallyProductName').val(),
-            TallyUOM: $('#txtTallyUOM').val()
+            TallyUOM: $('#txtTallyUOM').val(),
+            ProductCategory: $('#txtProductCategory').val()
         };
         console.log(ajaxdata);
 
@@ -150,8 +151,8 @@ var ProductMappingMaster = {
         
     },
 
-    GetByID_ProductMappingMaster: function (ID) {
-        var obj = { ProductID: ID }
+    GetByID_ProductMappingMaster: function (ID,ProductCategory) {
+        var obj = { ProductID: ID, ProductCategory: ProductCategory }
         //console.log(obj)
         ProductMappingMaster.OpenEditModal(function () {
             apiCall.ajaxCallWithReturnData(obj, "GET", 'MasterSetup/GetByID_ProductMappingMaster')

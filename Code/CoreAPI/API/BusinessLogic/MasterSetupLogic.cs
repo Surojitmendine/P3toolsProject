@@ -231,16 +231,16 @@ namespace API.BusinessLogic
         #region -- Update Product Mapping Master --
         public static String Update_ProductMappingMaster(String Connection, MasterSetupEntity.ProductMasterMapping product)
         {
-            return clsDatabase.fnDBOperation(Connection, "usp_Update_Product_Mapping", product.TallyProductName, product.TallyUOM, product.PK_ProductID);
+            return clsDatabase.fnDBOperation(Connection, "usp_Update_Product_Mapping", product.TallyProductName, product.TallyUOM, product.PK_ProductID,product.ProductCategory);
         }
 
         #endregion
 
         #region -- List of Product Mapping Master --
-        public static List<MasterSetupEntity.ProductMasterMapping> List_ProductMappingMaster(String Connection, string Type)
+        public static List<MasterSetupEntity.ProductMasterMapping> List_ProductMappingMaster(String Connection, string Type, string ProductCategory)
         {
             List<ProductMasterMapping> mlist = new List<ProductMasterMapping>();
-            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_ListByType", Type);
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_ListByType", Type, ProductCategory);
             foreach (DataRow DR in DT.Rows)
             {
                 ProductMasterMapping obj = new ProductMasterMapping();
@@ -258,10 +258,10 @@ namespace API.BusinessLogic
         #endregion
 
         #region -- Get by Product Mapping ID --
-        public static List<MasterSetupEntity.ProductMasterMapping> GetByID_ProductMappingMaster(String Connection, Int32 Id)
+        public static List<MasterSetupEntity.ProductMasterMapping> GetByID_ProductMappingMaster(String Connection, Int32 Id, String ProductCategory)
         {
             List<ProductMasterMapping> mlist = new List<ProductMasterMapping>();
-            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_GetByID", Id);
+            DataTable DT = clsDatabase.fnDataTable(Connection, "usp_Product_Mapping_GetByID", Id, ProductCategory);
             foreach (DataRow DR in DT.Rows)
             {
                 ProductMasterMapping obj = new ProductMasterMapping();

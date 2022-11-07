@@ -24,6 +24,10 @@ var ProductionPlanforecasting = {
             showToastErrorMessage("Month can not be blank.Select Year and Month")
             return false;
         }
+        if ($('#ddlProductionForecasting').val() == "0") {
+            showToastErrorMessage("Production Forecasting can not be blank.Select Production Forecasting")
+            return false;
+        }
 
         var queryparams = {
             Month: $('#ddlMonth').val(),
@@ -130,28 +134,30 @@ var ProductionPlanforecasting = {
 
     },
 
-    export: function () {
-        let VolumeConversion = $('#dtList_VolumeConversion').dataTable().fnGetData();
-        let VolumeCharge = $('#dtList_VolumeCharge').dataTable().fnGetData();
-        let FinalChargeUnit = $('#dtList_FinalChargeUnit').dataTable().fnGetData();
+    // export: function () {
+    //     let VolumeConversion = $('#dtList_VolumeConversion').dataTable().fnGetData();
+    //     let VolumeCharge = $('#dtList_VolumeCharge').dataTable().fnGetData();
+    //     let FinalChargeUnit = $('#dtList_FinalChargeUnit').dataTable().fnGetData();
 
-        let dataArr=[]
-        let sheetArr=[]
-        if(VolumeConversion.length>0){
-            dataArr.push(VolumeConversion)
-            sheetArr.push('Volume Conversion')
-        }
-        else if(VolumeCharge.length>0){
-            dataArr.push(VolumeCharge)
-            sheetArr.push('Volume Charge')
-        }
-        else if(FinalChargeUnit.length>0){
-            dataArr.push(FinalChargeUnit)
-            sheetArr.push('Final ChargeUnit')
-        }
+    //     console.log(VolumeConversion);
 
-        tablesToExcel.exportJson(dataArr,sheetArr, 'Production_Forecasting.xls', 'Excel')
-    },
+    //     let dataArr=[]
+    //     let sheetArr=[]
+    //     if(VolumeConversion.length>0){
+    //         dataArr.push(VolumeConversion)
+    //         sheetArr.push('Volume Conversion')
+    //     }
+    //     else if(VolumeCharge.length>0){
+    //         dataArr.push(VolumeCharge)
+    //         sheetArr.push('Volume Charge')
+    //     }
+    //     else if(FinalChargeUnit.length>0){
+    //         dataArr.push(FinalChargeUnit)
+    //         sheetArr.push('Final ChargeUnit')
+    //     }
+
+    //     tablesToExcel.exportJson(dataArr,sheetArr, 'Production_Forecasting.xls', 'Excel')
+    // },
 
 
     onSuccess_ListVolumeConversion: function (data) {
@@ -227,7 +233,7 @@ var ProductionPlanforecasting = {
             "dom": '<<"float-right"l>f<t><"#df"<"float-left" i><"float-right pagination pagination-sm p-1"p>>>',
             "lengthChange": true,
             "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
-            /*fnDrawCallback: function (oSettings) {
+            fnDrawCallback: function (oSettings) {
                 var info = this.api().page.info();
                 if (info.recordsTotal > 0) {
                     var tmptable = $('#dtList_VolumeConversion').DataTable();
@@ -249,7 +255,7 @@ var ProductionPlanforecasting = {
                     var tmptable = $('#dtList_VolumeConversion').DataTable();
                     tmptable.buttons().destroy();
                 }
-            },*/
+            },
         });
     },
 
@@ -310,7 +316,7 @@ var ProductionPlanforecasting = {
             "dom": '<<"float-right"l>f<t><"#df"<"float-left" i><"float-right pagination pagination-sm p-1"p>>>',
             "lengthChange": true,
             "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
-            /*fnDrawCallback: function (oSettings) {
+            fnDrawCallback: function (oSettings) {
                 var info = this.api().page.info();
                 if (info.recordsTotal > 0) {
                     var tmptable = $('#dtList_VolumeCharge').DataTable();
@@ -332,7 +338,7 @@ var ProductionPlanforecasting = {
                     var tmptable = $('#dtList_VolumeCharge').DataTable();
                     tmptable.buttons().destroy();
                 }
-            },*/
+            },
         });
     },
 
@@ -386,7 +392,7 @@ var ProductionPlanforecasting = {
             "dom": '<<"float-right"l>f<t><"#df"<"float-left" i><"float-right pagination pagination-sm p-1"p>>>',
             "lengthChange": true,
             "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
-            /*fnDrawCallback: function (oSettings) {
+            fnDrawCallback: function (oSettings) {
                 var info = this.api().page.info();
                 if (info.recordsTotal > 0) {
                     var tmptable = $('#dtList_FinalChargeUnit').DataTable();
@@ -408,7 +414,7 @@ var ProductionPlanforecasting = {
                     var tmptable = $('#dtList_FinalChargeUnit').DataTable();
                     tmptable.buttons().destroy();
                 }
-            },*/
+            },
         });
     },
 }

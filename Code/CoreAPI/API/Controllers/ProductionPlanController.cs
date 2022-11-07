@@ -1109,7 +1109,7 @@ namespace API.Controllers
             }
             else if (records.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 0, message = "No Data In Volume Conversion", data = records });
             }
             else
             {

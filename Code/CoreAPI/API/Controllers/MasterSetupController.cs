@@ -393,17 +393,17 @@ namespace API.Controllers
         [SwaggerResponse(200, "Product Mapping Type found"/*,typeof(IEnumerable<Vendor>)*/)]
         [SwaggerResponse(204, "Product Mapping Type not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public IActionResult List_ProductMappingMaster(string Type)
+        public IActionResult List_ProductMappingMaster(string Type, string ProductCategory)
         {
-            var lstData = MasterSetupLogic.List_ProductMappingMaster(MSSQLConnection, Type);
+            var lstData = MasterSetupLogic.List_ProductMappingMaster(MSSQLConnection, Type, ProductCategory);
 
             if (lstData != null && lstData.Count() > 0)
             {
                 return Ok(new { success = 1, message = "ProductMappingType list", data = lstData });
             }
-            else if (lstData == null)
+            else if (lstData.Count() <= 0)
             {
-                return NoContent();
+                return Ok(new { success = 1, message = "No Records In ProductMappingType list", data = lstData });
             }
             else
             {
@@ -424,9 +424,9 @@ namespace API.Controllers
         [SwaggerResponse(201, "Product found", typeof(Divisionwise_ProductEntity))]
         [SwaggerResponse(204, "Product not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public IActionResult GetByID_ProductMappingMaster([FromQuery, SwaggerParameter("Product's ID", Required = true)] Int32 ProductID)
+        public IActionResult GetByID_ProductMappingMaster([FromQuery, SwaggerParameter("Product's ID", Required = true)] Int32 ProductID, String ProductCategory)
         {
-            var Product = MasterSetupLogic.GetByID_ProductMappingMaster(MSSQLConnection, ProductID);
+            var Product = MasterSetupLogic.GetByID_ProductMappingMaster(MSSQLConnection, ProductID, ProductCategory);
 
             if (Product.Count > 0)
             {
