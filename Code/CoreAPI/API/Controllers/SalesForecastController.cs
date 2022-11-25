@@ -376,6 +376,91 @@ namespace API.Controllers
 
         #endregion
 
+        #region Third Party ForecastingComparison
+
+        #region Search Fields
+        [HttpGet]
+        [SwaggerOperation(
+                        Summary = "Third Party Forecasting Comparison ",
+                        Description = "Third Party Forecasting Comparison ",
+                        OperationId = "UpdateProjection",
+                        Tags = new[] { "SalesForecast" }
+                    )]
+
+        [SwaggerResponse(200, "Third Party Forecasting Comparison ")]
+        [SwaggerResponse(204, "Third Party Forecasting Comparison ", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> ThirdPartyForcastingComparison_SearchFields()
+        {
+            var records = await this.salesForecastLogic.ThirdPartyForcastingComparison_SearchFields();
+            if (records != null && records.Length > 0)
+            {
+                return Ok(new { success = 1, message = "Third Party Forecast Comparison", data = new { products = records[0], divisions = records[1], stocklocations = records[2], packunits = records[3] } });
+            }
+            else if (records.Count() <= 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #region Third Party Forecasting Comparison 
+        [HttpGet]
+        // [ResponseCache(Duration =3600,Location =ResponseCacheLocation.Any, VaryByHeader = "User-Agent",NoStore =false)]
+        [SwaggerOperation(
+                        Summary = "Third Party Forecasting Comparison",
+                        Description = "Third Party Forecasting Comparison",
+                        OperationId = "SalesForecastingComparison",
+                        Tags = new[] { "SalesForecastComparison" }
+                    )]
+        [SwaggerResponse(200, "Third Party Forecasting Comparison")]
+        [SwaggerResponse(204, "Third Party Forecasting Comparison", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public IActionResult ThirdPartyForecastingComparison([FromQuery, SwaggerParameter("Month", Required = true)] int Month, [FromQuery, SwaggerParameter("Year", Required = true)] int Year
+         , string Product, string Division, string Location, string PackUnit, bool ReInitializeCache = false)
+
+        {
+            var records = this.salesForecastLogic.ThirdPartyForecastingComparison(Month, Year, Product, Division, Location, PackUnit, ReInitializeCache);
+
+            if (records != null)
+            {
+                return Ok(new { success = 1, message = records.Item2, data = records.Item1 });
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+        #endregion
+
+        #region SAVE - Third Party Forecasting Comparison 
+        [HttpPost]
+        // [ResponseCache(Duration =3600,Location =ResponseCacheLocation.Any, VaryByHeader = "User-Agent",NoStore =false)]
+        [SwaggerOperation(
+                        Summary = "Third Party Forecasting Comparison",
+                        Description = "Third Party Forecasting Comparison",
+                        OperationId = "SalesForecastingComparison",
+                        Tags = new[] { "SalesForecastComparison" }
+                    )]
+        [SwaggerResponse(200, "Third Party Forecasting Comparison")]
+        [SwaggerResponse(204, "Third Party Forecasting Comparison", typeof(string))]
+        [SwaggerResponse(400, "Bad Request", typeof(string))]
+
+        public async Task<IActionResult> ThirdPartyForecastingComparisonSave(SalesForecastEntity.ForecastingComparison forecastingComparison)
+        {
+            var result = await this.salesForecastLogic.ThirdPartyForecastingComparisonSave(forecastingComparison);
+            return Ok(new { success = 1, message = "Third Party Forecasting Comparison", data = result });
+        }
+        #endregion
+
+        #endregion
+
         #region Primary Sales
 
         #region List Primary Sales
@@ -541,8 +626,6 @@ namespace API.Controllers
         #endregion
 
         #endregion
-
-      
 
         #region Sales Team Projection 
         #region Search Fields

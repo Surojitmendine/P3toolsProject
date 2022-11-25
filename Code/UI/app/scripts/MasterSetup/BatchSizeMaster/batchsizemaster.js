@@ -147,7 +147,7 @@ var BatchSizeMaster = {
             BatchSize: $('#txtBatchSize').val()
 
         };
-        //console.log(ajaxdata);
+        console.log(ajaxdata);
 
         apiCall.ajaxCall(undefined, 'POST', 'MasterSetup/AddNew_BatchSizeMaster',ajaxdata)
         .then((res)=>{

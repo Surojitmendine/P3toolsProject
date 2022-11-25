@@ -66,6 +66,7 @@ namespace API.BusinessLogic
                           from lfttmpMasterMonth in tmpMasterMonth.DefaultIfEmpty()
 
                           where sf.ForecastingForMonth == ForecastingForMonth && sf.ForecastingForYear == ForecastingForYear
+                          && sf.DivisionName != "CONTRACTUAL" && sf.DepotName != "Factory"
                           && sf.NextMonth_FinialForecastingQTY>0
                           orderby sf.ProductName, sf.PackUnit
                           group new { sf } by new
@@ -220,7 +221,8 @@ namespace API.BusinessLogic
 
             dynamic[] dynamics = new dynamic[4];
 
-            var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable().GroupBy(x => new { x.ProductName})
+            var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable()
+                .GroupBy(x => new { x.ProductName})
                 .Select(s => new
                 {
                     id = s.Key.ProductName,
@@ -230,7 +232,9 @@ namespace API.BusinessLogic
 
                 }).OrderBy(o => o.text).ToList();
 
-            var divisions = db.tbl_P3_SaleForecastingComparison.GroupBy(x => new { x.DivisionName })
+            var divisions = db.tbl_P3_SaleForecastingComparison
+               .Where(u => u.DivisionName != "CONTRACTUAL")
+               .GroupBy(x => new { x.DivisionName })
                .Select(s => new
                {
                    id = s.Key.DivisionName,
@@ -238,7 +242,9 @@ namespace API.BusinessLogic
 
                }).OrderBy(o => o.text).ToList();
 
-            var stocklocations = db.tbl_P3_SaleForecastingComparison.GroupBy(x => new { x.DepotName })
+            var stocklocations = db.tbl_P3_SaleForecastingComparison
+               .Where(u => u.DepotName != "FACTORY")
+               .GroupBy(x => new { x.DepotName })
                .Select(s => new
                {
                    id = s.Key.DepotName,
@@ -473,6 +479,142 @@ namespace API.BusinessLogic
 
         #endregion
 
+        #region Third Party Forcasting Comparison
+
+        #region Third Party Forcasting Comparison SearchFields
+        public async Task<dynamic[]> ThirdPartyForcastingComparison_SearchFields()
+        {
+
+            dynamic[] dynamics = new dynamic[4];
+
+            var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable()
+                .Where(u => u.DivisionName == "CONTRACTUAL")
+                .GroupBy(x => new { x.ProductName })
+                .Select(s => new
+                {
+                    id = s.Key.ProductName,
+                    text = s.Key.ProductName
+
+                }).OrderBy(o => o.text).ToList();
+
+            var divisions = db.tbl_P3_SaleForecastingComparison
+               .Where(u => u.DivisionName == "CONTRACTUAL")
+               .GroupBy(x => new { x.DivisionName })
+               .Select(s => new
+               {
+                   id = s.Key.DivisionName,
+                   text = s.Key.DivisionName,
+
+               }).OrderBy(o => o.text).ToList();
+
+            var stocklocations = db.tbl_P3_SaleForecastingComparison
+               .Where(u => u.DepotName == "FACTORY")
+               .GroupBy(x => new { x.DepotName })
+               .Select(s => new
+               {
+                   id = s.Key.DepotName,
+                   text = s.Key.DepotName,
+
+               }).OrderBy(o => o.text).ToList();
+
+            var packunit = db.tbl_Master_Product.AsEnumerable().GroupBy(x => new { x.PackUnit, x.ProductUOM })
+            .Select(s => new
+            {
+                id = s.Key.PackUnit,
+                text = $"{s.Key.PackUnit }({s.Key.ProductUOM})",
+                productUOM = s.Key.ProductUOM
+
+            }).OrderBy(o => o.text).ToList();
+
+            dynamics[0] = products;
+            dynamics[1] = divisions;
+            dynamics[2] = stocklocations;
+            dynamics[3] = packunit;
+
+            return await Task.FromResult(dynamics);
+        }
+        #endregion
+
+        #region ThirdPartyForecastingComparison
+       
+        public Tuple<List<SalesForecastEntity.ForecastingComparison>, string> ThirdPartyForecastingComparison(int ForecastingForMonth, int ForecastingForYear, string Product, string Division, string Location, string PackUnit,
+            bool ReInitializeCache)
+        {
+            string[] arrProduct = string.IsNullOrEmpty(Product) == true ? new string[] { } : Product.Split(",");
+            string[] arrDivision = string.IsNullOrEmpty(Division) == true ? new string[] { } : Division.Split(",");
+            string[] arrLocation = string.IsNullOrEmpty(Location) == true ? new string[] { } : Location.Split(",");
+            string[] arrPackUnit = string.IsNullOrEmpty(PackUnit) == true ? new string[] { } : PackUnit.Split(",");
+
+            var result = (from sf in db.tbl_P3_SaleForecastingComparison.AsEnumerable()
+                          join MasterMonth in db.tbl_Master_Month on sf.ForecastingForMonth equals MasterMonth.PK_MonthID into tmpMasterMonth
+                          from lfttmpMasterMonth in tmpMasterMonth.DefaultIfEmpty()
+
+                          where sf.ForecastingForMonth == ForecastingForMonth && sf.ForecastingForYear == ForecastingForYear
+                          && sf.DivisionName == "CONTRACTUAL" && sf.DepotName == "FACTORY"
+                           && (string.IsNullOrEmpty(Division) == true ? sf.DivisionName == sf.DivisionName : arrDivision.Any(ax => ax.Contains(sf.DivisionName)))
+                           && (string.IsNullOrEmpty(Location) == true ? sf.DepotName == sf.DepotName : arrLocation.Any(ax => ax.Contains(sf.DepotName)))
+                           && (string.IsNullOrEmpty(Product) == true ? sf.ProductName == sf.ProductName : arrProduct.Any(ax => ax.Equals(sf.ProductName)))
+                           && (string.IsNullOrEmpty(PackUnit) == true ? sf.PackUnit == sf.PackUnit : arrPackUnit.Any(ax => ax.Contains(sf.PackUnit)))
+
+                          orderby sf.HQ, sf.DepotName, sf.DivisionName, sf.ProductName, sf.PackUnit
+                          
+
+                          select new SalesForecastEntity.ForecastingComparison
+                          {
+                              SaleComparisonID = sf.PK_SaleComparisonID,
+                              Month = lfttmpMasterMonth.MonthName + "-" + Convert.ToInt32(sf.ForecastingForYear).ToString(),
+                              HQ = sf.HQ,
+                              DepotName = sf.DepotName,
+                              DivisionName = sf.DivisionName,
+                              ProductCode = sf.ProductCode,
+                              ProductName = sf.ProductName,
+                              PackUnit = sf.PackUnit,
+                              Logistics_ProjectionSalesQTY = (decimal)sf.Logistics_ProjectionSalesQTY,
+                              Marketing_ProjectedSaleQTY = (decimal)sf.Marketing_ProjectedSaleQTY,
+                              Sales_ProjectedSaleQTY = (decimal)sf.Sales_ProjectedSaleQTY,
+                              DifferencePersentage = (decimal)sf.DifferencePersentage,
+                              NextMonth_ForecastingQTY = (decimal)sf.NextMonth_ForecastingQTY,
+                              NextMonth_FinialForecastingQTY = (decimal)sf.NextMonth_FinialForecastingQTY,
+                              IsAutoCalculate = (bool)sf.IsAutoCalculate,
+                              NRVRate = (decimal)sf.NRVRate,
+                              ProjectionValue = (decimal)sf.ProjectionValue,
+                          }).ToList();
+
+            string message = string.Empty;
+            
+            return new Tuple<List<SalesForecastEntity.ForecastingComparison>, string>(result, message);
+
+        }
+        #endregion
+
+        #region
+
+        public async Task<bool> ThirdPartyForecastingComparisonSave(SalesForecastEntity.ForecastingComparison forecastingComparison)
+        {
+
+            var tmp = new tbl_P3_SaleForecastingComparison()
+            {
+                PK_SaleComparisonID = forecastingComparison.SaleComparisonID,
+                NextMonth_FinialForecastingQTY = forecastingComparison.NextMonth_FinialForecastingQTY,
+                ProjectionValue = forecastingComparison.NextMonth_FinialForecastingQTY * forecastingComparison.NRVRate,
+                //NextMonth_FinialForecastingQTY = forecastingComparison.NextMonth_FinialForecastingQTY
+            };
+
+            db.tbl_P3_SaleForecastingComparison.Attach(tmp);
+            db.Entry(tmp).Property(p => p.NextMonth_FinialForecastingQTY).IsModified = true;
+            db.Entry(tmp).Property(p => p.ProjectionValue).IsModified = true;
+            var result = await this.db.SaveChangesAsync();
+
+            return result > 0 ? true : false;
+        }
+
+
+        #endregion
+
+        #endregion
+
+
+
         public List<SalesForecastEntity.ImportProjection> ListImportProjection(int ImportProjectionForMonth, int ImportProjectionForYear, string ForecastingType)
         {
             if (ForecastingType== "SalesTeam")
@@ -481,7 +623,8 @@ namespace API.BusinessLogic
                               join MasterMonth in db.tbl_Master_Month on sp.ForMonth equals MasterMonth.PK_MonthID into tmpMasterMonth
                               from lfttmpMasterMonth in tmpMasterMonth.DefaultIfEmpty()
 
-                              where sp.ForMonth == ImportProjectionForMonth && sp.ForYear == ImportProjectionForYear
+                              where sp.ForMonth == ImportProjectionForMonth && sp.ForYear == ImportProjectionForYear 
+                              && sp.DivisionName != "CONTRACTUAL" && sp.DepotName != "Factory"
                               //&& sp.ForecastingType == ForecastingType
                               orderby sp.DivisionName, sp.DepotName, sp.ProductName, sp.PackUnit
                               select new SalesForecastEntity.ImportProjection
@@ -760,14 +903,18 @@ namespace API.BusinessLogic
 
             dynamic[] dynamics = new dynamic[4];
 
-            var divisions = db.tbl_P3_SaleProjection_SalesTeam.GroupBy(x => new { x.DivisionName })
+            var divisions = db.tbl_P3_SaleProjection_SalesTeam
+               .Where(u => u.DivisionName != "CONTRACTUAL")
+               .GroupBy(x => new { x.DivisionName })
                .Select(s => new
                {
                    id = s.Key.DivisionName,
                    text = s.Key.DivisionName,
                }).OrderBy(o => o.text).ToList();
 
-            var depotName = db.tbl_P3_SaleProjection_SalesTeam.GroupBy(x => new { x.DepotName })
+            var depotName = db.tbl_P3_SaleProjection_SalesTeam
+               .Where(u => u.DepotName != "FACTORY")
+               .GroupBy(x => new { x.DepotName })
                .Select(s => new
                {
                    id = s.Key.DepotName,

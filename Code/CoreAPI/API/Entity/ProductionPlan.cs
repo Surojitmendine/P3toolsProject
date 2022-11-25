@@ -61,6 +61,7 @@ namespace API.Entity
             public string Stock_date { get; set; }
             public string St_group { get; set; }
             public string St_category { get; set; }
+            public string Depot { get; set; }
             public string product_name { get; set; }
             public Decimal quantity { get; set; }
             public string UOM { get; set; }

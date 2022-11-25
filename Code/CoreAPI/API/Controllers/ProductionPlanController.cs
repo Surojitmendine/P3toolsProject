@@ -333,6 +333,17 @@ namespace API.Controllers
             var factoryclosingstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_FactoryClosingStock>>(factoryclosingstockList_Data.ToString());
 
             var records = ProductionPlanLogic.SaveExcel_FactoryClosingStock(MendineMasterConnection, factoryclosingstockList);
+
+            // Delete Files
+            FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+            String delPath = string.Format("{0}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/FactoryClosingStock/");
+            string[] Filenames = Directory.GetFiles(delPath);
+            // Delete Files And Folder From CandidateFileData
+            foreach (var files in Filenames)
+            {
+                fileHelper.deleteFile(files);
+            }
+            
             if (records != null && records.Count() > 0)
             {
                 return Ok(new { success = 1, message = "Production Plan", data = records });
@@ -345,6 +356,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
+
         }
 
         #endregion
@@ -430,6 +442,16 @@ namespace API.Controllers
             JArray depottransitstockList_Data = jsonData.DepotTransitStock;
 
             var depottransitstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotTransitStock>>(depottransitstockList_Data.ToString());
+
+            // Delete Files
+            FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+            String delPath = string.Format("{0}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/DepotTransitStock/");
+            string[] Filenames = Directory.GetFiles(delPath);
+            // Delete Files And Folder From CandidateFileData
+            foreach (var files in Filenames)
+            {
+                fileHelper.deleteFile(files);
+            }
 
             var records = ProductionPlanLogic.SaveExcel_DepotTransitStock(MendineMasterConnection, depottransitstockList);
             if (records != null && records.Count() > 0)
@@ -562,6 +584,16 @@ namespace API.Controllers
             JArray depotclosingstockList_Data = jsonData.DepotClosingStock;
 
             var depotclosingstockList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_DepotClosingStock>>(depotclosingstockList_Data.ToString());
+
+            // Delete Files
+            FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+            String delPath = string.Format("{0}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/DepotClosingStock/");
+            string[] Filenames = Directory.GetFiles(delPath);
+            // Delete Files And Folder From CandidateFileData
+            foreach (var files in Filenames)
+            {
+                fileHelper.deleteFile(files);
+            }
 
             var records = ProductionPlanLogic.SaveExcel_DepotClosingStock(MendineMasterConnection, depotclosingstockList);
             if (records != null && records.Count() > 0)
@@ -697,6 +729,16 @@ namespace API.Controllers
             JArray physiciansampleforecastingList_Data = jsonData.PhysicianSampleForecasting;
 
             var physiciansampleforecastingList = JsonConvert.DeserializeObject<List<ProductionPlan.ImportExcel_PhysicianSampleForecast>>(physiciansampleforecastingList_Data.ToString());
+
+            // Delete Files
+            FileHelper fileHelper = new FileHelper(this.webHostEnvironment);
+            String delPath = string.Format("{0}", this.webHostEnvironment.ContentRootPath + "/ExcelUpload/PhysicianSampleForecast/");
+            string[] Filenames = Directory.GetFiles(delPath);
+            // Delete Files And Folder From CandidateFileData
+            foreach (var files in Filenames)
+            {
+                fileHelper.deleteFile(files);
+            }
 
             var records = ProductionPlanLogic.SaveExcel_PhysicianSampleForecasting(MendineMasterConnection, physiciansampleforecastingList);
             if (records != null && records.Count() > 0)
