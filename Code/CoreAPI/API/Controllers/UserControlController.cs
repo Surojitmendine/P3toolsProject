@@ -17,7 +17,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserControlController : ApiBase
     {
         UserControlLogic userControl;
@@ -27,6 +27,7 @@ namespace API.Controllers
             userControl = new UserControlLogic(userManager, roleManager, db, mapper);
         }
 
+        /*
         #region User Control
 
         [HttpPost]
@@ -170,5 +171,7 @@ namespace API.Controllers
 
 
         #endregion
+
+        */
     }
 }

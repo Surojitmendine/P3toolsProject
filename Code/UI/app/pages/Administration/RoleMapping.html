@@ -1,0 +1,74 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Role Mapping</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header d-flex p-0">
+                        <h2 class="m-0 text-dark"></h2>
+
+                        <ul class="nav nav-pills ml-auto p-4">
+                            <li class="nav-item">
+
+                            </li>
+                            <li class="nav-item">
+                                <div id="export-area" style="padding-left: 10px;"></div>
+                            </li>
+                        </ul>
+                    </div><!-- /.card-header -->
+
+                    <div class="row" style="margin-top:30px">
+                        <div class="col-sm-3 ml-3">
+                            <select id="ddlRole" class="form-control form-control-sm select2" style="width: 100%;">  
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3 ml-3">
+                            <select id="ddlEmployee" class="form-control form-control-sm select2" style="width: 100%;">  
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2">
+
+                            <button type="button" class="btn btn-info"
+                                onclick="RoleMapping.AddEmployeeWiseRoleMapping()">
+                                <i class="fas fa-plus"></i>Save
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="card-body">
+                        
+                    </div>
+
+                    <div id="df" class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+
+
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<script>
+    $(document).ready(function () {
+        RoleMapping.Initialize();
+    })
+</script>

@@ -205,7 +205,7 @@ function loadHtml(FilePath, element) {
                 // console.log(responseText)
                 // console.log(textStatus)
                 // console.log(jqXHR)
-                $('h1.text-dark').removeClass('text-dark').addClass('text-white')
+                // $('h1.text-dark').removeClass('text-dark').addClass('text-white')
 
                 validateRequiredField();
                 fieldValidationNumeric()
@@ -226,8 +226,9 @@ function loadHtml(FilePath, element) {
  */
 function addnavigation() {
     $("a.nav-link").each(function (index, element) {
+        //console.log(element)
         var attr = $(element).attr('data-filepath');
-
+        //console.log("Pallab " + attr)
         // For some browsers, `attr` is undefined; for others,
         // `attr` is false.  Check for both.
         if (typeof attr !== typeof undefined && attr !== false) {

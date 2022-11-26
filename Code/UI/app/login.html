@@ -15,12 +15,12 @@
 
 <body class="hold-transition login-page">
   <div class="login-box">
-    <div class="login-logo">
-      <a href="javascript:void(0)"><b>Mendine </b>P3 Tools</a>
-    </div>
     <!-- /.login-logo -->
-    <div id="divlogin" class="card"> 
+    <div id="divlogin" class="card shadow"> 
       <div class="card-body login-card-body">
+        <div class="login-logo">
+          <a href="javascript:void(0)"><b>Mendine </b>P3 Tools</a>
+        </div>
         <p class="login-box-msg">Sign in to start your session</p>
 
         <form id="formLogin">
@@ -89,7 +89,8 @@
 
         login.GetBingImageofTheDay()
           .then((imgurl) => {
-           // console.log(imgurl)
+            console.log(imgurl)
+            
             $('body').css({ 'background-image': 'url(' + imgurl + ')' });
           })
       });

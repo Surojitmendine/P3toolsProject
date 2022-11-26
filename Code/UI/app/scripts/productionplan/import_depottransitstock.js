@@ -78,6 +78,9 @@ var importDepotTransitStock = {
                     mData: "St_category", sTitle: "Stock Category", sClass: "head1", bSortable: true,
                 },
                 {
+                    mData: "Depot", sTitle: "Depot", sClass: "head1", bSortable: true,
+                },
+                {
                     mData: "product_name", sTitle: "Product Name", sClass: "head1", bSortable: true,
                 },
                 {

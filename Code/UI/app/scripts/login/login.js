@@ -13,31 +13,35 @@ var login = {
 
         $("#btnLogin").prop('disabled', true)
         $("#loginloader").show().addClass('fa-spin')
-        apiCall.ajaxCall('formLogin', 'GET', 'Auth/token')
-            .done((data, textStatus, jqXHR) => {
 
-                $("#loginloader").hide().removeClass('fa-spin')
-                $("#btnLogin").prop('disabled', false)
-                if (data.access_token) {
+        var ajaxdata = {
+            uname: $('#txtemail').val(),
+            pwd: $('#txtpassword').val()
+        };
 
-                    sessionStorage.setItem("token", data.access_token)
+        console.log(ajaxdata);
+        
+        apiCall.ajaxCallWithReturnData(ajaxdata, 'POST', 'Auth/ValidLogin')
+            .done(function (res) {
+                console.log(res)
+                 if (res.success == true) {
                     sessionStorage.setItem('sysdate', moment(new Date()).format('DD/MM/YYYY'))
-                    window.location.href = "index.html"
-                    //page.redirect('./');
+                    sessionStorage.setItem("username", res.data[0].Empemail)
+                    window.location.href = "/index.html"
+                    //console.log("Pallab");
                 }
+                else{
+                    $("#loginloader").hide().removeClass('fa-spin')
+                    $("#btnLogin").prop('disabled', false)
+                    login.runEffect()
+                    login.Toast.fire({
+                        type: 'error',
+                        title: 'Invalid Username or Passrord',
+                    })
+                }
+
             })
-            .fail((jqXHR, textStatus, errorThrown) => {
-                /*console.log(jqXHR)
-                console.log(textStatus)
-                console.log(errorThrown)*/
-                $("#loginloader").hide().removeClass('fa-spin')
-                $("#btnLogin").prop('disabled', false)
-                login.runEffect()
-                login.Toast.fire({
-                    type: 'error',
-                    title: 'Invalid Username or Passrord',
-                })
-            })
+            
     },
 
     runEffect: function () {

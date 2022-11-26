@@ -16,30 +16,44 @@ using API.IdentityModels;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using API.BusinessLogic;
+using System.Data;
+using API.Models;
+
 namespace API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CommonController : ApiBase
     {
 
 
 
         #region -- Declaration --
-        BusinessLogic.CommonLogic common;
+        //BusinessLogic.CommonLogic common;
         public static CultureInfo enGBcultureFormat = new CultureInfo("en-GB");
         private ILogger logger;
-        private readonly RoleManager<tbl_SYS_AspNet_Roles> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public CommonController(ILoggerFactory loggerFactory, DBContext db, IMapper mapper, UserManager<ApplicationUser> userManager, ILogger<CommonController> logger,RoleManager<tbl_SYS_AspNet_Roles> roleManager) : base(loggerFactory)
+        //private readonly RoleManager<tbl_SYS_AspNet_Roles> _roleManager;
+        //private readonly UserManager<ApplicationUser> _userManager;
+
+        public IConfiguration Configuration { get; set; }
+        public String ESSPConnection { get; set; }
+        public String MSSQLConnection { get; set; }
+
+        public CommonController(ILoggerFactory loggerFactory, DBContext db, IMapper mapper, ILogger<CommonController> logger, IConfiguration configuration /*, UserManager<ApplicationUser> userManager, ILogger<CommonController> logger,RoleManager<tbl_SYS_AspNet_Roles> roleManager*/) : base(loggerFactory)
         {
+            Configuration = configuration;
+            ESSPConnection = Configuration.GetConnectionString("ESSPConnection").ToString();
+            MSSQLConnection = Configuration.GetConnectionString("MSSQLConnection").ToString();
             this.logger = logger;
-            this._roleManager = roleManager;
-            this._userManager = userManager;
-            common = new BusinessLogic.CommonLogic(db, mapper, userManager);
+            //this._roleManager = roleManager;
+            //this._userManager = userManager;
+            //common = new BusinessLogic.CommonLogic(db, mapper, userManager);
         }
         #endregion
+
 
         #region " Current User"
         [HttpGet]
@@ -52,13 +66,54 @@ namespace API.Controllers
         [SwaggerResponse(201, "Get Current User Details", typeof(string))]
         [SwaggerResponse(204, "Get Current User Details not found", typeof(string))]
         [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public async Task<IActionResult> GetLoggedinUser()
-        {
-            var user = await this.GetCurrentUser();            
 
-            return Ok(new { data = user.FirstName });
+        public async Task<IActionResult> GetLoggedinUser(String UserEmail)
+        {
+            DataTable DT = clsLogin.Login_User_Information(ESSPConnection,UserEmail);
+            return Ok(new { data = DT.Rows[0]["Name"], empno = DT.Rows[0]["Empno"] });
+        }
+
+        #endregion
+
+        #region Menu 
+        #region Menu List
+        [HttpGet]
+        public IActionResult EmployeeWiseMenuList(String EmployeeNo)
+        {
+            var d = clsLogin.Employee_Wise_Menu_List(MSSQLConnection, EmployeeNo);
+            return Ok(d);
         }
         #endregion
+
+        #region P3 Role List
+        [HttpGet]
+        public IActionResult P3RoleList()
+        {
+            var d = clsLogin.P3RoleList(MSSQLConnection);
+            return Ok(new { success = 1, message = "Role List", data = d });
+        }
+        #endregion
+
+        #region Employee List
+        [HttpGet]
+        public IActionResult EmployeeList(long IDRole)
+        {
+            var d = clsLogin.EmployeeList(MSSQLConnection);
+            return Ok(new { success = 1, message = "Active Employee List", data = d });
+        }
+        #endregion
+
+        #region Save Employee Role Mapping 
+        [HttpPost]
+        public IActionResult EmployeeRoleMappingSave(clsRoleMappingInfo info)
+        {
+            var d = clsLogin.EmployeeRoleMappingSave(MSSQLConnection, info.EmployeeNo, info.IDRole);
+            return Ok(new { success = 1, message = "Save Employee Role Mapping Successfully", data = d });
+        }
+        #endregion
+
+        #endregion
+
 
         #region "CurrentDatetime"
         [HttpGet]
@@ -179,24 +234,38 @@ namespace API.Controllers
         {
 
 
-            string ImageURL = string.Empty;
+            //string ImageURL = string.Empty;
 
-            string imagesource = string.Empty;
-            Random rnd = new Random();
+            //string imagesource = string.Empty;
+            //Random rnd = new Random();
 
-            int toss = rnd.Next(2);
-            if (toss <= 0)
-            {
-                ImageURL = BackgroundImage.Spotlight.GetImageUrls();
-                imagesource = "spotlightImage";
-            }
-            else
-            {
-                ImageURL = await BackgroundImage.BingImageOfTheDay.ImageOfTheDay();
-                imagesource = "bingImage";
-            }
+            //int toss = rnd.Next(2);
+            //if (toss <= 0)
+            //{
+            //    ImageURL = BackgroundImage.Spotlight.GetImageUrls();
+            //    imagesource = "spotlightImage";
+            //}
+            //else
+            //{
+            //    ImageURL = await BackgroundImage.BingImageOfTheDay.ImageOfTheDay();
+            //    imagesource = "bingImage";
+            //}
 
             // We can specify the region we want for the Bing Image of the Day.
+            //try
+            //{
+            //    return Ok(new { data = new { imageurl = ImageURL, source = imagesource } });
+            //}
+            //catch (Exception)
+            //{
+
+            //    return NoContent();
+            //}
+             
+            // Fixed Image
+            string ImageURL = "dist/img/background.png";
+
+            string imagesource = "ImageFixed";
             try
             {
                 return Ok(new { data = new { imageurl = ImageURL, source = imagesource } });
@@ -206,69 +275,70 @@ namespace API.Controllers
 
                 return NoContent();
             }
+
         }
 
         #endregion
 
-        #region User Role
-        [HttpGet]
-        [SwaggerOperation(
-                            Summary = "Get List of User Roles",
-                            Description = "Get List User Roles",
-                            OperationId = "GetUserRoles",
-                            Tags = new[] { "Common" }
-                        )]
-        [SwaggerResponse(201, "User Roles", typeof(string))]
-        [SwaggerResponse(204, "User Roles not found", typeof(string))]
-        [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public IActionResult GetUserRoles()
-        {
-            var records = this._roleManager.Roles.Select(s => new { id = s.Id, text = s.Name }).ToList();
+        //#region User Role
+        //[HttpGet]
+        //[SwaggerOperation(
+        //                    Summary = "Get List of User Roles",
+        //                    Description = "Get List User Roles",
+        //                    OperationId = "GetUserRoles",
+        //                    Tags = new[] { "Common" }
+        //                )]
+        //[SwaggerResponse(201, "User Roles", typeof(string))]
+        //[SwaggerResponse(204, "User Roles not found", typeof(string))]
+        //[SwaggerResponse(400, "Bad Request", typeof(string))]
+        //public IActionResult GetUserRoles()
+        //{
+        //    var records = this._roleManager.Roles.Select(s => new { id = s.Id, text = s.Name }).ToList();
 
-            if (records != null)
-            {
-                return Ok(new { success = 1, message = "User Roles found", data = records });
-            }
-            else if (records == null)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        //    if (records != null)
+        //    {
+        //        return Ok(new { success = 1, message = "User Roles found", data = records });
+        //    }
+        //    else if (records == null)
+        //    {
+        //        return NoContent();
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        [HttpGet]
-        [SwaggerOperation(
-                            Summary = "GetUsersByRole",
-                            Description = "GetUsersByRole",
-                            OperationId = "GetUsersByRole",
-                            Tags = new[] { "Common" }
-                        )]
-        [SwaggerResponse(201, "User Roles", typeof(string))]
-        [SwaggerResponse(204, "User Roles not found", typeof(string))]
-        [SwaggerResponse(400, "Bad Request", typeof(string))]
-        public IActionResult GetUsersByRole([FromQuery, SwaggerParameter("Role ID", Required = true)]Int32 RoleID)
-        {
+        //[HttpGet]
+        //[SwaggerOperation(
+        //                    Summary = "GetUsersByRole",
+        //                    Description = "GetUsersByRole",
+        //                    OperationId = "GetUsersByRole",
+        //                    Tags = new[] { "Common" }
+        //                )]
+        //[SwaggerResponse(201, "User Roles", typeof(string))]
+        //[SwaggerResponse(204, "User Roles not found", typeof(string))]
+        //[SwaggerResponse(400, "Bad Request", typeof(string))]
+        //public IActionResult GetUsersByRole([FromQuery, SwaggerParameter("Role ID", Required = true)]Int32 RoleID)
+        //{
 
 
-            List<dynamic> userlist = this.common.GetUsersByRole(RoleID);
+        //    List<dynamic> userlist = this.common.GetUsersByRole(RoleID);
 
-            if (userlist != null)
-            {
-                return Ok(new { success = 1, message = "GetUsersByRole", data = userlist });
-            }
-            else if (userlist == null)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        //    if (userlist != null)
+        //    {
+        //        return Ok(new { success = 1, message = "GetUsersByRole", data = userlist });
+        //    }
+        //    else if (userlist == null)
+        //    {
+        //        return NoContent();
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        #endregion
+        //#endregion
     }
 }

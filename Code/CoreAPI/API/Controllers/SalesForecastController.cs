@@ -26,7 +26,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SalesForecastController : ApiBase
     {
         public static CultureInfo enGBcultureFormat = new CultureInfo("en-GB");

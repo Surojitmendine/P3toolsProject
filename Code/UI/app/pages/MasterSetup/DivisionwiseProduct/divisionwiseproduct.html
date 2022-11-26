@@ -33,37 +33,38 @@
                 </ul>
               </div><!-- /.card-header -->
 
-              <div class="row" style="margin-top:30px">        
-                <div class="col-sm-2">
-                  <select id="ddlDivision" class="form-control form-control-sm select2" style="width: 100%;"
-                     required></select>
-                </div>
-      
-                <div class="col-sm-2">
-                  <select id="ddlDepot" class="form-control form-control-sm select2" style="width: 100%;"
-                     required></select>
-                </div>
-      
-                <div class="col-sm-2">
-                  <select id="ddlProductName" class="form-control form-control-sm select2" style="width: 100%;"
-                     required></select>
-                </div>
-      
-                <div class="col-sm-2">
-                  <select id="ddlPackUnit" class="form-control form-control-sm select2" style="width: 100%;"
-                     ></select>
-                </div>
-      
-              <div class="col-sm-2">
-                
-               <button type="button" class="btn btn-default" onclick="DivisionWiseProduct.ListDivisionWiseProduct()">
-                    <i class="fas fa-search" style="color: #fd7e14;"></i>
-                  </button>
-                </div>               
-              </div>
+              
 
 
               <div class="card-body">
+                <div class="row">        
+                  <div class="col-sm-2">
+                    <select id="ddlDivision" class="form-control form-control-sm select2" style="width: 100%;"
+                       required></select>
+                  </div>
+        
+                  <div class="col-sm-2">
+                    <select id="ddlDepot" class="form-control form-control-sm select2" style="width: 100%;"
+                       required></select>
+                  </div>
+        
+                  <div class="col-sm-2">
+                    <select id="ddlProductName" class="form-control form-control-sm select2" style="width: 100%;"
+                       required></select>
+                  </div>
+        
+                  <div class="col-sm-2">
+                    <select id="ddlPackUnit" class="form-control form-control-sm select2" style="width: 100%;"
+                       ></select>
+                  </div>
+        
+                <div class="col-sm-2">
+                  
+                 <button type="button" class="btn btn-default" onclick="DivisionWiseProduct.ListDivisionWiseProduct()">
+                      <i class="fas fa-search" style="color: #fd7e14;"></i>
+                    </button>
+                  </div>               
+                </div>
                 <table id="dtDivisionWiseProductlist" class="table table-bordered table-hover">
                 </table>  
               </div>

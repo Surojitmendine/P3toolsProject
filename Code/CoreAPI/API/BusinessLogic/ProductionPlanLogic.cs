@@ -205,6 +205,7 @@ namespace API.BusinessLogic
             DT.Columns.Add("Stock_date", typeof(System.String));
             DT.Columns.Add("St_group", typeof(System.String));
             DT.Columns.Add("St_category", typeof(System.String));
+            DT.Columns.Add("Depot", typeof(System.String));
             DT.Columns.Add("product_name", typeof(System.String));
             DT.Columns.Add("quantity", typeof(System.Decimal));
             DT.Columns.Add("UOM", typeof(System.String));
@@ -222,6 +223,7 @@ namespace API.BusinessLogic
                 DR["Stock_date"] = item.Stock_date;
                 DR["St_group"] = item.St_group;
                 DR["St_category"] = item.St_category;
+                DR["Depot"] = item.Depot;
                 DR["product_name"] = item.product_name;
                 DR["quantity"] = item.quantity;
                 DR["UOM"] = item.UOM;

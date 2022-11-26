@@ -29,6 +29,8 @@ var apiCall = {
         var xhr
         formatedData = typeof AjaxData === typeof undefined ? this.prepareAjaxCallData(ParentForm) : AjaxData
 
+        console.log(formatedData);
+
         if (RequestType == "GET" && typeof ParentForm !== typeof undefined || ParentForm !== null) {
 
             $.each(formatedData, function (key, value) {

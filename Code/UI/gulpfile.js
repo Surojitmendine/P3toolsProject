@@ -49,13 +49,13 @@ var filesLibraryJS = ['plugins/jquery/jquery.min.js', 'plugins/jquery-ui/jquery-
     'plugins/summernote/summernote-bs4.min.js', 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
     'plugins/datatables/jquery.dataTables.js', 'plugins/datatables-bs4/js/dataTables.bootstrap4.js', 'plugins/datatables-bs4/js/buttons/dataTables.buttons.min.js',
     'plugins/datatables-bs4/js/buttons/buttons.flash.min.js', 'plugins/datatables-bs4/js/buttons/jszip.min.js', 'plugins/datatables-bs4/js/buttons/buttons.html5.min.js',
-    'plugins/datatables-bs4/js/buttons/buttons.print.min.js', 'plugins/datatables-bs4/js/buttons/datetime-moment.js',
+    'plugins/datatables-bs4/js/buttons/buttons.print.min.js', 'plugins/datatables-bs4/js/buttons/datetime-moment.js', 
     'plugins/sweetalert2/sweetalert2.min.js', 'plugins/faLoading/jquery.faloading.js', 'plugins/bootstrap-datetimepicker/js/moment.min.js',
     'plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', 'plugins/select2/js/select2.full.min.js', 'plugins/nprogress/nprogress.js',
     'plugins/summernote/summernote-bs4.min.js', 'plugins/chart.js/Chart.min.js', 'plugins/PrintJs/print.min.js',
     'plugins/pagejs/page.js','plugins/bootstrap-switch/js/bootstrap-switch.min.js','plugins/bootbox/bootbox.min.js','plugins/tabletoexcel/tabletoexcel.js']
 
-var filesTemplateCustomJS = ['app/dist/js/adminlte.js', 'app/dist/js/demo.js', 'app/scripts/config.js', 'app/scripts/00.global.js']
+var filesTemplateCustomJS = ['app/dist/js/adminlte.js', 'app/dist/js/demo.js', 'app/scripts/config.js',  'app/scripts/00.global.js']
 
 var filesFrameworkGlobalJS = ['app/scripts/config.js','app/scripts/01.global-router.js', 'app/scripts/00.global.js']
 

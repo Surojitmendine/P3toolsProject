@@ -22,6 +22,40 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Common.Utility
 {
+    public class clsAPI
+    {
+        private String APIBaseURL { get; set; } = "";
+        public clsAPI(String _APIBaseURL)
+        {
+            APIBaseURL = _APIBaseURL;
+        }
+        public HttpResponseMessage APIPost(string APIMethod, string contents)
+        {
+            HttpResponseMessage response;
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.BaseAddress = new Uri(APIBaseURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                response = client.PostAsync(APIMethod, new StringContent(contents, Encoding.UTF8, "application/json")).Result;
+            }
+            return response;
+        }
+
+        public HttpResponseMessage APIPost(string APIMethod)
+        {
+            HttpResponseMessage response;
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.BaseAddress = new Uri(APIBaseURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                response = client.PostAsync(APIMethod, new StringContent("", Encoding.UTF8, "application/json")).Result;
+            }
+            return response;
+        }
+    }
+
     public class clsHelper
     {
         public static string ConvertAmountToINR(double dblAmount, bool boolUseShortFormat = false) //string strAmount
