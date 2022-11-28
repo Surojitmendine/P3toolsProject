@@ -11214,7 +11214,7 @@ body,
 @media (max-width: 767.98px) {
   .main-sidebar, .main-sidebar::before {
     box-shadow: none !important;
-    margin-left: -250px;
+    margin-left: -280px;
   }
   .sidebar-open .main-sidebar, .sidebar-open .main-sidebar::before {
     margin-left: 0;
@@ -11638,7 +11638,7 @@ body,
 }
 
 .nav-sidebar > .nav-item .nav-icon.fa, .nav-sidebar > .nav-item .nav-icon.fas, .nav-sidebar > .nav-item .nav-icon.far, .nav-sidebar > .nav-item .nav-icon.fab, .nav-sidebar > .nav-item .nav-icon.glyphicon, .nav-sidebar > .nav-item .nav-icon.ion {
-  font-size: 1.1rem;
+  font-size: 0.8rem;
 }
 
 .nav-sidebar > .nav-item .float-right {
@@ -11743,7 +11743,7 @@ body,
 }
 
 [class*='sidebar-light-'] .sidebar a {
-  color: #343a40;
+  color: #000;
 }
 
 [class*='sidebar-light-'] .sidebar a:hover {
@@ -11751,7 +11751,7 @@ body,
 }
 
 [class*='sidebar-light-'] .nav-treeview > .nav-item > .nav-link {
-  color: #777;
+  color: #000;
 }
 
 [class*='sidebar-light-'] .nav-treeview > .nav-item > .nav-link.active, [class*='sidebar-light-'] .nav-treeview > .nav-item > .nav-link.active:hover {

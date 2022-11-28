@@ -125,9 +125,9 @@ var common = {
                         $.each(submenu, function () {
                             //console.log(this.MenuURL)
                             // divstring += '<ul class="nav nav-treeview">';
-                            divstring += '<li class="nav-item" data-permissionmenuid="1002">';
+                            divstring += '<li class="nav-item">';
                             divstring += '<a href="javascript:void(0)" class="nav-link" data-filepath="' + this.MenuURL + '">';
-                            divstring += '<i class="nav-icon fas fa-upload"></i>';
+                            divstring += '<i class="nav-icon ' + this.MenuIcon + '"></i>';
                             divstring += '<p>';
                             divstring += '<span class="badge badge-info left"></span> ' + this.SubMenu + '</p>';
                             divstring += '</a>';

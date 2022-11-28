@@ -38,6 +38,7 @@ namespace API.Models
         public String MainMenu { get; set; } = "";
         public String SubMenu { get; set; } = "";
         public String MenuURL { get; set; } = "";
+        public String MenuIcon { get; set; } = "";
     }
     public class clsUserMenuInfo
     {

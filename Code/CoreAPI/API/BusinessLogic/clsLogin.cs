@@ -36,6 +36,7 @@ namespace API.BusinessLogic
                 sobj.MainMenu = Dr["MainMenu"].ToString();
                 sobj.SubMenu = Dr["SubMenu"].ToString();
                 sobj.MenuURL = Dr["MenuURL"].ToString();
+                sobj.MenuIcon = Dr["MenuIcon"].ToString();
                 submenu.Add(sobj);
             }
             menus.Add(new clsUserMenuInfo { MainMenu = mainmenu, SubMenu = submenu });
