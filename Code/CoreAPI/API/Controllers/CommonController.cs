@@ -263,7 +263,7 @@ namespace API.Controllers
             //}
              
             // Fixed Image
-            string ImageURL = "dist/img/background.png";
+            string ImageURL = "dist/img/background.jpg";
 
             string imagesource = "ImageFixed";
             try

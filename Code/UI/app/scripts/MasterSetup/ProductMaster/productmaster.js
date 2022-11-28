@@ -25,7 +25,7 @@ var ProductMaster = {
         apiCall.ajaxCall(undefined, 'GET', 'MasterSetup/Get_ProductTypeName',undefined)
         .then((res)=>{
             $('#ddlProductType').empty();
-            $("#ddlProductType").append("<option value=0>Select Product Type</option>");
+            $("#ddlProductType").append("<option value=0>Select Product Category</option>");
             $.each(res.data, function (index, value) {
                 console.log(this.ProductTypeName);
                 $("#ddlProductType").append("<option value=" + this.ProductTypeName + ">" + this.ProductTypeName + "</option>");
@@ -49,7 +49,7 @@ var ProductMaster = {
         apiCall.ajaxCallWithReturnData(obj, "GET", 'MasterSetup/Get_ProductTypeWise_Category')
         .then((res)=>{
             $('#ddlCategory').empty();
-            $("#ddlCategory").append("<option value=" + "" + ">Select Category Name</option>");
+            $("#ddlCategory").append("<option value=" + "" + ">Select/option>");
             $.each(res.data, function (index, value) {
                 //console.log(this.BatchSize);
                 $("#ddlCategory").append("<option value=" + this.CategoryName + ">" + this.CategoryName + "</option>");
