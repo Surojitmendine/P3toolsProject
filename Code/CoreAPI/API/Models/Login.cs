@@ -45,4 +45,17 @@ namespace API.Models
         public List<clsUserMainMenuInfo> MainMenu { get; set; } = new List<clsUserMainMenuInfo>();
         public List<clsUserSubMenuInfo> SubMenu { get; set; } = new List<clsUserSubMenuInfo>();
     }
+
+    public class clsEmployeeRoleMappingListInfo
+    {
+        public long EmpNo { get; set; } = 0;
+        public String EmployeeName { get; set; } = "";
+        public String PostName { get; set; } = "";
+        public String DepartmentName { get; set; } = "";
+        public String Role { get; set; } = "";
+        public String Remarks { get; set; } = "";
+
+    }
+
+
 }

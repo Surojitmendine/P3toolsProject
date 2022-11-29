@@ -41,9 +41,18 @@ namespace API.Controllers
             clsAPI objAPI = new clsAPI(APIBaseurl);
             var data = new List<clsEmployeeInfo>();
             String apiMethod = "";
-            
+
+            String SpChar = "#";
+            Boolean result = l.pwd.Contains(SpChar);
+            if(result == true)
+            {
+               l.pwd = l.pwd.Replace(SpChar, "%23");
+            }
+
             apiMethod = "api/Emp/UserNamePwdcheck?uname=" + l.uname + "&pwd=" + l.pwd;
-        
+
+            //apiMethod = "api/Emp/UserNamePwdcheck?uname=" + l.uname + "&pwd=mega#9";
+
             HttpResponseMessage response = objAPI.APIPost(apiMethod);
             if (response.IsSuccessStatusCode)
             {

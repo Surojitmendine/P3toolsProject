@@ -80,5 +80,25 @@ namespace API.BusinessLogic
             return clsDatabase.fnDBOperation(Connection, "P3_PRC_Employee_Role_Mapping_Save", EmployeeNo, IDRole);
         }
 
+        public static List<clsEmployeeRoleMappingListInfo> EmployeeRoleMappingList(String Connection)
+        {
+            List<clsEmployeeRoleMappingListInfo> mlist = new List<clsEmployeeRoleMappingListInfo>();
+            DataTable DT = clsDatabase.fnDataTable(Connection, "P3_PRC_Employee_Role_Mapping_List");
+            foreach (DataRow DR in DT.Rows)
+            {
+                mlist.Add(new clsEmployeeRoleMappingListInfo()
+                {
+                    EmpNo = clsHelper.fnConvert2Long(DR["Empno"]),
+                    EmployeeName = DR["EmployeeName"].ToString(),
+                    PostName = DR["PostName"].ToString(),
+                    DepartmentName = DR["DepartmentName"].ToString(),
+                    Role = DR["Role"].ToString(),
+                    Remarks = DR["Remarks"].ToString(),
+                });
+            }
+            return mlist;
+        }
+
+
     }
 }

@@ -96,7 +96,7 @@ namespace API.Controllers
 
         #region Employee List
         [HttpGet]
-        public IActionResult EmployeeList(long IDRole)
+        public IActionResult EmployeeList()
         {
             var d = clsLogin.EmployeeList(MSSQLConnection);
             return Ok(new { success = 1, message = "Active Employee List", data = d });
@@ -109,6 +109,15 @@ namespace API.Controllers
         {
             var d = clsLogin.EmployeeRoleMappingSave(MSSQLConnection, info.EmployeeNo, info.IDRole);
             return Ok(new { success = 1, message = "Save Employee Role Mapping Successfully", data = d });
+        }
+        #endregion
+
+        #region Employee Mapping List
+        [HttpGet]
+        public IActionResult EmployeeRoleMappingList()
+        {
+            var d = clsLogin.EmployeeRoleMappingList(MSSQLConnection);
+            return Ok(new { success = 1, message = "Employee Mapping List", data = d });
         }
         #endregion
 
