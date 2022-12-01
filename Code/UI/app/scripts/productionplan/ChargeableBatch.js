@@ -26,8 +26,11 @@ var chargeablebatch = {
     },
 
     GetProductWiseBatchSize : function () {
+        var Product_Name = $('#ddlProductName :selected').map(function () {
+            return $(this).text();
+        }).get();
         var obj = {
-            ProductName: $("#ddlProductName").val()
+            ProductName: Product_Name
         };
 
         apiCall.ajaxCallWithReturnData(obj, "GET", 'ProductionPlan/Get_ProductWise_BatchSize')
@@ -68,10 +71,14 @@ var chargeablebatch = {
             return $(this).text();
         }).get().join(',');
 
+        var Product_Name = $('#ddlProductName :selected').map(function () {
+            return $(this).text();
+        }).get();
+
         var queryparams = {
             Month: $('#ddlMonth').val(),
             Year: $('#ddlYear').val(),
-            ProductName: $("#ddlProductName").val(),
+            ProductName: Product_Name,
             BatchSize: Batch_Size
         };
         console.log(queryparams);
