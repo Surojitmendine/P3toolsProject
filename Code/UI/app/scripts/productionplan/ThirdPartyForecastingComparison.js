@@ -13,6 +13,7 @@ var thirdpartyforecastingComparison = {
     },
 
     FillcomboProduct: function (data) {
+        
         $('#ddlProductName').empty();
         $('#ddlProductName').select2({
             multiple: true,

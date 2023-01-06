@@ -222,6 +222,7 @@ namespace API.BusinessLogic
             dynamic[] dynamics = new dynamic[4];
 
             var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable()
+                .Where(u => u.ProductName != null)
                 .GroupBy(x => new { x.ProductName})
                 .Select(s => new
                 {
@@ -233,7 +234,7 @@ namespace API.BusinessLogic
                 }).OrderBy(o => o.text).ToList();
 
             var divisions = db.tbl_P3_SaleForecastingComparison
-               .Where(u => u.DivisionName != "CONTRACTUAL")
+               .Where(u => u.DivisionName != "CONTRACTUAL" && u.ProductName != null)
                .GroupBy(x => new { x.DivisionName })
                .Select(s => new
                {
@@ -243,7 +244,7 @@ namespace API.BusinessLogic
                }).OrderBy(o => o.text).ToList();
 
             var stocklocations = db.tbl_P3_SaleForecastingComparison
-               .Where(u => u.DepotName != "FACTORY")
+               .Where(u => u.DepotName != "FACTORY" && u.ProductName != null)
                .GroupBy(x => new { x.DepotName })
                .Select(s => new
                {
@@ -252,7 +253,9 @@ namespace API.BusinessLogic
 
                }).OrderBy(o => o.text).ToList();
 
-            var packunit = db.tbl_Master_Product.AsEnumerable().GroupBy(x => new { x.PackUnit, x.ProductUOM })
+            var packunit = db.tbl_Master_Product.AsEnumerable()
+            .Where(u => u.ProductName != null)
+            .GroupBy(x => new { x.PackUnit, x.ProductUOM })
             .Select(s => new
             {
                 id = s.Key.PackUnit,
@@ -921,7 +924,9 @@ namespace API.BusinessLogic
                    text = s.Key.DepotName,
                }).OrderBy(o => o.text).ToList();
 
-            var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable().GroupBy(x => new { x.ProductName })
+            var products = db.tbl_P3_SaleForecastingComparison.AsEnumerable()
+            .Where(u => u.ProductName != null)
+            .GroupBy(x => new { x.ProductName })
             .Select(s => new
             {
                 id = s.Key.ProductName,

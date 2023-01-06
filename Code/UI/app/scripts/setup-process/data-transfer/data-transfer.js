@@ -13,6 +13,7 @@ var datatransfer = {
             showToastSuccessMessage(res.data)
         })
     },
+    
 
     List_PrimarySales: function () {
         var queryparams = {

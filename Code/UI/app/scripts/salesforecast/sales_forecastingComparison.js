@@ -13,6 +13,7 @@ var salesforecastingComparison = {
     },
 
     FillcomboProduct: function (data) {
+        console.log(data);
         $('#ddlProductName').empty();
         $('#ddlProductName').select2({
             multiple: true,
@@ -27,6 +28,7 @@ var salesforecastingComparison = {
     },
 
     FillcomboDivision: function (data) {
+        console.log(data);
         $('#ddlDivision').empty();
         $('#ddlDivision').select2({
             multiple: true,
